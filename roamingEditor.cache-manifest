@@ -1,0 +1,20 @@
+CACHE MANIFEST
+
+# Version 0.10
+
+CACHE:
+css/main.css
+images/favicon.png
+images/logoSamuSocial_128x128.png
+index.html
+js/angular.min.js
+js/angular-route.min.js
+js/roamingEditor.js
+templates/debug.html
+templates/interventionEditor.html
+templates/roamingEditor.html
+templates/roamingsList.html
+
+NETWORK:
+*
+

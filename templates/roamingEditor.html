@@ -1,0 +1,53 @@
+<div id="roaming">
+  <h2>Maraude du {{roaming.date}}</h2>
+  <button ng-click="goBack()">Revenir à la liste des maraudes</button>
+  <br/><br/>
+  <label for="tutorField">Tuteur</label> <input id="tutorField" ng-model="roaming.tutor" type="text" ng-change="updateRoaming()" /><br/>
+  <div ng-repeat="volunteer in roaming.volunteers track by $index">
+    Bénévole
+    <input ng-model="roaming.volunteers[$index]" type="text" ng-change="updateRoaming()"  />
+    <button ng-click="removeVolunteer($index)" ng-attr-title="Enlever un bénévole" ng-show="roaming.volunteers.length > 1">-</button>
+  </div>
+  <button ng-click="addVolunteer()" ng-attr-title="Ajouter un bénévole" ng-show="roaming.volunteers.length &lt; 3">+</button>
+  <br/>
+  Voiture
+    <label><input ng-model="roaming.vehicle" type="radio" value="1" ng-change="updateRoaming()" />1</label>
+    <label><input ng-model="roaming.vehicle" type="radio" value="2" ng-change="updateRoaming()" />2</label>
+  <br/><br/>
+  <button ng-click="addIntervention()">Ajouter une intervention</button><br/>
+  <br/>
+  <table ng-show="roaming.interventions.length > 0">
+    <tr>
+      <th>Personnes rencontrées</th>
+      <th>Lieu</th>
+      <th>Heure</th>
+      <th>Source</th>
+      <th>Adulte</th>
+      <th>Enfant</th>
+      <th>Couverture</th>
+      <th>Tente</th>
+      <th>Commentaire</th>
+      <th>Action</th>
+    </tr>
+    <tr ng-repeat="(interventionIndex, intervention) in roaming.interventions">
+      <td><ul class="roamingEditorPeopleList"><li ng-repeat="person in intervention.people track by $index">{{person}}</li></ul></td>
+      <td>{{intervention.location}}</td>
+      <td>{{intervention.time}}</td>
+      <td>{{intervention.source}}</td>
+      <td>{{intervention.nbAdults}}</td>
+      <td>{{intervention.nbChildren}}</td>
+      <td>{{intervention.blankets}}</td>
+      <td>{{intervention.tents}}</td>
+      <td>{{intervention.comments}}</td>
+      <td>
+        <button ng-click="editIntervention(interventionIndex)">Editer</button>
+        <button ng-click="deleteIntervention(interventionIndex)">Supprimer</button>
+      </td>
+    </tr>
+  </table>
+  <br/>
+  <button ng-click="addIntervention()" ng-show="roaming.interventions.length > 0">Ajouter une intervention</button>
+  <br/><br/>
+  <button ng-click="goBack()">Revenir à la liste des maraudes</button>
+  <br/><br/>
+</div>

@@ -1,0 +1,75 @@
+<div id="intervention">
+  
+  <h2>Edition intervention</h2>
+
+  <form name="form" class="css-form" novalidate="true">
+
+    <fieldset>
+      <legend>Heure de la rencontre</legend>
+      <select name="hour" ng-model="hour" required="true">
+        <option ng-repeat="i in range(0,23)" value="{{('00'+i).slice(-2)}}">{{('00'+i).slice(-2)}}</option>
+      </select>
+      :
+      <select name="minute" ng-model="minute" required="true">
+        <option ng-repeat="i in range(0,55,5)" value="{{('00'+i).slice(-2)}}">{{('00'+i).slice(-2)}}</option>
+      </select>
+    </fieldset>
+    <fieldset>
+      <legend>Lieu de la rencontre</legend>
+      <textarea name="location" id="locationField" ng-model="intervention.location" required="true"
+        placeholder="Merci de préciser le lieu de la rencontre">
+      </textarea>
+    </fieldset>
+    <fieldset>
+      <legend>Personnes rencontrées</legend>
+      <div ng-repeat="person in intervention.people track by $index">
+        <input ng-model="intervention.people[$index]" type="text" placeholder="Nom de la personne" />
+        <button ng-click="removePerson($index)" ng-attr-title="Enlever {{intervention.people[$index]}}" ng-show="intervention.people.length > 1">-</button>
+      </div>
+      <button ng-click="addPerson()" ng-attr-title="Ajouter une personne">+</button>
+    </fieldset>
+    <fieldset class="interventionEditorStatistics">
+      <legend>Statistiques</legend>
+      <ul>
+        <li>
+          <label for="sourceField">Source</label>
+          <select name="source" id="sourceField" ng-model="intervention.source" ng-options="s as s for s in sources" required="true">
+          </select>
+        </li>
+        <li>
+          <label for="nbAdultsField">Nombre d'adultes</label>
+          <select name="nbAdults" id="nbAdultsField" ng-model="intervention.nbAdults" ng-options="i*1 as i for i in range(0,30)" required="true">
+          </select>
+        </li>
+        <li>
+          <label for="nbChildrenField">Nombre d'enfants</label>
+          <select name="nbChildren" id="nbChildrenField" ng-model="intervention.nbChildren" ng-options="i*1 as i for i in range(0,30)" required="true">
+          </select>
+        </li>
+        <li>
+          <label for="blanketsField">Nombre de couvertures</label>
+          <select name="blankets" id="blanketsField" ng-model="intervention.blankets" ng-options="i*1 as i for i in range(0,30)" required="true">
+          </select>
+        </li>
+        <li>
+          <label for="tentsField">Nombre de tentes</label>
+          <select name="tents" id="tentsField" ng-model="intervention.tents" ng-options="i*1 as i for i in range(0,20)" required="true">
+          </select>
+        </li>
+      </ul>
+    </fieldset>
+    <fieldset>
+      <legend>Commentaires</legend>
+      <textarea name="comments" id="commentsField" ng-model="intervention.comments" required="true" ng-trim="true"
+        placeholder="Merci d'indiquer les informations pouvant être utiles aux autres maraudes tout en évitant les informations personnelles, médicales ou les jugements de valeur">
+      </textarea>
+    </fieldset>
+    
+    <br/>
+
+    <input type="button" ng-click="cancelInterventionEdit()" value="Annuler" />
+    <input type="submit" ng-click="saveInterventionEdit()" value="Enregistrer" />
+
+  </form>
+</div>
+

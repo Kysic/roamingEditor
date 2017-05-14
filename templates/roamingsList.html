@@ -1,0 +1,27 @@
+<div id="roamingList">
+  <h2>Liste des dernières maraudes</h2>
+  <button ng-click="createRoaming()">Editer le compte rendu du jour</button>
+  <br/><br/>
+  <table ng-show="roamings.length > 0">
+    <tr>
+      <th>Date</th>
+      <th>Tuteur</th>
+      <th>Bénévole</th>
+      <th>Bénévole</th>
+      <th>Bénévole</th>
+      <th>Nb interventions</th>
+      <th>Action</th>
+    </tr>
+    <tr ng-repeat="roaming in roamings">
+      <td>{{roaming.date}}</td>
+      <td>{{roaming.tutor}}</td>
+      <td>{{roaming.volunteers[0]}}</td>
+      <td>{{roaming.volunteers[1]}}</td>
+      <td>{{roaming.volunteers[2]}}</td>
+      <td>{{roaming.interventions.length}}</td>
+      <td>
+        <button ng-click="editRoaming(roaming)">Editer</button>
+      </td>
+    </tr>
+  </table>
+</div>
