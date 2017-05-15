@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# Version 0.10
+# Version 0.11
 
 CACHE:
 css/main.css
@@ -10,6 +10,7 @@ index.html
 js/angular.min.js
 js/angular-route.min.js
 js/roamingEditor.js
+manifest.json
 templates/debug.html
 templates/interventionEditor.html
 templates/roamingEditor.html

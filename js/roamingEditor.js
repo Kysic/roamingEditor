@@ -28,6 +28,13 @@ roamingEditor.factory('roamingService', function ($filter) {
     
     var roamings = { };
     
+    // Try to resolve the cache manifest to update file cache if necessary
+    try {
+        window.applicationCache.update();
+    } catch (e) {
+        console.log('Unable to update application cache', e);
+    }
+    
     function loadLocalStorage() {
         var rawRoamings = localStorage.getItem('roamings');
         if (rawRoamings) {
@@ -219,6 +226,17 @@ roamingEditor.controller('InterventionController', function InterventionControll
         $location.path('/roaming/' + $routeParams.roamingId);
     }
 
+    /** Allow to sort intervention by time with time between 00:00 and 07:59 after time between 08:00 and 23:59 */
+    function timeSort(intervention1, intervention2) {
+        if ( intervention1.time.localeCompare("08:00") * intervention2.time.localeCompare("08:00") == -1 ) {
+            // If one is strictly before 08:00 and the other strictly after 08:00 the result is reversed
+            return intervention2.time.localeCompare(intervention1.time);
+        } else {
+            // Otherwise we just compare the two string
+            return intervention1.time.localeCompare(intervention2.time);
+        }
+    }
+
     $scope.saveInterventionEdit = function () {
         $scope.intervention.time = $scope.hour + ':' + $scope.minute;
         if (interventionIndex == -1) {
@@ -226,7 +244,7 @@ roamingEditor.controller('InterventionController', function InterventionControll
         } else { 
             roaming.interventions[interventionIndex] = $scope.intervention;
         }
-        roaming.interventions = $filter('orderBy')(roaming.interventions, 'time');
+        roaming.interventions = roaming.interventions.sort(timeSort);
         roamingService.updateRoaming(roaming);
         $location.path('/roaming/' + $routeParams.roamingId);
     }
