@@ -1,20 +1,20 @@
 # Roaming Editor
-Editeur de maraude pour tablette pour le Samu Social de Grenoble (VINCI).
+## Editeur de maraude pour tablette pour le Samu Social de Grenoble (VINCI).
 
-Installation :
+### Installation
 - Configurer le webservice php pour pointer vers le planning google doc de l'asso en renommant le fichier
   config_template.php en config.php et en le complétant avec les références des documents et onglets google
   doc.
 - Renseigner la clé d'API google dans la page index.html
 - Déposer le tout sur un serveur web php
-Astuce :
-    Pour ne pas commiter la clé d'API google mais l'avoir dans le fichier index.html automatiquement,
-    on peut définir les filtres git suivants :
-        git config --global filter.googleapikey.clean "sed 's/<Votre API KEY>/GOOGLE_API_KEY/'"
-        git config --global filter.googleapikey.smudge "sed 's/GOOGLE_API_KEY/<Votre API KEY>/'"
-    en remplacant bien sûr <Votre API KEY> par la clé de l'API google.
 
-Informations diverses :
+### Astuce
+- Pour ne pas commiter la clé d'API google mais l'avoir dans le fichier index.html automatiquement,
+  on peut définir les filtres git suivants (en remplacant bien sûr ${MY_API_KEY} par votre clé de l'API google) :
+  - git config --global filter.googleapikey.clean "sed 's/${MY_API_KEY}/GOOGLE_API_KEY/'"
+  - git config --global filter.googleapikey.smudge "sed 's/GOOGLE_API_KEY/${MY_API_KEY}/'"
+
+### Informations diverses
 - basé sur angular js
 - utilise le local storage pour éviter de perdre un CR en cas de plantage de la tablette
 - utilise un Web App manifest (https://w3c.github.io/manifest/) pour être installé en tant qu'application android via chrome
