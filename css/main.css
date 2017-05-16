@@ -41,6 +41,13 @@ ul.roamingEditorPeopleList {
     text-align: right;
     padding-right: 20px;
 }
+.interventionEditorStatistics button {
+    margin-left: 10px;
+}
+input[type="number"] {
+    -moz-appearance:textfield;
+    width: 30px;
+}
 fieldset {
     margin: auto;
     width: 600px;

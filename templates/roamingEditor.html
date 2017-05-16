@@ -6,7 +6,7 @@
   <div ng-repeat="volunteer in roaming.volunteers track by $index">
     Bénévole
     <input ng-model="roaming.volunteers[$index]" type="text" ng-change="updateRoaming()"  />
-    <button ng-click="removeVolunteer($index)" ng-attr-title="Enlever un bénévole" ng-show="roaming.volunteers.length > 1">-</button>
+    <button ng-click="removeVolunteer($index)" ng-attr-title="Enlever un bénévole">-</button>
   </div>
   <button ng-click="addVolunteer()" ng-attr-title="Ajouter un bénévole" ng-show="roaming.volunteers.length &lt; 3">+</button>
   <br/>

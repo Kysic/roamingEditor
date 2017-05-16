@@ -1,8 +1,6 @@
 <div id="intervention">
-  
-  <h2>Edition intervention</h2>
 
-  <form name="form" class="css-form" novalidate="true">
+  <form name="form" class="css-form">
 
     <fieldset>
       <legend>Heure de la rencontre</legend>
@@ -16,7 +14,7 @@
     </fieldset>
     <fieldset>
       <legend>Lieu de la rencontre</legend>
-      <textarea name="location" id="locationField" ng-model="intervention.location" required="true"
+      <textarea name="location" id="locationField" ng-model="intervention.location"
         placeholder="Merci de préciser le lieu de la rencontre">
       </textarea>
     </fieldset>
@@ -24,7 +22,7 @@
       <legend>Personnes rencontrées</legend>
       <div ng-repeat="person in intervention.people track by $index">
         <input ng-model="intervention.people[$index]" type="text" placeholder="Nom de la personne" />
-        <button ng-click="removePerson($index)" ng-attr-title="Enlever {{intervention.people[$index]}}" ng-show="intervention.people.length > 1">-</button>
+        <button ng-click="removePerson($index)" ng-attr-title="Enlever {{intervention.people[$index]}}">-</button>
       </div>
       <button ng-click="addPerson()" ng-attr-title="Ajouter une personne">+</button>
     </fieldset>
@@ -38,37 +36,40 @@
         </li>
         <li>
           <label for="nbAdultsField">Nombre d'adultes</label>
-          <select name="nbAdults" id="nbAdultsField" ng-model="intervention.nbAdults" ng-options="i*1 as i for i in range(0,30)" required="true">
-          </select>
+          <input type="number" name="nbAdults" id="nbAdultsField" ng-model="intervention.nbAdults" required="true" min="0" max="100" />
+          <button ng-click="intervention.nbAdults=intervention.nbAdults-1" ng-attr-title="Décrémenter le nombre d'adultes" ng-disabled="intervention.nbAdults <= 0">-</button>
+          <button ng-click="intervention.nbAdults=intervention.nbAdults+1" ng-attr-title="Incrémenter le nombre d'adultes" ng-disabled="intervention.nbAdults >= 100">+</button>
         </li>
         <li>
           <label for="nbChildrenField">Nombre d'enfants</label>
-          <select name="nbChildren" id="nbChildrenField" ng-model="intervention.nbChildren" ng-options="i*1 as i for i in range(0,30)" required="true">
-          </select>
+          <input type="number" name="nbChildren" id="nbChildrenField" ng-model="intervention.nbChildren" required="true" min="0" max="100" />
+          <button ng-click="intervention.nbChildren=intervention.nbChildren-1" ng-attr-title="Décrémenter le nombre d'enfant" ng-disabled="intervention.nbChildren <= 0">-</button>
+          <button ng-click="intervention.nbChildren=intervention.nbChildren+1" ng-attr-title="Incrémenter le nombre d'enfant" ng-disabled="intervention.nbChildren >= 100">+</button>
         </li>
         <li>
           <label for="blanketsField">Nombre de couvertures</label>
-          <select name="blankets" id="blanketsField" ng-model="intervention.blankets" ng-options="i*1 as i for i in range(0,30)" required="true">
-          </select>
+          <input type="number" name="blankets" id="blanketsField" ng-model="intervention.blankets" required="true" min="0" max="100" />
+          <button ng-click="intervention.blankets=intervention.blankets-1" ng-attr-title="Décrémenter le nombre de couverture" ng-disabled="intervention.blankets <= 0">-</button>
+          <button ng-click="intervention.blankets=intervention.blankets+1" ng-attr-title="Incrémenter le nombre de couverture" ng-disabled="intervention.blankets >= 100">+</button>
         </li>
         <li>
           <label for="tentsField">Nombre de tentes</label>
-          <select name="tents" id="tentsField" ng-model="intervention.tents" ng-options="i*1 as i for i in range(0,20)" required="true">
-          </select>
+          <input type="number" name="tents" id="tentsField" ng-model="intervention.tents" required="true" min="0" max="100" />
+          <button ng-click="intervention.tents=intervention.tents-1" ng-attr-title="Décrémenter le nombre de tente" ng-disabled="intervention.tents <= 0">-</button>
+          <button ng-click="intervention.tents=intervention.tents+1" ng-attr-title="Incrémenter le nombre de tente" ng-disabled="intervention.tents >= 100">+</button>
         </li>
       </ul>
     </fieldset>
     <fieldset>
       <legend>Commentaires</legend>
-      <textarea name="comments" id="commentsField" ng-model="intervention.comments" required="true" ng-trim="true"
+      <textarea name="comments" id="commentsField" ng-model="intervention.comments"
         placeholder="Merci d'indiquer les informations pouvant être utiles aux autres maraudes tout en évitant les informations personnelles, médicales ou les jugements de valeur.">
       </textarea>
     </fieldset>
-    
-    <br/>
-
-    <input type="button" ng-click="cancelInterventionEdit()" value="Annuler" />
-    <input type="submit" ng-click="saveInterventionEdit()" value="Enregistrer" />
+    <fieldset>
+        <input type="button" ng-click="cancelInterventionEdit()" value="Annuler" />
+        <input type="submit" ng-click="saveInterventionEdit()" value="Enregistrer" />
+    </fieldset>
 
   </form>
 </div>

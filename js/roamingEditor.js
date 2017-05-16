@@ -34,29 +34,30 @@ roamingEditor.factory('roamingService', function ($filter) {
     } catch (e) {
         console.log('Unable to update application cache', e);
     }
-    
+
+    loadLocalStorage();
+
     function loadLocalStorage() {
         var rawRoamings = localStorage.getItem('roamings');
         if (rawRoamings) {
             try {
                 roamings = JSON.parse(rawRoamings);
             } catch (e) {
-                console.log(e);
+                console.log('Unable to restore local storage', e);
             }
         }
     }
-    loadLocalStorage();
 
     function updateRoamingsInLocalStorage() {
         var roamingsJson = JSON.stringify(roamings);
         //console.log(new Date() + ' saving roamings to local storage ' + roamingsJson)
         localStorage.setItem('roamings', roamingsJson);
     }
-    
+
     function getAllRoamings() {
         return angular.copy(roamings);
     }
-    
+
     function getRoaming(roamingId) {
         return angular.copy(roamings[roamingId]);
     }
@@ -85,7 +86,7 @@ roamingEditor.factory('roamingService', function ($filter) {
 roamingEditor.controller('RoamingListController', function RoamingListController($scope, $location, $filter, roamingService) {
 
     $scope.roamings = $filter('orderBy')(Object.values(roamingService.getAllRoamings()), '-date');
-    
+
     $scope.editRoaming = function (roaming) {
         $location.path('/roaming/' + roaming.date);
     }
@@ -99,7 +100,7 @@ roamingEditor.controller('RoamingListController', function RoamingListController
 
 });
 
-roamingEditor.controller('RoamingController', function RoamingController($scope, $routeParams, $location, roamingService) {
+roamingEditor.controller('RoamingController', function RoamingController($scope, $routeParams, $location, $http, roamingService) {
 
     if ( ! /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test($routeParams.roamingId)) {
         $location.path('/roamingsList');
@@ -113,41 +114,58 @@ roamingEditor.controller('RoamingController', function RoamingController($scope,
             date: $routeParams.roamingId,
             tutor: '',
             volunteers: [ '' ],
+            vehicle: getVehicleAccordingToRoamingDate($routeParams.roamingId),
             interventions: [ ]
         };
+        $http.get('api/getInfoPlanning.php?roamingDate=' + $routeParams.roamingId).then(function (response) {
+            if (response.data.tutor && $scope.roaming.tutor == '') {
+                $scope.roaming.tutor = response.data.tutor;
+            }
+            if (response.data.volunteers && angular.equals($scope.roaming.volunteers, [ '' ])) {
+                $scope.roaming.volunteers = response.data.volunteers;
+            }
+            $scope.updateRoaming();
+        });
         roamingService.updateRoaming($scope.roaming);
     }
-    
+
+    function getVehicleAccordingToRoamingDate(roamingDate) {
+        return parseInt(roamingDate.substring(8,10)) % 2 == 0 ? '2' : '1';
+    }
+
     $scope.addIntervention = function () {
         $scope.editIntervention(-1);
     }
-    
+
     $scope.editIntervention = function (interventionIndex) {
         $location.path('/roaming/' + $routeParams.roamingId + '/intervention/' + interventionIndex);
     }
-    
+
     $scope.deleteIntervention = function (interventionIndex) {
         if (confirm('Etes vous sur de vouloir supprimer cette intervention ?')) {
             $scope.roaming.interventions.splice(interventionIndex, 1);
             $scope.updateRoaming();
        }
     }
-    
+
     $scope.addVolunteer = function () {
         $scope.roaming.volunteers.push('');
         $scope.updateRoaming();
     }
     $scope.removeVolunteer = function (volunteerIndex) {
-        if (volunteerIndex < $scope.roaming.volunteers.length) {
-            if ($scope.roaming.volunteers[volunteerIndex] == ''
-                    || confirm('Etes vous sur de vouloir enlever ' + $scope.roaming.volunteers[volunteerIndex] + ' ?')
-            ) {
-                $scope.roaming.volunteers.splice(volunteerIndex, 1);
-                $scope.updateRoaming();
+        if (volunteerIndex < $scope.roaming.volunteers.length
+            && ($scope.roaming.volunteers[volunteerIndex] == ''
+                    || confirm('Etes vous sûr de vouloir enlever ' + $scope.roaming.volunteers[volunteerIndex] + ' ?')
+            )
+        ) {
+            $scope.roaming.volunteers.splice(volunteerIndex, 1);
+            if ($scope.roaming.volunteers.length == 0) {
+                $scope.roaming.volunteers.push('');
             }
+            $scope.updateRoaming();
         }
     }
-    
+
     $scope.updateRoaming = function () {
         roamingService.updateRoaming($scope.roaming);
     }
@@ -164,7 +182,7 @@ roamingEditor.controller('InterventionController', function InterventionControll
 
     var roaming;
     var interventionIndex = $routeParams.interventionId;
-    
+
     if ($routeParams.roamingId) {
         roaming = roamingService.getRoaming($routeParams.roamingId);
     }
@@ -173,23 +191,19 @@ roamingEditor.controller('InterventionController', function InterventionControll
     }
     if (interventionIndex == -1) {
         $scope.intervention = createEmptyIntervention();
+        getLocation();
     } else {
         $scope.intervention = roaming.interventions[interventionIndex];
     }
     if ( !$scope.intervention ) {
         $location.path('/roaming/' + $routeParams.roamingId);
     }
-    
-    function updateFormTimeWithInterventionTime() {
-        var timeSplited = $scope.intervention.time.split(':');
-        $scope.hour = timeSplited[0];
-        $scope.minute = ('00' + ((Math.round(timeSplited[1] / 5) * 5) % 60)).slice(-2);
-    }
     updateFormTimeWithInterventionTime();
-    
+
     function createEmptyIntervention() {
         return {
             time: $filter('date')(new Date(), 'HH:mm'),
+            location: '',
             people: [ '' ],
             source: '115',
             nbAdults: 0,
@@ -198,7 +212,51 @@ roamingEditor.controller('InterventionController', function InterventionControll
             tents: 0
         };
     }
-    
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                try {
+                    $scope.$apply(function() {
+                        $scope.intervention.latitude = position.coords.latitude;
+                        $scope.intervention.longitude = position.coords.longitude;
+                    });
+                    if (position.coords.accuracy <= 100) {
+                        new google.maps.Geocoder().geocode(
+                            { 'latLng': new google.maps.LatLng(position.coords.latitude, position.coords.longitude) },
+                            function(results, status) {
+                                console.log(results);
+                                $scope.$apply(function() {
+                                    if (status == google.maps.GeocoderStatus.OK && results[0] && results[0].formatted_address) {
+                                        if ($scope.intervention.location == '') {
+                                            $scope.intervention.location = results[0].formatted_address;
+                                        }
+                                    }
+                                });
+                            }
+                        );
+                    }
+                } catch (e) {
+                    console.log('Unable to retrieve location', e);
+                }
+            });
+        } else {
+            console.log('Geolocalisation not supported');
+        }
+    }
+
+    function updateFormTimeWithInterventionTime() {
+        var timeSplited = $scope.intervention.time.split(':');
+        var hour = parseInt(timeSplited[0]);
+        var minute = Math.round(timeSplited[1] / 5) * 5;
+        if (minute >= 60) {
+            minute = 0;
+            hour += 1;
+        }
+        $scope.hour = ('00' + hour).slice(-2);
+        $scope.minute = ('00' + minute).slice(-2);
+    }
+
     $scope.range = function(min, max, step) {
         step = step || 1;
         var input = [];
@@ -207,21 +265,23 @@ roamingEditor.controller('InterventionController', function InterventionControll
         }
         return input;
     };
-    
+
     $scope.addPerson = function () {
         $scope.intervention.people.push('');
     }
     $scope.removePerson = function (personIndex) {
-        if (personIndex < $scope.intervention.people.length) {
-            if ($scope.intervention.people[personIndex] == ''
-                    || confirm('Etes vous sur de vouloir enlever ' 
-                            + $scope.intervention.people[personIndex] + ' ?')
-            ) {
-                $scope.intervention.people.splice(personIndex, 1);
+        if (personIndex < $scope.intervention.people.length
+            && ($scope.intervention.people[personIndex] == ''
+                    || confirm('Etes vous sûr de vouloir enlever ' + $scope.intervention.people[personIndex] + ' ?')
+            )
+        ) {
+            $scope.intervention.people.splice(personIndex, 1);
+            if ($scope.intervention.people.length == 0) {
+                $scope.intervention.people.push('');
             }
         }
     }
-    
+
     $scope.cancelInterventionEdit = function () {
         $location.path('/roaming/' + $routeParams.roamingId);
     }
@@ -241,7 +301,7 @@ roamingEditor.controller('InterventionController', function InterventionControll
         $scope.intervention.time = $scope.hour + ':' + $scope.minute;
         if (interventionIndex == -1) {
             roaming.interventions.push($scope.intervention);
-        } else { 
+        } else {
             roaming.interventions[interventionIndex] = $scope.intervention;
         }
         roaming.interventions = roaming.interventions.sort(timeSort);
@@ -260,5 +320,6 @@ roamingEditor.controller('DebugController', function DebugController($scope, $lo
         var roamingsJson = JSON.stringify({});
         localStorage.setItem('roamings', roamingsJson);
     }
+
 });
 
