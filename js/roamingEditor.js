@@ -191,7 +191,6 @@ roamingEditor.controller('InterventionController', function InterventionControll
     }
     if (interventionIndex == -1) {
         $scope.intervention = createEmptyIntervention();
-        getLocation();
     } else {
         $scope.intervention = roaming.interventions[interventionIndex];
     }
@@ -213,7 +212,19 @@ roamingEditor.controller('InterventionController', function InterventionControll
         };
     }
 
-    function getLocation() {
+    function updateFormTimeWithInterventionTime() {
+        var timeSplited = $scope.intervention.time.split(':');
+        var hour = parseInt(timeSplited[0]);
+        var minute = Math.round(timeSplited[1] / 5) * 5;
+        if (minute >= 60) {
+            minute = 0;
+            hour += 1;
+        }
+        $scope.hour = ('00' + hour).slice(-2);
+        $scope.minute = ('00' + minute).slice(-2);
+    }
+
+    $scope.localizeMe = function () {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 try {
@@ -225,7 +236,6 @@ roamingEditor.controller('InterventionController', function InterventionControll
                         new google.maps.Geocoder().geocode(
                             { 'latLng': new google.maps.LatLng(position.coords.latitude, position.coords.longitude) },
                             function(results, status) {
-                                console.log(results);
                                 $scope.$apply(function() {
                                     if (status == google.maps.GeocoderStatus.OK && results[0] && results[0].formatted_address) {
                                         if ($scope.intervention.location == '') {
@@ -245,16 +255,10 @@ roamingEditor.controller('InterventionController', function InterventionControll
         }
     }
 
-    function updateFormTimeWithInterventionTime() {
-        var timeSplited = $scope.intervention.time.split(':');
-        var hour = parseInt(timeSplited[0]);
-        var minute = Math.round(timeSplited[1] / 5) * 5;
-        if (minute >= 60) {
-            minute = 0;
-            hour += 1;
+    $scope.resetLocation = function () {
+        if ($scope.intervention.location != '' && confirm('Etes vous sûr de vouloir réinitialiser le lieu de la rencontre ?')) {
+            $scope.intervention.location = '';
         }
-        $scope.hour = ('00' + hour).slice(-2);
-        $scope.minute = ('00' + minute).slice(-2);
     }
 
     $scope.range = function(min, max, step) {
