@@ -1,5 +1,5 @@
 
-var roamingEditor = angular.module("roamingEditor", ["ngRoute"]);
+var roamingEditor = angular.module('roamingEditor', ['ngRoute']);
 
 roamingEditor.config(function($routeProvider) {
     $routeProvider.when('/roamingsList', {
@@ -82,6 +82,18 @@ roamingEditor.factory('roamingService', function ($filter) {
     return { getAllRoamings: getAllRoamings, getRoaming: getRoaming, updateRoaming: updateRoaming };
 });
 
+roamingEditor.directive('ngEnter', function() {
+    return function(scope, element, attrs) {
+        element.bind("keydown keypress", function(event) {
+            if(event.which === 13) {
+                scope.$apply(function(){
+                    scope.$eval(attrs.ngEnter, {'event': event});
+                });
+                event.preventDefault();
+            }
+        });
+    };
+});
 
 roamingEditor.controller('RoamingListController', function RoamingListController($scope, $location, $filter, roamingService) {
 
@@ -100,7 +112,8 @@ roamingEditor.controller('RoamingListController', function RoamingListController
 
 });
 
-roamingEditor.controller('RoamingController', function RoamingController($scope, $routeParams, $location, $http, roamingService) {
+roamingEditor.controller('RoamingController',
+  function RoamingController($scope, $routeParams, $location, $timeout, $http, roamingService) {
 
     if ( ! /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test($routeParams.roamingId)) {
         $location.path('/roamingsList');
@@ -151,6 +164,13 @@ roamingEditor.controller('RoamingController', function RoamingController($scope,
     $scope.addVolunteer = function () {
         $scope.roaming.volunteers.push('');
         $scope.updateRoaming();
+        // A timeout is required because the field doesn't exist yet
+        $timeout(function () {
+            var elts = document.querySelectorAll('.volunteerInput');
+            if (elts && elts.length > 0) {
+                elts[elts.length-1].focus();
+            }
+        });
     }
     $scope.removeVolunteer = function (volunteerIndex) {
         if (volunteerIndex < $scope.roaming.volunteers.length
@@ -176,7 +196,8 @@ roamingEditor.controller('RoamingController', function RoamingController($scope,
 
 });
 
-roamingEditor.controller('InterventionController', function InterventionController($scope, $routeParams, $location, $filter, roamingService) {
+roamingEditor.controller('InterventionController',
+  function InterventionController($scope, $routeParams, $location, $filter, $timeout, roamingService) {
 
     $scope.sources = ['115', 'Maraude', 'Particulier', 'Direct', 'CHU', 'SemiTag', 'Pompier', 'Police', 'Autre'];
 
@@ -224,8 +245,15 @@ roamingEditor.controller('InterventionController', function InterventionControll
         $scope.minute = ('00' + minute).slice(-2);
     }
 
+    function localisationFinished() {
+        $scope.$apply(function() {
+            $scope.localisationInProgress = false;
+        });
+    }
+
     $scope.localizeMe = function () {
         if (navigator.geolocation) {
+            $scope.localisationInProgress = true;
             navigator.geolocation.getCurrentPosition(function (position) {
                 try {
                     $scope.$apply(function() {
@@ -242,13 +270,23 @@ roamingEditor.controller('InterventionController', function InterventionControll
                                             $scope.intervention.location = results[0].formatted_address;
                                         }
                                     }
+                                    $scope.localisationInProgress = false;
+                                }, function () {
+                                    console.log('Unable to determined the address');
+                                    localisationFinished();
                                 });
                             }
                         );
+                    } else {
+                        localisationFinished();
                     }
                 } catch (e) {
-                    console.log('Unable to retrieve location', e);
+                    console.log('Error while retrieving location', e);
+                    localisationFinished();
                 }
+            }, function () {
+                console.log('Unable to retrieve location');
+                localisationFinished();
             });
         } else {
             console.log('Geolocalisation not supported');
@@ -270,8 +308,24 @@ roamingEditor.controller('InterventionController', function InterventionControll
         return input;
     };
 
+    function filterBlankPeople() {
+        for (var i = 0; i < $scope.intervention.people.length; i++) {
+            if ($scope.intervention.people[i].trim() == '') {
+                $scope.intervention.people.splice(i, 1);
+            }
+        }
+    }
+
     $scope.addPerson = function () {
+        filterBlankPeople();
         $scope.intervention.people.push('');
+        // A timeout is required because the field doesn't exist yet
+        $timeout(function () {
+            var elts = document.querySelectorAll('.personInput');
+            if (elts && elts.length > 0) {
+                elts[elts.length-1].focus();
+            }
+        });
     }
     $scope.removePerson = function (personIndex) {
         if (personIndex < $scope.intervention.people.length
@@ -302,6 +356,7 @@ roamingEditor.controller('InterventionController', function InterventionControll
     }
 
     $scope.saveInterventionEdit = function () {
+        filterBlankPeople();
         $scope.intervention.time = $scope.hour + ':' + $scope.minute;
         if (interventionIndex == -1) {
             roaming.interventions.push($scope.intervention);

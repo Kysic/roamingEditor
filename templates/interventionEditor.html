@@ -1,7 +1,5 @@
 <div id="intervention">
 
-  <form name="form" class="css-form">
-
     <fieldset>
       <legend>Heure de la rencontre</legend>
       <select name="hour" ng-model="hour" required="true">
@@ -19,13 +17,13 @@
           placeholder="Merci de préciser le lieu de la rencontre">
         </textarea>
         <button ng-click="resetLocation()" ng-attr-title="Réinitialiser" ng-show="intervention.location != ''">Réinitialiser</button>
-        <button ng-click="localizeMe()" ng-attr-title="Me localiser" ng-show="intervention.location == ''">Me localiser</button>
+        <button ng-click="localizeMe()" ng-attr-title="Me localiser" ng-show="intervention.location == ''" ng-disabled="localisationInProgress">Me localiser</button>
       </div>
     </fieldset>
     <fieldset>
       <legend>Personnes rencontrées</legend>
       <div ng-repeat="person in intervention.people track by $index">
-        <input ng-model="intervention.people[$index]" type="text" placeholder="Nom de la personne" />
+        <input class="personInput" ng-model="intervention.people[$index]" ng-enter="addPerson()" type="text" placeholder="Nom de la personne" />
         <button ng-click="removePerson($index)" ng-attr-title="Enlever {{intervention.people[$index]}}">-</button>
       </div>
       <button ng-click="addPerson()" ng-attr-title="Ajouter une personne">+</button>
@@ -71,10 +69,8 @@
       </textarea>
     </fieldset>
     <fieldset>
-        <input type="button" ng-click="cancelInterventionEdit()" value="Annuler" />
-        <input type="submit" ng-click="saveInterventionEdit()" value="Enregistrer" />
+      <input type="button" ng-click="cancelInterventionEdit()" value="Annuler" />
+      <input type="submit" ng-click="saveInterventionEdit()" value="Enregistrer" />
     </fieldset>
-
-  </form>
 </div>
 

@@ -5,8 +5,8 @@
   <label for="tutorField">Tuteur</label> <input id="tutorField" ng-model="roaming.tutor" type="text" ng-change="updateRoaming()" /><br/>
   <div ng-repeat="volunteer in roaming.volunteers track by $index">
     Bénévole
-    <input ng-model="roaming.volunteers[$index]" type="text" ng-change="updateRoaming()"  />
-    <button ng-click="removeVolunteer($index)" ng-attr-title="Enlever un bénévole">-</button>
+    <input class="volunteerInput" ng-model="roaming.volunteers[$index]" ng-enter="addVolunteer()" type="text" ng-change="updateRoaming()"  />
+    <button ng-click="removeVolunteer($index)" ng-attr-title="Enlever un bénévole" ng-disabled="roaming.volunteers.length &lt;= 1">-</button>
   </div>
   <button ng-click="addVolunteer()" ng-attr-title="Ajouter un bénévole" ng-show="roaming.volunteers.length &lt; 3">+</button>
   <br/>
