@@ -10,6 +10,7 @@
       <th>Bénévole</th>
       <th>Bénévole</th>
       <th>Nb interventions</th>
+      <th>Envoi au serveur</th>
       <th>Action</th>
     </tr>
     <tr ng-repeat="roaming in roamings">
@@ -19,8 +20,12 @@
       <td>{{roaming.volunteers[1]}}</td>
       <td>{{roaming.volunteers[2]}}</td>
       <td>{{roaming.interventions.length}}</td>
+      <td class="{{ {IN_PROGRESS:'statusInProgress', SYNCHRONIZED:'statusDone', FAILED:'statusFailed'}[roaming.synchroStatus] }}">
+        {{ {IN_PROGRESS:'en cours', SYNCHRONIZED:'synchronisé', FAILED:'échec'}[roaming.synchroStatus] }}
+      </td>
       <td>
         <button ng-click="editRoaming(roaming)">Editer</button>
+        <button ng-click="resynchro()" ng-show="roaming.synchroStatus != 'SYNCHRONIZED' && roaming.synchroStatus != 'IN_PROGRESS'">Resynchroniser</button>
       </td>
     </tr>
   </table>

@@ -24,18 +24,22 @@ roamingEditor.config(function($routeProvider) {
 });
 
 
-roamingEditor.factory('roamingService', function ($filter) {
-    
-    var roamings = { };
-    
-    // Try to resolve the cache manifest to update file cache if necessary
-    try {
-        window.applicationCache.update();
-    } catch (e) {
-        console.log('Unable to update application cache', e);
-    }
+roamingEditor.factory('roamingService', function ($filter, $http) {
 
+    var roamings = { };
+
+    updateApplicationCache();
     loadLocalStorage();
+    resynchro();
+
+    function updateApplicationCache() {
+        // Try to resolve the cache manifest to update file cache if necessary
+        try {
+            window.applicationCache.update();
+        } catch (e) {
+            console.log('Unable to update application cache', e);
+        }
+    }
 
     function loadLocalStorage() {
         var rawRoamings = localStorage.getItem('roamings');
@@ -55,10 +59,14 @@ roamingEditor.factory('roamingService', function ($filter) {
     }
 
     function getAllRoamings() {
+        return roamings;
+    }
+
+    function getAllRoamingsCopy() {
         return angular.copy(roamings);
     }
 
-    function getRoaming(roamingId) {
+    function getRoamingCopy(roamingId) {
         return angular.copy(roamings[roamingId]);
     }
 
@@ -73,13 +81,52 @@ roamingEditor.factory('roamingService', function ($filter) {
         }
     }
 
+    function resynchro() {
+        for (var roamingId in roamings) {
+            var roaming = roamings[roamingId];
+            if (roaming.synchroStatus != 'SYNCHRONIZED') {
+                sendRoamingToRemoteServer(roaming);
+            }
+        }
+    }
+
     function updateRoaming(roaming) {
+        roaming.version = roaming.version ? roaming.version + 1 : 1;
         roamings[roaming.date] = roaming;
         filterOldRoamings();
         updateRoamingsInLocalStorage();
+        sendRoamingToRemoteServer(roaming);
     }
 
-    return { getAllRoamings: getAllRoamings, getRoaming: getRoaming, updateRoaming: updateRoaming };
+    function sendRoamingToRemoteServer(roaming) {
+        roaming.synchroStatus = 'IN_PROGRESS';
+        $http.post(
+            'api/saveRoaming.php',
+            { roaming: roaming },
+            { roamingDate: roaming.date, roamingVersion: roaming.version}
+        ).then(function (response) {
+            updateSynchroStatus(response.config.roamingDate, response.config.roamingVersion, 'SYNCHRONIZED');
+        }, function (response) {
+            updateSynchroStatus(response.config.roamingDate, response.config.roamingVersion, 'FAILED');
+        });
+    }
+
+    function updateSynchroStatus(roamingDate, roamingVersion, status) {
+        var roaming = roamings[roamingDate];
+        if (roaming && roaming.version == roamingVersion) {
+            roaming.synchroStatus = status;
+            updateRoamingsInLocalStorage();
+        }
+    }
+
+    return {
+        loadLocalStorage: loadLocalStorage,
+        getAllRoamings: getAllRoamings,
+        getAllRoamingsCopy: getAllRoamingsCopy,
+        getRoamingCopy: getRoamingCopy,
+        updateRoaming: updateRoaming,
+        resynchro: resynchro
+    };
 });
 
 roamingEditor.directive('ngEnter', function() {
@@ -103,6 +150,10 @@ roamingEditor.controller('RoamingListController', function RoamingListController
         $location.path('/roaming/' + roaming.date);
     }
 
+    $scope.resynchro = function () {
+        roamingService.resynchro();
+    }
+
     $scope.createRoaming = function () {
         // between 0h and 8h, the current roaming date is the date of the previous date
         var currentRoamingDate = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
@@ -120,7 +171,7 @@ roamingEditor.controller('RoamingController',
         return;
     }
     if ($routeParams.roamingId) {
-        $scope.roaming = roamingService.getRoaming($routeParams.roamingId);
+        $scope.roaming = roamingService.getRoamingCopy($routeParams.roamingId);
     }
     if ( !$scope.roaming ) {
         $scope.roaming = {
@@ -205,7 +256,7 @@ roamingEditor.controller('InterventionController',
     var interventionIndex = $routeParams.interventionId;
 
     if ($routeParams.roamingId) {
-        roaming = roamingService.getRoaming($routeParams.roamingId);
+        roaming = roamingService.getRoamingCopy($routeParams.roamingId);
     }
     if ( !roaming ) {
         $location.path('/roamingsList');
@@ -371,13 +422,17 @@ roamingEditor.controller('InterventionController',
 });
 
 
-roamingEditor.controller('DebugController', function DebugController($scope, $location, roamingService) {
+roamingEditor.controller('DebugController', function DebugController($scope, $filter, $location, roamingService) {
 
-    $scope.roamings = roamingService.getAllRoamings();
+    $scope.roamingsJSON = $filter('json')(roamingService.getAllRoamingsCopy());
 
-    $scope.reset = function () {
-        var roamingsJson = JSON.stringify({});
-        localStorage.setItem('roamings', roamingsJson);
+    $scope.goRoamingsList = function () {
+        $location.path('/roamingsList');
+    }
+
+    $scope.save = function () {
+        localStorage.setItem('roamings', $scope.roamingsJSON);
+        roamingService.loadLocalStorage();
     }
 
 });

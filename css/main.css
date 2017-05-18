@@ -19,6 +19,15 @@ th, td {
 th {
     background: #ddd;
 }
+.statusDone {
+    color: #080;
+}
+.statusInProgress {
+    color: #e60;
+}
+.statusFailed {
+    color: #f00;
+}
 ul.roamingEditorPeopleList {
     padding: 0px;
     margin: 0px;

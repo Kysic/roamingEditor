@@ -1,7 +1,6 @@
 <div>
-  <button ng-click="reset()">Reset</button>
+  <button ng-click="goRoamingsList()">Accueil</button>
+  <button ng-click="save()">Sauvegarder</button>
   <hr/>
-  <pre style="text-align: left">
-    {{roamings | json}}
-  </pre>
+  <textarea ng-model="roamingsJSON" style="width: 700px; height: 700px"></textarea>
 </div>
