@@ -280,7 +280,8 @@ roamingEditor.controller('InterventionController',
             nbAdults: 0,
             nbChildren: 0,
             blankets: 0,
-            tents: 0
+            tents: 0,
+            comments: ''
         };
     }
 
@@ -367,6 +368,12 @@ roamingEditor.controller('InterventionController',
         }
     }
 
+    function formAlmostUntouchedByUser() {
+        return $scope.intervention.location.trim() == ''
+            && angular.equals($scope.intervention.people, [ '' ])
+            && $scope.intervention.comments.trim() == '';
+    }
+
     $scope.addPerson = function () {
         filterBlankPeople();
         $scope.intervention.people.push('');
@@ -392,7 +399,9 @@ roamingEditor.controller('InterventionController',
     }
 
     $scope.cancelInterventionEdit = function () {
-        $location.path('/roaming/' + $routeParams.roamingId);
+        if ( formAlmostUntouchedByUser() || confirm('Etes vous sûr de vouloir annuler cette intervention ?') ) {
+            $location.path('/roaming/' + $routeParams.roamingId);
+        }
     }
 
     /** Allow to sort intervention by time with time between 00:00 and 07:59 after time between 08:00 and 23:59 */
