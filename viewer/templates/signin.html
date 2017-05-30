@@ -1,0 +1,13 @@
+<h3>Inscription</h3>
+<div>
+    Si c'est votre première visite ici, utilisez le formulaire ci-dessous pour vous inscrire sur ce site.<br>
+    Vous recevrez ensuite un email qui vous permettra de choisir votre mot de passe.<br>
+</div><br/>
+<div class='login'>
+  <div class='error' ng-show="sessionInfo.lastError">{{sessionInfo.lastError}}</div>
+  <label for='email'>Email</label>
+  <input id='email' type='text' name='email' ng-model='email' placeholder="Votre adresse email" /><br/>
+  <button ng-click='signin()' ng-disabled='signinInProgress'>M'inscrire</button>
+</div>
+<br/>
+<button ng-click='cancel()'>Retour</button>

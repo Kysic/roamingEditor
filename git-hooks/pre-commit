@@ -1,0 +1,32 @@
+#!/bin/bash
+
+for fc in api/conf/*
+do
+    ft="api/conf_template/$(basename $fc)"
+    if ! [ -f $ft ]
+    then
+        echo "$ft does not exist at contrary to $fc" >&2
+        exit 1
+    fi
+    SED_CMD='sed -e "s/\(define(.*, \).*\();\)/\1\2/" -e "s/array(.*)/array()/"'
+    if ! diff -q <(eval $SED_CMD "$fc") <(eval $SED_CMD "$ft")
+    then
+        echo "$ft differ from $fc :" >&2
+        diff <(sed -e "s/\(define('.*',\ \).*\();\)/\1\2/" "$fc") <(sed -e "s/\(define('.*',\ \).*\();\)/\1\2/" "$ft") >&2
+        exit 1
+    fi
+done
+
+for ft in api/conf_template/*
+do
+    fc="api/conf/$(basename $ft)"
+    if ! [ -f $fc ]
+    then
+        echo "$fc does not exist at contrary to $ft" >&2
+        exit 1
+    fi
+done
+
+
+exit 0
+

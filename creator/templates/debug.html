@@ -1,0 +1,10 @@
+<div>
+  <button ng-click="goRoamingsList()">Accueil</button>
+  <hr/>
+  <input type="text" ng-model="apiKey" style="width: 400px" />
+  <button ng-click="updateApiKey()">Modifier l'apiKey</button>
+  <hr/>
+  <button ng-click="roamingsJSON='{}'">Réinitialiser</button>
+  <button ng-click="updateRoamings()">Sauvegarder</button><br/>
+  <textarea ng-model="roamingsJSON" style="width: 700px; height: 700px"></textarea>
+</div>

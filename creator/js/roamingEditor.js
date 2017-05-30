@@ -1,4 +1,6 @@
 
+var roamingApiEndPoint = '../api';
+
 var roamingEditor = angular.module('roamingEditor', ['ngRoute']);
 
 roamingEditor.config(function($routeProvider) {
@@ -26,22 +28,14 @@ roamingEditor.config(function($routeProvider) {
 
 roamingEditor.factory('roamingService', function ($filter, $http) {
 
+    var apiKey = '';
     var roamings = { };
 
-    updateApplicationCache();
     loadLocalStorage();
     resynchro();
 
-    function updateApplicationCache() {
-        // Try to resolve the cache manifest to update file cache if necessary
-        try {
-            window.applicationCache.update();
-        } catch (e) {
-            console.log('Unable to update application cache', e);
-        }
-    }
-
     function loadLocalStorage() {
+        apiKey = localStorage.getItem('apiKey');
         var rawRoamings = localStorage.getItem('roamings');
         if (rawRoamings) {
             try {
@@ -101,11 +95,16 @@ roamingEditor.factory('roamingService', function ($filter, $http) {
     function sendRoamingToRemoteServer(roaming) {
         roaming.synchroStatus = 'IN_PROGRESS';
         $http.post(
-            'api/saveRoaming.php',
+            roamingApiEndPoint + '/saveRoaming.php?apiKey=' + apiKey,
             { roaming: roaming },
-            { roamingDate: roaming.date, roamingVersion: roaming.version}
+            { roamingDate: roaming.date, roamingVersion: roaming.version }
         ).then(function (response) {
-            updateSynchroStatus(response.config.roamingDate, response.config.roamingVersion, 'SYNCHRONIZED');
+            if (response.data.status == 'success') {
+                updateSynchroStatus(response.config.roamingDate, response.config.roamingVersion, 'SYNCHRONIZED');
+            } else {
+                console.log('Server error : ' + response.data.errorMsg);
+                updateSynchroStatus(response.config.roamingDate, response.config.roamingVersion, 'FAILED');
+            }
         }, function (response) {
             updateSynchroStatus(response.config.roamingDate, response.config.roamingVersion, 'FAILED');
         });
@@ -119,7 +118,12 @@ roamingEditor.factory('roamingService', function ($filter, $http) {
         }
     }
 
+    function getApiKey() {
+        return apiKey;
+    }
+
     return {
+        getApiKey: getApiKey,
         loadLocalStorage: loadLocalStorage,
         getAllRoamings: getAllRoamings,
         getAllRoamingsCopy: getAllRoamingsCopy,
@@ -181,7 +185,10 @@ roamingEditor.controller('RoamingController',
             vehicle: getVehicleAccordingToRoamingDate($routeParams.roamingId),
             interventions: [ ]
         };
-        $http.get('api/getInfoPlanning.php?roamingDate=' + $routeParams.roamingId).then(function (response) {
+        $http.get(
+            roamingApiEndPoint + '/getPlanning.php?apiKey=' + roamingService.getApiKey()
+            + '&roamingDate=' + $routeParams.roamingId
+        ).then(function (response) {
             if (response.data.tutor && $scope.roaming.tutor == '') {
                 $scope.roaming.tutor = response.data.tutor;
             }
@@ -434,12 +441,18 @@ roamingEditor.controller('InterventionController',
 roamingEditor.controller('DebugController', function DebugController($scope, $filter, $location, roamingService) {
 
     $scope.roamingsJSON = $filter('json')(roamingService.getAllRoamingsCopy());
+    $scope.apiKey = roamingService.getApiKey();
 
     $scope.goRoamingsList = function () {
         $location.path('/roamingsList');
     }
 
-    $scope.save = function () {
+    $scope.updateApiKey = function () {
+        localStorage.setItem('apiKey', $scope.apiKey);
+        roamingService.loadLocalStorage();
+    }
+
+    $scope.updateRoamings = function () {
         localStorage.setItem('roamings', $scope.roamingsJSON);
         roamingService.loadLocalStorage();
     }

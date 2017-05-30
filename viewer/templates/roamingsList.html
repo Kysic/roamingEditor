@@ -1,0 +1,36 @@
+<div id="roamingList">
+  <div class="login">
+    Connecté en tant que {{sessionInfo.user.firstname}} {{sessionInfo.user.lastname}}
+    <button ng-click="setPassword()">Modifier mon mot de passe</button>
+    <button ng-click="logout()">Me déconnecter</button>
+  </div>
+  <h2>Liste des dernières maraudes</h2>
+  <div class='spaceUnder'>
+    Les comptes rendus de maraudes sont des informations sensibles réservées aux membres de l'association
+    <a target='_blank' href='https://www.samu-social-grenoble.fr/'>VINCI</a>.<br>
+  </div>
+  <div ng-show="roamings.length == 0">
+    Aucun compte rendu de maraude n'est disponible pour l'instant
+  </div>
+  <table ng-show="roamings.length > 0">
+    <tr>
+      <th>Date</th>
+      <th>Tuteur</th>
+      <th>Coéquipier</th>
+      <th>Coéquipier</th>
+      <th>Coéquipier</th>
+      <th>Action</th>
+    </tr>
+    <tr ng-repeat="roaming in roamings | orderBy:'-date'">
+      <td>{{roaming.date}}</td>
+      <td>{{roaming.tutor}}</td>
+      <td>{{roaming.volunteers[0]}}</td>
+      <td>{{roaming.volunteers[1]}}</td>
+      <td>{{roaming.volunteers[2]}}</td>
+      <td>
+        <button ng-click="printRoaming(roaming.id)" ng-disabled="editRunning">Visualiser</button>
+        <button ng-click="editRoaming(roaming.id)" ng-disabled="editRunning">Editer</button>
+      </td>
+    </tr>
+  </table>
+</div>

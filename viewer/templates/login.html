@@ -1,0 +1,22 @@
+<h3>Connexion</h3>
+<div>Veuillez compléter le formulaire suivant pour vous connecter :</div>
+<form class="login formAlign">
+  <div class='error' ng-show="sessionInfo.lastError">{{sessionInfo.lastError}}</div>
+  <div class="fieldGroup">
+    <label for='email'>Email</label>
+    <input id='email' type='text' name='email' ng-model='email' placeholder="Votre adresse email" />
+  </div>
+  <div class="fieldGroup">
+    <label for="password">Mot de passe</label>
+    <input id='password' type='password' name='password' ng-model='password' placeholder="Votre mot de passe" />
+  </div>
+  <div class="fieldGroup">
+    <label for="stayLogged">Rester connecté</label>
+    <input id='stayLogged' type='checkbox' name='stayLogged' ng-model='stayLogged' value='true' />
+  </div>
+  <div class="fieldGroup">
+    <button ng-click='login()' ng-disabled='loginInProgress'>Me connecter</button>
+  </div>
+</form>
+<button ng-click='resetPassword()' class="linkButton">Mot de passe perdu</button><br/><br/>
+Si vous n'êtes pas encore inscrit sur le site, <button ng-click='signin()' class="linkButton">c'est par ici</button>.

@@ -1,0 +1,58 @@
+html {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
+body {
+    margin: 0px;
+    height: 100%;
+    text-align: center;
+}
+table, tr, th, td {
+    margin: auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 3px 10px;
+}
+th {
+    background: #ddd;
+}
+#email {
+    width: 250px;
+}
+.spaceUnder {
+    padding-bottom: 15px;
+}
+.login {
+    background: #eeeeee;
+    padding: 10px;
+}
+.info {
+    background: #bbffbb;
+    font-weight: bold;
+    color: #000000;
+    padding: 5px;
+}
+.error {
+    background: #ffbbbb;
+    font-weight: bold;
+    color: #000000;
+    padding: 5px;
+}
+.linkButton {
+    /* Remove all decorations to look like normal text */
+    background: none;
+    border: none;
+    display: inline;
+    font: inherit;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    outline-offset: 0;
+    /* Additional styles to look like a link */
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}

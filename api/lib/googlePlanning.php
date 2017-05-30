@@ -1,5 +1,7 @@
 <?php
 
+require_once('conf/google.php');
+
 define('DAY_INDEX', 1);
 define('MONTH_INDEX', 2);
 define('YEAR_INDEX', 4);
@@ -16,7 +18,11 @@ function getVolunteerName($data, $volunteerIndex) {
 function getVolunteerGender($data, $volunteerIndex) {
     return strtolower(trim($data[TUTOR_INDEX + ($volunteerIndex * DIFF_INDEX_VOLUNTEER) + 1]));
 }
-function extractRoamingsFrom($docId, $sheetId) {
+function extractRoamingsOfMonth($roamingMonthDate) {
+    global $DOC_REF;
+    $monthId = date('Y-m', $roamingMonthDate);
+    $docId = $DOC_REF[$monthId][DOC_ID];
+    $sheetId = $DOC_REF[$monthId][SHEET_ID];
     $roamingData = array();
     $planningUrl = GOOGLE_DOC_URL . $docId . GOOGLE_DOC_CMD_CSV . $sheetId;
     if (($handle = fopen($planningUrl, 'r')) !== FALSE) {
@@ -53,6 +59,10 @@ function extractRoamingsFrom($docId, $sheetId) {
         fclose($handle);
     }
     return $roamingData;
+}
+
+function getRoamingOfDate($roamingMonthData, $roamingDate) {
+    return @$roamingMonthData[date('Y-m-d', $roamingDate)];
 }
 
 ?>
