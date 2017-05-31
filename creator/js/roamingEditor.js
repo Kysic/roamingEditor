@@ -122,6 +122,12 @@ roamingEditor.factory('roamingService', function ($filter, $http) {
         return apiKey;
     }
 
+    function getCurrentRoamingDateId() {
+        // between 0h and 8h, the current roaming date is the date of the previous date
+        var currentRoamingDate = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
+        return $filter('date')(currentRoamingDate, 'yyyy-MM-dd');
+    }
+
     return {
         getApiKey: getApiKey,
         loadLocalStorage: loadLocalStorage,
@@ -129,6 +135,7 @@ roamingEditor.factory('roamingService', function ($filter, $http) {
         getAllRoamingsCopy: getAllRoamingsCopy,
         getRoamingCopy: getRoamingCopy,
         updateRoaming: updateRoaming,
+        getCurrentRoamingDateId: getCurrentRoamingDateId,
         resynchro: resynchro
     };
 });
@@ -159,16 +166,13 @@ roamingEditor.controller('RoamingListController', function RoamingListController
     }
 
     $scope.createRoaming = function () {
-        // between 0h and 8h, the current roaming date is the date of the previous date
-        var currentRoamingDate = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
-        var roamingDateId = $filter('date')(currentRoamingDate, 'yyyy-MM-dd');
-        $location.path('/roaming/' + roamingDateId);
+        $location.path('/roaming/' + roamingService.getCurrentRoamingDateId());
     }
 
 });
 
 roamingEditor.controller('RoamingController',
-  function RoamingController($scope, $routeParams, $location, $timeout, $http, roamingService) {
+  function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, roamingService) {
 
     if ( ! /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test($routeParams.roamingId)) {
         $location.path('/roamingsList');
@@ -178,6 +182,10 @@ roamingEditor.controller('RoamingController',
         $scope.roaming = roamingService.getRoamingCopy($routeParams.roamingId);
     }
     if ( !$scope.roaming ) {
+        initRoaming();
+    }
+
+    function initRoaming() {
         $scope.roaming = {
             date: $routeParams.roamingId,
             tutor: '',
@@ -185,6 +193,15 @@ roamingEditor.controller('RoamingController',
             vehicle: getVehicleAccordingToRoamingDate($routeParams.roamingId),
             interventions: [ ]
         };
+        roamingService.updateRoaming($scope.roaming);
+        getTeammates();
+    }
+
+    function getVehicleAccordingToRoamingDate(roamingDate) {
+        return parseInt(roamingDate.substring(8,10)) % 2 == 0 ? '2' : '1';
+    }
+
+    function getTeammates() {
         $http.get(
             roamingApiEndPoint + '/getPlanning.php?apiKey=' + roamingService.getApiKey()
             + '&roamingDate=' + $routeParams.roamingId
@@ -197,11 +214,6 @@ roamingEditor.controller('RoamingController',
             }
             $scope.updateRoaming();
         });
-        roamingService.updateRoaming($scope.roaming);
-    }
-
-    function getVehicleAccordingToRoamingDate(roamingDate) {
-        return parseInt(roamingDate.substring(8,10)) % 2 == 0 ? '2' : '1';
     }
 
     $scope.addIntervention = function () {
@@ -251,6 +263,13 @@ roamingEditor.controller('RoamingController',
     $scope.goBack = function () {
         $location.path('/roamingsList');
     }
+
+    $scope.isEditable = function () {
+        return $routeParams.roamingId == roamingService.getCurrentRoamingDateId();
+    }
+    $interval(function(){
+        // Allow to refresh read only status every hour
+    },3600000)
 
 });
 
