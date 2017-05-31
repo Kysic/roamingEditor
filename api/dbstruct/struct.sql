@@ -3,7 +3,7 @@ CREATE TABLE `vcr_users` (
   `email` varchar(100) NOT NULL,
   `lastname` varchar(50),
   `firstname` varchar(50),
-  `role` enum('former', 'guest', 'member', 'tutor', 'board', 'admin', 'root') NOT NULL DEFAULT 'member',
+  `role` enum('former', 'guest', 'member', 'tutor', 'board', 'admin', 'root', 'appli') NOT NULL DEFAULT 'member',
   `passwordSalt` binary(16),
   `passwordHash` binary(32),
   `mailToken` binary(32),
@@ -24,6 +24,7 @@ CREATE TABLE `vcr_autologin` (
 CREATE TABLE `vcr_roamings` (
   `roamingId` int NOT NULL AUTO_INCREMENT,
   `creationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `creationUserId` int NOT NULL,
   `roamingDate` date NOT NULL,
   `version` int NOT NULL,
   `rawJson` text NOT NULL,
@@ -31,7 +32,8 @@ CREATE TABLE `vcr_roamings` (
   `generationDate` timestamp,
   `generationUserId` int,
   PRIMARY KEY (`roamingId`),
-  CONSTRAINT `vcr_roamings_userId_ref` FOREIGN KEY (`generationUserId`) REFERENCES `vcr_users` (`userId`),
+  CONSTRAINT `vcr_roamings_creaUserId_ref` FOREIGN KEY (`creationUserId`) REFERENCES `vcr_users` (`userId`),
+  CONSTRAINT `vcr_roamings_genUserId_ref` FOREIGN KEY (`generationUserId`) REFERENCES `vcr_users` (`userId`),
   INDEX `idx_roamingDateVersion` (`roamingDate`, `version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -3,7 +3,7 @@ var roamingApiEndPoint = '../api';
 
 var roamingViewer = angular.module('roamingViewer', ['ngRoute']);
 
-roamingViewer.config(function($routeProvider) {
+roamingViewer.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
         templateUrl: 'templates/roamingsList.html',
         controller: 'RoamingListController'
@@ -31,7 +31,7 @@ roamingViewer.config(function($routeProvider) {
     .otherwise({
         redirectTo: '/roamingsList'
     });
-});
+}]);
 
 
 roamingViewer.factory('authService', function ($rootScope, $http) {

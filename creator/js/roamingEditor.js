@@ -1,9 +1,9 @@
 
 var roamingApiEndPoint = '../api';
 
-var roamingEditor = angular.module('roamingEditor', ['ngRoute']);
+var roamingEditor = angular.module('roamingEditor', ['ngRoute', 'ngCookies']);
 
-roamingEditor.config(function($routeProvider) {
+roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
         templateUrl: 'templates/roamingsList.html',
         controller: 'RoamingListController'
@@ -23,19 +23,22 @@ roamingEditor.config(function($routeProvider) {
     .otherwise({
         redirectTo: '/roamingsList'
     });
-});
+}]);
+
+roamingEditor.config(['$cookiesProvider', function($cookiesProvider) {
+    $cookiesProvider.defaults.path = '/';
+}]);
 
 
-roamingEditor.factory('roamingService', function ($filter, $http) {
+roamingEditor.factory('roamingService', function ($filter, $http, $cookies) {
 
-    var apiKey = '';
     var roamings = { };
 
     loadLocalStorage();
     resynchro();
 
     function loadLocalStorage() {
-        apiKey = localStorage.getItem('apiKey');
+        synchronizeApiKeyWithAutoLogin();
         var rawRoamings = localStorage.getItem('roamings');
         if (rawRoamings) {
             try {
@@ -43,6 +46,13 @@ roamingEditor.factory('roamingService', function ($filter, $http) {
             } catch (e) {
                 console.log('Unable to restore local storage', e);
             }
+        }
+    }
+
+    function synchronizeApiKeyWithAutoLogin() {
+        var apiKey = localStorage.getItem('apiKey');
+        if ( apiKey ) {
+            $cookies.put('vcrPersistentLogin', apiKey);
         }
     }
 
@@ -95,7 +105,7 @@ roamingEditor.factory('roamingService', function ($filter, $http) {
     function sendRoamingToRemoteServer(roaming) {
         roaming.synchroStatus = 'IN_PROGRESS';
         $http.post(
-            roamingApiEndPoint + '/saveRoaming.php?apiKey=' + apiKey,
+            roamingApiEndPoint + '/saveRoaming.php',
             { roaming: roaming },
             { roamingDate: roaming.date, roamingVersion: roaming.version }
         ).then(function (response) {
@@ -118,10 +128,6 @@ roamingEditor.factory('roamingService', function ($filter, $http) {
         }
     }
 
-    function getApiKey() {
-        return apiKey;
-    }
-
     function getCurrentRoamingDateId() {
         // between 0h and 8h, the current roaming date is the date of the previous date
         var currentRoamingDate = new Date(new Date().getTime() - 8 * 60 * 60 * 1000);
@@ -129,7 +135,6 @@ roamingEditor.factory('roamingService', function ($filter, $http) {
     }
 
     return {
-        getApiKey: getApiKey,
         loadLocalStorage: loadLocalStorage,
         getAllRoamings: getAllRoamings,
         getAllRoamingsCopy: getAllRoamingsCopy,
@@ -203,8 +208,7 @@ roamingEditor.controller('RoamingController',
 
     function getTeammates() {
         $http.get(
-            roamingApiEndPoint + '/getPlanning.php?apiKey=' + roamingService.getApiKey()
-            + '&roamingDate=' + $routeParams.roamingId
+            roamingApiEndPoint + '/getPlanning.php?roamingDate=' + $routeParams.roamingId
         ).then(function (response) {
             if (response.data.tutor && $scope.roaming.tutor == '') {
                 $scope.roaming.tutor = response.data.tutor;
@@ -457,10 +461,15 @@ roamingEditor.controller('InterventionController',
 });
 
 
-roamingEditor.controller('DebugController', function DebugController($scope, $filter, $location, roamingService) {
+roamingEditor.controller('DebugController', function DebugController($scope, $cookies, $filter, $location, roamingService) {
 
-    $scope.roamingsJSON = $filter('json')(roamingService.getAllRoamingsCopy());
-    $scope.apiKey = roamingService.getApiKey();
+    loadCurrentConf();
+
+    function loadCurrentConf() {
+        $scope.roamingsJSON = $filter('json')(roamingService.getAllRoamingsCopy());
+        $scope.autoLogin = $cookies.get('vcrPersistentLogin');
+        $scope.apiKey = localStorage.getItem('apiKey');
+    }
 
     $scope.goRoamingsList = function () {
         $location.path('/roamingsList');
@@ -468,12 +477,15 @@ roamingEditor.controller('DebugController', function DebugController($scope, $fi
 
     $scope.updateApiKey = function () {
         localStorage.setItem('apiKey', $scope.apiKey);
+        $cookies.put('vcrPersistentLogin', $scope.apiKey);
         roamingService.loadLocalStorage();
+        loadCurrentConf();
     }
 
     $scope.updateRoamings = function () {
         localStorage.setItem('roamings', $scope.roamingsJSON);
         roamingService.loadLocalStorage();
+        loadCurrentConf();
     }
 
 });

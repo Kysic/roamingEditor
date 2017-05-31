@@ -25,7 +25,7 @@ try {
     }
     validateRoamingDate($roaming->date);
     validateRoamingVersion($roaming->version);
-    addRoaming($roaming);
+    addRoaming($roaming, getSessionUser()->userId);
     returnResult(array('status' => 'success'));
 } catch (Exception $e) {
     returnError($e);

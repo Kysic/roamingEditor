@@ -31,7 +31,7 @@ function getPermissions() {
     global $ROLES_PERMISSIONS;
     $role = getRole();
     if (!array_key_exists($role, $ROLES_PERMISSIONS)) {
-        return $ROLES_PERMISSIONS[UNSIGNED_USER_ROLE];
+        return $ROLES_PERMISSIONS[VISITOR];
     }
     return $ROLES_PERMISSIONS[$role];
 }
@@ -123,34 +123,28 @@ function validateRole($role) {
 
 session_start();
 
-/// API key login ///
-if ( !empty($_GET['apiKey']) ) {
-    require_once(API_KEYS_CONF);
-    if (in_array($_GET['apiKey'], $API_KEYS)) {
-        $_SESSION['USER'] = (object) array('role' => 'appli');
-    }
-}
-
 /// Autologin ///
 define('AUTOLOGIN_COOKIE_KEY' , 'vcrPersistentLogin');
 function resetAutologinIdCookie() {
-    setcookie(AUTOLOGIN_COOKIE_KEY, '', time() - AUTOLOGIN_COOKIE_EXPIRATION);
+    setcookie(AUTOLOGIN_COOKIE_KEY, '', time() - AUTOLOGIN_COOKIE_EXPIRATION, '/');
 }
 function generateAutologinId($userId) {
     require_once(USER_SQL_LIB);
     $autologinId = createAutologinIdForUserId($userId);
-    setcookie(AUTOLOGIN_COOKIE_KEY, $autologinId, time() + AUTOLOGIN_COOKIE_EXPIRATION);
+    setcookie(AUTOLOGIN_COOKIE_KEY, $autologinId, time() + AUTOLOGIN_COOKIE_EXPIRATION, '/');
+}
+function connectWithAutologin($autologinId64) {
+    require_once(USER_SQL_LIB);
+    $user = getUserWithAutologinId($autologinId64);
+    if (!$user) {
+        throw new NotFoundException('Unrecognized autologin id');
+    }
+    $_SESSION['USER'] = $user;
 }
 
 if ( !isLoggedIn() && !empty($_COOKIE[AUTOLOGIN_COOKIE_KEY]) ) {
     try {
-        $autologinId64 = $_COOKIE[AUTOLOGIN_COOKIE_KEY];
-        require_once(USER_SQL_LIB);
-        $user = getUserWithAutologinId($autologinId64);
-        if (!$user) {
-            throw new NotFoundException('Unrecognized autologin id');
-        }
-        $_SESSION['USER'] = $user;
+        connectWithAutologin($_COOKIE[AUTOLOGIN_COOKIE_KEY]);
     } catch (Exception $e) {
         resetAutologinIdCookie();
     }

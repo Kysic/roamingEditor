@@ -67,7 +67,7 @@ function resetPassword() {
     sendResetPasswordToken($user->email, $user->firstname, $user->lastname, $user->userId, $mailToken);
 }
 function login() {
-    checkHasPermission(P_LOG_IN, 'Vous n\'êtes pas autorisé à vous loguer sur le site.');
+    checkHasPermission(P_LOG_IN, 'Vous n\'êtes pas autorisé à vous connecter sur le site.');
     checkSessionToken(@$_POST['sessionToken']);
     $email = strtolower(@$_POST['email']);
     validateEmail($email);
@@ -81,6 +81,7 @@ function login() {
     }
 }
 function logout() {
+    checkHasPermission(P_LOG_OUT, 'Vous n\'êtes pas autorisé à vous déconnecter du site.');
     checkSessionToken(@$_POST['sessionToken']);
     require_once(USER_SQL_LIB);
     deleteUserAutologinId(getSessionUser()->userId);

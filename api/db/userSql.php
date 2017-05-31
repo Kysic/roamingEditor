@@ -10,11 +10,11 @@ function hashPasssword($salt, $password) {
 }
 
 function generateSalt() {
-	return openssl_random_pseudo_bytes(16);
+    return openssl_random_pseudo_bytes(16);
 }
 
 function generateMailToken() {
-	return openssl_random_pseudo_bytes(32);
+    return openssl_random_pseudo_bytes(32);
 }
 
 function changePassword($userId, $newPassword) {
@@ -31,12 +31,12 @@ function changePassword($userId, $newPassword) {
 }
 
 function getAllUsers() {
-	$query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
+    $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
              ' FROM '.USERS_TABLE.
-		     ' ORDER BY firstname, lastname';
-	$request = getPdo()->prepare($query);
+             ' ORDER BY firstname, lastname';
+    $request = getPdo()->prepare($query);
     executeWithException($request);
-	return $request->fetchAll(PDO::FETCH_OBJ);
+    return $request->fetchAll(PDO::FETCH_OBJ);
 }
 
 function getUserWithId($userId) {
@@ -63,11 +63,11 @@ function addUser($email, $firstname, $lastname) {
     if (getUserWithEmail($email)) {
         throw new BadRequestException('Un compte existe déjà pour cette adresse email, utilisez la procédure de mot de passe perdu si vous avez oublié votre mot de passe.');
     }
-	$query = 'INSERT INTO '.USERS_TABLE.' (email, firstname, lastname) VALUES (:email, :firstname, :lastname)';
-	$request = getPdo()->prepare($query);
-	$request->bindValue(':email', $email, PDO::PARAM_STR);
-	$request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
-	$request->bindValue(':lastname', $lastname, PDO::PARAM_STR);
+    $query = 'INSERT INTO '.USERS_TABLE.' (email, firstname, lastname) VALUES (:email, :firstname, :lastname)';
+    $request = getPdo()->prepare($query);
+    $request->bindValue(':email', $email, PDO::PARAM_STR);
+    $request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
+    $request->bindValue(':lastname', $lastname, PDO::PARAM_STR);
     executeWithException($request);
 }
 
@@ -93,38 +93,38 @@ function checkAndGetUser($email, $password) {
 }
 
 function updateUser($userId, $email, $firstname, $lastname) {
-	$query = 'UPDATE '.USERS_TABLE.
-	         ' SET email=:email, firstname=:firstname, lastname=:lastname'.
+    $query = 'UPDATE '.USERS_TABLE.
+             ' SET email=:email, firstname=:firstname, lastname=:lastname'.
              ' WHERE userId=:userId';
-	$request = getPdo()->prepare($query);
-	$request->bindValue(':userId', $userId, PDO::PARAM_INT);
-	$request->bindValue(':email', $email, PDO::PARAM_STR);
-	$request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
-	$request->bindValue(':lastname', $email, PDO::PARAM_STR);
+    $request = getPdo()->prepare($query);
+    $request->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $request->bindValue(':email', $email, PDO::PARAM_STR);
+    $request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
+    $request->bindValue(':lastname', $email, PDO::PARAM_STR);
     executeWithException($request);
-	return $request->errorCode();
+    return $request->errorCode();
 }
 
 function updateUserRole($userId, $newRole) {
-	$query = 'UPDATE '.USERS_TABLE.
-	         ' SET role=:role'.
+    $query = 'UPDATE '.USERS_TABLE.
+             ' SET role=:role'.
              ' WHERE userId=:userId';
-	$request = getPdo()->prepare($query);
-	$request->bindValue(':userId', $userId, PDO::PARAM_INT);
-	$request->bindValue(':role', $newRole, PDO::PARAM_STR);
+    $request = getPdo()->prepare($query);
+    $request->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $request->bindValue(':role', $newRole, PDO::PARAM_STR);
     executeWithException($request);
-	return $request->errorCode();
+    return $request->errorCode();
 }
 
 function generateUserMailToken($userId) {
     $mailToken = generateMailToken();
-	$query = 'UPDATE '.USERS_TABLE.
-	         ' SET mailToken=:mailToken WHERE userId=:userId';
-	$request = getPdo()->prepare($query);
-	$request->bindValue(':userId', $userId, PDO::PARAM_INT);
-	$request->bindValue(':mailToken', $mailToken, PDO::PARAM_STR);
+    $query = 'UPDATE '.USERS_TABLE.
+             ' SET mailToken=:mailToken WHERE userId=:userId';
+    $request = getPdo()->prepare($query);
+    $request->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $request->bindValue(':mailToken', $mailToken, PDO::PARAM_STR);
     executeWithException($request);
-	return base64_encode($mailToken);
+    return base64_encode($mailToken);
 }
 
 function validateMailToken($userId, $mailToken) {
@@ -132,11 +132,11 @@ function validateMailToken($userId, $mailToken) {
     if (!$mailToken) {
         throw new BadRequestException('Token de validation invalide, assurez-vous d\'avoir copier correctement l\'URL reçue par email.');
     }
-	$query = 'SELECT userId FROM '.USERS_TABLE.
-	         ' WHERE userId=:userId AND mailToken=:mailToken';
-	$request = getPdo()->prepare($query);
-	$request->bindValue(':userId', $userId, PDO::PARAM_INT);
-	$request->bindValue(':mailToken', $mailToken, PDO::PARAM_STR);
+    $query = 'SELECT userId FROM '.USERS_TABLE.
+             ' WHERE userId=:userId AND mailToken=:mailToken';
+    $request = getPdo()->prepare($query);
+    $request->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $request->bindValue(':mailToken', $mailToken, PDO::PARAM_STR);
     executeWithException($request);
     $user = $request->fetch(PDO::FETCH_OBJ);
     if ( !$user  || $user->userId != $userId ) {
@@ -145,10 +145,10 @@ function validateMailToken($userId, $mailToken) {
 }
 
 function resetUserMailToken($userId) {
-	$query = 'UPDATE '.USERS_TABLE.
-	         ' SET mailToken = NULL WHERE userId=:userId';
-	$request = getPdo()->prepare($query);
-	$request->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $query = 'UPDATE '.USERS_TABLE.
+             ' SET mailToken = NULL WHERE userId=:userId';
+    $request = getPdo()->prepare($query);
+    $request->bindValue(':userId', $userId, PDO::PARAM_INT);
     executeWithException($request);
 }
 
@@ -156,12 +156,12 @@ function resetUserMailToken($userId) {
 function deleteUserAutologinId($userId) {
     $query = 'DELETE FROM '.AUTOLOGIN_TABLE.' WHERE userId=:userId';
     $request = getPdo()->prepare($query);
-	$request->bindValue(':userId', $userId, PDO::PARAM_INT);
+    $request->bindValue(':userId', $userId, PDO::PARAM_INT);
     executeWithException($request);
 }
 function deleteExpiredAutologinId() {
-	$query = 'DELETE FROM '.AUTOLOGIN_TABLE.
-	         ' WHERE connectionDate < (CURRENT_TIMESTAMP - INTERVAL '.AUTOLOGIN_COOKIE_EXPIRATION.' SECOND)';
+    $query = 'DELETE FROM '.AUTOLOGIN_TABLE.
+             ' WHERE connectionDate < (CURRENT_TIMESTAMP - INTERVAL '.AUTOLOGIN_COOKIE_EXPIRATION.' SECOND)';
     $request = getPdo()->prepare($query);
     executeWithException($request);
 }
@@ -183,10 +183,10 @@ function createAutologinIdForUserId($userId) {
     deleteExpiredAutologinId();
     // Create the new one
     $autologinId = openssl_random_pseudo_bytes(48);
-	$query = 'INSERT INTO '.AUTOLOGIN_TABLE.' (autologinId, userId) VALUES (:autologinId, :userId)';
-	$request = getPdo()->prepare($query);
-	$request->bindValue(':autologinId', $autologinId, PDO::PARAM_STR);
-	$request->bindValue(':userId', $userId, PDO::PARAM_STR);
+    $query = 'INSERT INTO '.AUTOLOGIN_TABLE.' (autologinId, userId) VALUES (:autologinId, :userId)';
+    $request = getPdo()->prepare($query);
+    $request->bindValue(':autologinId', $autologinId, PDO::PARAM_STR);
+    $request->bindValue(':userId', $userId, PDO::PARAM_STR);
     executeWithException($request);
     return base64_encode($autologinId);
 }

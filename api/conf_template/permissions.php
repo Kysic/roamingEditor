@@ -30,14 +30,14 @@ define('ROOT', 'root');
 #
 function buildRolesPermissions() {
     $visitor = array( P_SIGN_IN, P_LOG_IN, P_RESET_PASSWORD );
-    $appli = array ( P_SEE_PLANNING, P_SAVE_ROAMINGS );
+    $appli = array ( P_SEE_PLANNING, P_SEE_LAST_REPORT, P_SAVE_ROAMINGS );
     $former = array( P_LOG_OUT, P_CHANGE_PASSWORD );
-    $guest = array_merge($former, array( P_SEE_PLANNING ));
-    $member = array_merge($guest, array( P_SEE_NAMES, P_SEE_LAST_REPORT, P_EDIT_REPORT ));
-    $tutor = array_merge($member, array(  ));
-    $board = array_merge($tutor, array( P_SEE_ALL_REPORT ));
-    $admin = array_merge($board, array( P_SEE_USERS_LIST, P_ASSIGN_ROLE ));
-    $root = array_merge($admin, array( P_SAVE_ROAMINGS, P_GENERATE_PASSWORD_TOKEN ));
+    $guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES ), $former);
+    $member = array_merge(array( P_SEE_LAST_REPORT, P_EDIT_REPORT ), $guest);
+    $tutor = array_merge(array(  ), $member);
+    $board = array_merge(array( P_SEE_ALL_REPORT ), $tutor);
+    $admin = array_merge(array( P_SEE_USERS_LIST, P_ASSIGN_ROLE ), $board);
+    $root = array_merge(array( P_SAVE_ROAMINGS, P_GENERATE_PASSWORD_TOKEN ), $admin);
     return array(
         VISITOR => $visitor,
         APPLI => $appli,

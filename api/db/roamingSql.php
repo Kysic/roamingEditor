@@ -4,12 +4,13 @@ require_once('db/sql.php');
 
 define('ROAMINGS_TABLE', 'vcr_roamings');
 
-function addRoaming($roaming) {
-    $query = 'INSERT INTO '.ROAMINGS_TABLE.' (roamingDate, version, rawJson)'.
-             ' VALUES (:roamingDate, :version, :rawJson)';
+function addRoaming($roaming, $userId) {
+    $query = 'INSERT INTO '.ROAMINGS_TABLE.' (roamingDate, version, creationUserId, rawJson)'.
+             ' VALUES (:roamingDate, :version, :creationUserId, :rawJson)';
     $request = getPdo()->prepare($query);
     $request->bindValue(':roamingDate', $roaming->date, PDO::PARAM_STR);
     $request->bindValue(':version', $roaming->version, PDO::PARAM_INT);
+    $request->bindValue(':creationUserId', $userId, PDO::PARAM_INT);
     $request->bindValue(':rawJson', json_encode($roaming), PDO::PARAM_STR);
     executeWithException($request);
 }
@@ -68,7 +69,7 @@ function setRoamingDocId($roamingId, $docId, $userId) {
     $request = getPdo()->prepare($query);
     $request->bindValue(':roamingId', $roamingId, PDO::PARAM_INT);
     $request->bindValue(':docId', $docId, PDO::PARAM_STR);
-    $request->bindValue(':generationUserId', $userId, PDO::PARAM_STR);
+    $request->bindValue(':generationUserId', $userId, PDO::PARAM_INT);
     executeWithException($request);
     return $request->errorCode();
 }

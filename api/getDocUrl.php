@@ -9,14 +9,13 @@ try {
     checkLoggedIn();
     checkHasPermission(P_EDIT_REPORT);
 
-    $userId = getSessionUser()->userId;
     $roamingId = @$_GET['roamingId'];
     if ( !$roamingId ) {
         throw new BadRequestException('Identifiant de maraude (roamingId) attendu.');
     }
     $roamingDate = getRoamingDate($roamingId);
     validateRoamingDate($roamingDate);
-    $docId = getOrCreateDocId($roamingId, $userId);
+    $docId = getOrCreateDocId($roamingId, getSessionUser()->userId;
     returnResult(array(
         'status' => 'success',
         'docId' => $docId,
