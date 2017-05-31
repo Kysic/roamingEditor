@@ -12,7 +12,7 @@ do
     if ! diff -q <(eval $SED_CMD "$fc") <(eval $SED_CMD "$ft")
     then
         echo "$ft differ from $fc :" >&2
-        diff <(sed -e "s/\(define('.*',\ \).*\();\)/\1\2/" "$fc") <(sed -e "s/\(define('.*',\ \).*\();\)/\1\2/" "$ft") >&2
+        diff <(eval $SED_CMD "$fc") <(eval $SED_CMD "$ft") >&2
         exit 1
     fi
 done

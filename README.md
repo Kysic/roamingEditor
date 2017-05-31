@@ -13,8 +13,12 @@
 - Renseigner la clé d'API google dans la page index.html
 - Déposer les fichiers sur le serveur web/php
 
+### Outils externes
+- angular js avec le module angular-route
+- maps.googleapis
+- PHPMailer avec le module smtp
+
 ### Informations techniques
-- Basé sur angular js
 - Utilise le local storage pour éviter de perdre un CR en cas de plantage de la tablette
 - Utilise un Web App manifest (https://w3c.github.io/manifest/) pour être installé en tant qu'application android via chrome
 
@@ -30,7 +34,3 @@
   git config filter.googleapikey.smudge "sed 's/GOOGLE_API_KEY/${MY_API_KEY}/'"
   ```
 
-### External tools
-- angular js (with angular-route module)
-- maps.googleapis
-- PHPMailer with smtp module
