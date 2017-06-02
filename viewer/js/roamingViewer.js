@@ -157,6 +157,10 @@ roamingViewer.controller('RoamingListController', function RoamingListController
         });
     }
 
+    $scope.hasP = function (permission) {
+        return $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
+    }
+
     $scope.printRoaming = function (roamingId) {
         $window.open(roamingApiEndPoint + '/getPdf.php?roamingId=' + roamingId);
     }

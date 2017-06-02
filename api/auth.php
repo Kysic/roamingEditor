@@ -49,7 +49,7 @@ function setPassword() {
         changePassword($userId, $password);
         resetUserMailToken($userId);
         deleteUserAutologinId($userId);
-        $_SESSION['USER'] = getUserWithId($userId);
+        setSessionUser(getUserWithId($userId));
     }
 }
 function resetPassword() {
@@ -74,7 +74,7 @@ function login() {
     $password = @$_POST['password'];
     validatePassword($password);
     require_once(USER_SQL_LIB);
-    $_SESSION['USER'] = checkAndGetUser($email, $password);
+    setSessionUser(checkAndGetUser($email, $password));
     resetUserMailToken(getSessionUser()->userId);
     if (@$_POST['stayLogged'] == 'true') {
         generateAutologinId(getSessionUser()->userId);
@@ -86,8 +86,7 @@ function logout() {
     require_once(USER_SQL_LIB);
     deleteUserAutologinId(getSessionUser()->userId);
     resetAutologinIdCookie();
-    unset($_SESSION['USER']);
-    unset($_SESSION['POST_TOKEN']);
+    deleteSessionUser();
 }
 
 try {

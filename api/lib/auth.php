@@ -9,7 +9,30 @@ function isLoggedIn() {
 }
 
 function getSessionUser() {
-    return @$_SESSION['USER'];
+    if (isLoggedIn()) {
+        return $_SESSION['USER'];
+    } else {
+        global $ROLES_PERMISSIONS;
+        return (object) array('role' => VISITOR, 'permissions' => $ROLES_PERMISSIONS[VISITOR]);
+    }
+}
+
+function setSessionUser($user) {
+    global $ROLES_PERMISSIONS;
+    if (array_key_exists($user->role, $ROLES_PERMISSIONS)) {
+        $user->permissions = $ROLES_PERMISSIONS[$user->role];
+    } else {
+        $user->permissions = $ROLES_PERMISSIONS[VISITOR];
+    }
+    $_SESSION['USER'] = $user;
+}
+
+function deleteSessionUser() {
+    unset($_SESSION['USER']);
+}
+
+function hasPermission($permission) {
+    return in_array($permission, getSessionUser()->permissions);
 }
 
 function getSessionToken() {
@@ -18,28 +41,6 @@ function getSessionToken() {
     }
     return $_SESSION['POST_TOKEN'];
 }
-
-function getRole() {
-    if (isLoggedIn()) {
-        return getSessionUser()->role;
-    } else {
-        return VISITOR;
-    }
-}
-
-function getPermissions() {
-    global $ROLES_PERMISSIONS;
-    $role = getRole();
-    if (!array_key_exists($role, $ROLES_PERMISSIONS)) {
-        return $ROLES_PERMISSIONS[VISITOR];
-    }
-    return $ROLES_PERMISSIONS[$role];
-}
-
-function hasPermission($permission) {
-    return in_array($permission, getPermissions());
-}
-
 
 function checkSessionToken($tokenToCheck) {
     if ( getSessionToken() != $tokenToCheck ) {
@@ -139,7 +140,7 @@ function connectWithAutologin($autologinId64) {
     if (!$user) {
         throw new NotFoundException('Unrecognized autologin id');
     }
-    $_SESSION['USER'] = $user;
+    setSessionUser($user);
 }
 
 if ( !isLoggedIn() && !empty($_COOKIE[AUTOLOGIN_COOKIE_KEY]) ) {
