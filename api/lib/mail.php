@@ -39,6 +39,10 @@ function sendMail($to, $sujet, $body, $from=false) {
     }
 }
 
+function getLoginURL($userMail) {
+    return 'http://'.$_SERVER['HTTP_HOST'].APPLICATION_PATH.'/viewer/#!/login/'.$userMail;
+}
+
 function getPasswordURL($userId, $mailToken) {
     return 'http://'.$_SERVER['HTTP_HOST'].APPLICATION_PATH.'/viewer/#!/setPassword?userId='.$userId.'&mailToken='.urlencode($mailToken);
 }
@@ -47,23 +51,27 @@ function sendSigninToken($to, $firstname, $lastname, $userId, $mailToken) {
     sendMail($to, '[VINCI] Inscription sur le site de comptes rendus de maraudes du VINCI',
             'Bonjour '.$firstname.' '.$lastname.','."\n".
             "\n".
-            'Merci de vous être inscrit sur le site de consultations des comptes rendus de maraudes du VINCI.'."\n".
+            'Bienvenue sur le site de consultations des comptes rendus de maraudes du VINCI.'."\n".
             'Pour finaliser votre inscription, veuillez vous rendre à l\'adresse suivante afin de choisir votre mot de passe :'."\n".
             getPasswordURL($userId, $mailToken)."\n".
             "\n".
-            'Si vous n\'êtes pas à l\'origine de ce message, prévenez l\'administrateur du site en répondant à ce mail.'
+            'Par la suite, vous pourrez vous connecter au site via l\'adresse suivante : '."\n".
+            getLoginURL($to)
             );
 }
 
 function sendResetPasswordToken($to, $firstname, $lastname, $userId, $mailToken) {
-    sendMail($to, '[VINCI] Modification de votre mot de passe',
+    sendMail($to, '[VINCI] Réinitialisation de votre mot de passe',
             'Bonjour '.$firstname.' '.$lastname.','."\n".
             "\n".
-            'Vous venez de demander la réinitialisation de votre mot de passe sur le site de consultations des comptes rendus de maraudes du VINCI'."\n".
+            'Vous venez de demander la réinitialisation de votre mot de passe sur le site de comptes rendus de maraudes du VINCI'."\n".
             'Pour choisir votre nouveau mot de passe, veuillez vous rendre à l\'adresse suivante :'."\n".
             getPasswordURL($userId, $mailToken)."\n".
             "\n".
-            'Si vous n\'êtes pas à l\'origine de ce message, prévenez l\'administrateur du site en répondant à ce mail.'
+            'Par la suite, vous pourrez vous connecter au site via l\'adresse suivante : '."\n".
+            getLoginURL($to)."\n".
+            "\n".
+            'Si vous n\'êtes pas à l\'origine de ce message, merci de prévenir l\'administrateur du site en répondant à ce mail.'
             );
 }
 

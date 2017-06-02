@@ -2,7 +2,7 @@
 
 require_once('conf/main.php');
 
-# Roles and permissions configuration
+# Permissions
 define('P_SIGN_IN', 'P_SIGN_IN');
 define('P_LOG_IN', 'P_LOG_IN');
 define('P_LOG_OUT', 'P_LOG_OUT');
@@ -17,7 +17,7 @@ define('P_SEE_ALL_REPORT', 'P_SEE_ALL_REPORT');
 define('P_SEE_USERS_LIST', 'P_SEE_USERS_LIST');
 define('P_ASSIGN_ROLE', 'P_ASSIGN_ROLE');
 define('P_GENERATE_PASSWORD_TOKEN', 'P_GENERATE_PASSWORD_TOKEN');
-#
+# Roles
 define('VISITOR', 'visitor');
 define('APPLI', 'appli');
 define('FORMER', 'former');
@@ -27,7 +27,7 @@ define('TUTOR', 'tutor');
 define('BOARD', 'board');
 define('ADMIN', 'admin');
 define('ROOT', 'root');
-#
+# Mapping between roles and permissions
 function buildRolesPermissions() {
     $visitor = array( P_SIGN_IN, P_LOG_IN, P_RESET_PASSWORD );
     $appli = array ( P_SEE_PLANNING, P_SEE_LAST_REPORT, P_SAVE_ROAMINGS );
@@ -50,7 +50,6 @@ function buildRolesPermissions() {
         ROOT    => $root
     );
 }
-
 $ROLES_PERMISSIONS = buildRolesPermissions();
 
 ?>

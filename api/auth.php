@@ -113,9 +113,9 @@ try {
 
     returnResult(array(
         'status' => 'success',
+        'sessionToken' => getSessionToken(),
         'isLoggedIn' => isLoggedIn(),
-        'user' => getSessionUser(),
-        'sessionToken' => getSessionToken()
+        'user' => getSessionUser()
     ));
 
 } catch (Exception $e) {

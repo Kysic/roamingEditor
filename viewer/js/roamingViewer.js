@@ -325,7 +325,7 @@ roamingViewer.controller('MailSentController', function MailSentController($scop
     }
 
     $scope.goLogin = function () {
-        $location.path('/login');
+        $location.path('/login/' + $scope.email);
     }
 
 });
