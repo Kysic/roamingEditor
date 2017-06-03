@@ -15,7 +15,7 @@ try {
     }
     $roamingDate = getRoamingDate($roamingId);
     validateRoamingDate($roamingDate);
-    $docId = getOrCreateDocId($roamingId, getSessionUser()->userId;
+    $docId = getOrCreateDocId($roamingId, getSessionUser()->userId);
     returnResult(array(
         'status' => 'success',
         'docId' => $docId,
