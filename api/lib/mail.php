@@ -75,4 +75,3 @@ function sendResetPasswordToken($to, $firstname, $lastname, $userId, $mailToken)
             );
 }
 
-?>

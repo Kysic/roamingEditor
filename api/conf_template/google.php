@@ -46,4 +46,3 @@ $DOC_REF = array(
     '2017-12' => array( DOC_ID => '', SHEET_ID => '')
 );
 
-?>

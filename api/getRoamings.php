@@ -20,4 +20,3 @@ try {
     returnError($e);
 }
 
-?>

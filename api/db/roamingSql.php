@@ -74,4 +74,3 @@ function setRoamingDocId($roamingId, $docId, $userId) {
     return $request->errorCode();
 }
 
-?>

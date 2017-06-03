@@ -122,4 +122,3 @@ try {
     returnError($e);
 }
 
-?>

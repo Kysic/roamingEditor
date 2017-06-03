@@ -52,4 +52,3 @@ function buildRolesPermissions() {
 }
 $ROLES_PERMISSIONS = buildRolesPermissions();
 
-?>

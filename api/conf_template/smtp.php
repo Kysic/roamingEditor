@@ -6,4 +6,3 @@ require_once('conf/main.php');
 define('SMTP_USER', '');
 define('SMTP_PASSWORD', '');
 
-?>

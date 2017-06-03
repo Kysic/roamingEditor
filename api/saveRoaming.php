@@ -31,4 +31,3 @@ try {
     returnError($e);
 }
 
-?>

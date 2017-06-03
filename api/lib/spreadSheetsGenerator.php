@@ -51,4 +51,3 @@ function docIdToPrintUrl($docId) {
     return GOOGLE_DOC_URL.$docId.GOOGLE_DOC_CMD_PDF;
 }
 
-?>

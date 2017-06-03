@@ -191,4 +191,3 @@ function createAutologinIdForUserId($userId) {
     return base64_encode($autologinId);
 }
 
-?>

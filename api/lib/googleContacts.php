@@ -51,4 +51,3 @@ function extractContacts() {
     return $contacts;
 }
 
-?>

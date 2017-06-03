@@ -9,4 +9,3 @@ define('SQL_DATABASE', '');
 define('SQL_USER', '');
 define('SQL_PASSWORD', '');
 
-?>

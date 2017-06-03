@@ -151,4 +151,3 @@ if ( !isLoggedIn() && !empty($_COOKIE[AUTOLOGIN_COOKIE_KEY]) ) {
     }
 }
 
-?>

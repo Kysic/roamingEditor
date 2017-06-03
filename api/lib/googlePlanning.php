@@ -65,4 +65,3 @@ function getRoamingOfDate($roamingMonthData, $roamingDate) {
     return @$roamingMonthData[date('Y-m-d', $roamingDate)];
 }
 
-?>
