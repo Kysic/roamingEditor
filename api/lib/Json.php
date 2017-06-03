@@ -1,7 +1,5 @@
 <?php
 
-require_once('lib/auth.php');
-
 if (!function_exists('http_response_code')) {
     function http_response_code($code) {
         switch ($code) {
@@ -51,35 +49,38 @@ if (!function_exists('http_response_code')) {
     }
 }
 
-function mergeJsonParameterToPost() {
-    if ( isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], "application/json") !== false ) {
-        $_POST = array_merge($_POST, (array) json_decode(trim(file_get_contents('php://input')), true));
+class Json {
+
+    public function mergeJsonParameterToPost() {
+        if ( isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], "application/json") !== false ) {
+            $_POST = array_merge($_POST, (array) json_decode(trim(file_get_contents('php://input')), true));
+        }
     }
-}
 
-function returnResult($result) {
-    header("Content-Type: application/json");
-    echo json_encode($result);
-}
-
-function returnError($exception) {
-    if ($exception instanceof BadRequestException) {
-        $errorCode = 400; // 400 BadRequest
-    } else if ($exception instanceof UnauthenticatedException) {
-        $errorCode = 401; // 401 Unauthorized (Unauthenticated)
-    } else if ($exception instanceof ForbiddenException) {
-        $errorCode = 403; // 403 Forbidden
-    } else if ($exception instanceof NotFoundException) {
-        $errorCode = 404; // 404 Not Found
-    } else {
-        $errorCode = 500; // 500 Internal Server Error
+    public function returnResult($result) {
+        header("Content-Type: application/json");
+        echo json_encode($result);
     }
-    http_response_code($errorCode);
-    header("Content-Type: application/json");
-    echo json_encode(array(
-        'status' => 'error',
-        'errorCode' => $errorCode,
-        'errorMsg' => $exception->getMessage()
-    ));
-}
 
+    public function returnError($exception) {
+        if ($exception instanceof BadRequestException) {
+            $errorCode = 400; // 400 BadRequest
+        } else if ($exception instanceof UnauthenticatedException) {
+            $errorCode = 401; // 401 Unauthorized (Unauthenticated)
+        } else if ($exception instanceof ForbiddenException) {
+            $errorCode = 403; // 403 Forbidden
+        } else if ($exception instanceof NotFoundException) {
+            $errorCode = 404; // 404 Not Found
+        } else {
+            $errorCode = 500; // 500 Internal Server Error
+        }
+        http_response_code($errorCode);
+        header("Content-Type: application/json");
+        echo json_encode(array(
+            'status' => 'error',
+            'errorCode' => $errorCode,
+            'errorMsg' => $exception->getMessage()
+        ));
+    }
+
+}

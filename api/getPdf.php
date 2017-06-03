@@ -1,28 +1,33 @@
 <?php
 
-require_once('lib/auth.php');
-require_once('lib/json.php');
-require_once('lib/spreadSheetsGenerator.php');
+require_once('lib/Container.php');
 
 try {
 
-    checkLoggedIn();
-    checkHasPermission(P_SEE_LAST_REPORT);
+    $container = new Container();
+    $session = $container->getSession();
+    $validator = $container->getValidator();
+    $json = $container->getJson();
+    $roamingsStorage = $container->getRoamingsStorage();
+    $spreadsheetsGenerator = $container->getSpreadsheetsGenerator();
+
+    $session->checkLoggedIn();
+    $session->checkHasPermission(P_SEE_LAST_REPORT);
 
     $roamingId = @$_GET['roamingId'];
     if ( !$roamingId ) {
         throw new BadRequestException('Identifiant de maraude (roamingId) attendu.');
     }
-    $roamingDate = getRoamingDate($roamingId);
-    validateRoamingDate($roamingDate);
-    $docId = getOrCreateDocId($roamingId, getSessionUser()->userId);
-    $printUrl = docIdToPrintUrl($docId);
+    $roamingDate = $roamingsStorage->getDate($roamingId);
+    $validator->validateRoamingDate($roamingDate);
+    $docId = $spreadsheetsGenerator->getOrCreateDocId($roamingId, $session->getUser()->userId);
+    $printUrl = $spreadsheetsGenerator->docIdToPrintUrl($docId);
 
     header('Content-Type: application/pdf');
     header('Content-Disposition: inline; filename="CR_'.$roamingDate.'.pdf"');
     echo file_get_contents($printUrl);
 
 } catch (Exception $e) {
-    returnError($e);
+    $json->returnError($e);
 }
 

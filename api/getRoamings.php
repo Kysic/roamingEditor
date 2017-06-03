@@ -1,22 +1,25 @@
 <?php
 
-require_once('lib/auth.php');
-require_once('lib/json.php');
-require_once('db/roamingSql.php');
+require_once('lib/Container.php');
 
 try {
 
-    checkLoggedIn();
-    checkHasPermission(P_SEE_LAST_REPORT);
+    $container = new Container();
+    $session = $container->getSession();
+    $json = $container->getJson();
+    $roamingsStorage = $container->getRoamingsStorage();
 
-    $roamings = getRoamings('2000-01-01', '2020-01-01');
+    $session->checkLoggedIn();
+    $session->checkHasPermission(P_SEE_LAST_REPORT);
 
-    returnResult(array(
+    $roamings = $roamingsStorage->getAll('2000-01-01', '2020-01-01');
+
+    $json->returnResult(array(
         'status' => 'success',
         'roamings' => $roamings
     ));
 
 } catch (Exception $e) {
-    returnError($e);
+    $json->returnError($e);
 }
 

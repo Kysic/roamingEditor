@@ -11,6 +11,8 @@ define('APPLICATION_PATH', '/roamingEditor');
 define('MIN_PASSWORD_LENGTH', 6);
 define('MAX_PASSWORD_LENGTH', 50);
 define('REPORT_OLD_LIMIT_DAYS', 31);
+
+define('AUTOLOGIN_COOKIE_KEY', 'vcrPersistentLogin');
 define('AUTOLOGIN_COOKIE_EXPIRATION', '5356800'); // 62 jours
 
 # Set TimeZone
