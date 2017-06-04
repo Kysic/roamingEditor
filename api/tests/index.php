@@ -9,11 +9,17 @@
   <pre>
 <?php
 
+define('END_POINT', 'http://localhost/roamingEditor');
+define('TABLETTE_1_AUTOLOGIN_KEY', '8U8MPr6/ZNo4rIQHU7gvezB7lkU6aYI8LXkHH9Le7ZF2Xf8otJgmHgTiVnJnHr12');
+
 require_once('lib/Sql.php');
 require_once('lib/Browser.php');
 require_once('lib/auth.php');
+require_once('lib/roamings.php');
 
-define('TABLETTE_1_AUTOLOGIN_KEY', '8U8MPr6/ZNo4rIQHU7gvezB7lkU6aYI8LXkHH9Le7ZF2Xf8otJgmHgTiVnJnHr12');
+date_default_timezone_set('Europe/Paris');
+
+cleanTmp();
 
 printTestCase('DB init');
 $sql = new Sql();
@@ -71,9 +77,9 @@ assertNonEquals($autologin3, '');
 assertNonEquals($autologin1, $autologin3);
 
 printTestCase('Autologin as appli should succeed');
-$tabletteBrowser = new Browser();
-$tabletteBrowser->cookies['vcrPersistentLogin'] = TABLETTE_1_AUTOLOGIN_KEY;
-assertIsTablette1(getSessionUser($tabletteBrowser));
+$appliBrowser = new Browser();
+$appliBrowser->cookies['vcrPersistentLogin'] = TABLETTE_1_AUTOLOGIN_KEY;
+assertIsTablette1(getSessionUser($appliBrowser));
 
 printTestCase('Autologin as member should succeed');
 $browser1 = new Browser();
@@ -88,7 +94,7 @@ assertIsBernard(getSessionUser($browser3));
 
 printTestCase('Logout as appli should be forbidden');
 try {
-    logout($tabletteBrowser);
+    logout($appliBrowser);
     throw new AssertException('logout should have raised an HttpStatusException');
 } catch (Exception $e) {
     assertEquals($e->statusCode, 403);
@@ -96,7 +102,7 @@ try {
     assertEquals($e->content->errorCode, 403);
     assertEquals($e->content->errorMsg, "Vous n'êtes pas autorisé à vous déconnecter du site.");
 }
-assertIsTablette1(getSessionUser($tabletteBrowser));
+assertIsTablette1(getSessionUser($appliBrowser));
 
 printTestCase('Logout as member should unset autologin');
 assertIsBernard(getSessionUser($browser1));
@@ -136,6 +142,41 @@ printTestCase('Login as member with new password should succeed');
 login($browser, 'berni@gmail.com', 'berni-password');
 assertIsBernard(getSessionUser($browser));
 
+printTestCase('GetPlanning as appli should succeed');
+$twentiethDayOfLastMonth = date('Y-m-d', strtotime('+19 day', strtotime('first day of last month')));
+$result = getplanning($appliBrowser, $twentiethDayOfLastMonth);
+assertEquals($result, (object) array('tutor'=>'Nicole P','volunteers'=>array('Olivier C', 'Sonia Jb', 'Aude P')));
+
+printTestCase('SaveRoaming as appli should succeed');
+$roaming = generateRoamingReport($twentiethDayOfLastMonth, 5);
+$result = saveRoaming($appliBrowser, $roaming);
+
+printTestCase('GetRoamings as appli should succeed');
+$result = getRoamings($appliBrowser);
+assertEquals($result->status, 'success');
+$roamings = $result->roamings;
+assertEquals($roamings->{'1'}->date, $twentiethDayOfLastMonth);
+assertEquals($roamings->{'1'}->version, 5);
+
+printTestCase('GetDocUrl as member should generate docId and succeed');
+$result = getDocUrl($browser, 1);
+assertEquals($result->status, 'success');
+$docId = $result->docId;
+$editUrl = $result->editUrl;
+$roaming = $browser->get($editUrl);
+assertEquals($roaming->date, $twentiethDayOfLastMonth);
+assertEquals($roaming->version, 5);
+
+printTestCase('Second GetDocUrl as member should return the same docId');
+$result = getDocUrl($browser, 1);
+assertEquals($result->status, 'success');
+assertEquals($result->docId, $docId);
+assertEquals($result->editUrl, $editUrl);
+
+
+
+
+
 class AssertException extends Exception { }
 
 function assertNonEquals($actual, $expected, $errorMsg = NULL) {
@@ -164,6 +205,15 @@ function assertSuccess($response, $errorMsg = NULL) {
 
 function printTestCase($testCase) {
     echo "==== ".$testCase." ====\r\n";
+}
+
+function cleanTmp() {
+    $files = glob('tmp');
+    foreach ($files as $file) {
+        if(is_file($file)) {
+            unlink($file);
+        }
+    }
 }
 
 function assertIsVisitor($user) {

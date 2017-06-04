@@ -23,7 +23,7 @@ try {
     if (!$dataObject) {
         throw new BadRequestException('Unable to parse post body as json.');
     }
-    $roaming = $dataObject->roaming;
+    $roaming = @$dataObject->roaming;
     if (!$roaming) {
         throw new BadRequestException('No roaming found in post body.');
     }

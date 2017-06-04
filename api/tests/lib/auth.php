@@ -1,11 +1,11 @@
 <?php
 
 function getSessionToken($browser) {
-    $response = $browser->get('http://localhost/roamingEditor/api/auth.php');
+    $response = $browser->get(END_POINT.'/api/auth.php');
     return $response->sessionToken;
 }
 function getSessionUser($browser) {
-    $response = $browser->get('http://localhost/roamingEditor/api/auth.php');
+    $response = $browser->get(END_POINT.'/api/auth.php');
     return $response->user;
 }
 function signinAndSetPassword($browser, $email, $password, $sessionToken = NULL) {
@@ -26,39 +26,39 @@ function resetPassword($browser, $email, $password, $sessionToken = NULL) {
 }
 function signin($browser, $email, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
-    $response = $browser->post('http://localhost/roamingEditor/api/auth.php',
+    $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'signin', 'email'=>$email, 'sessionToken'=>$sessionToken));
     assertSuccess($response, 'signin failed');
 }
 function askPasswordReset($browser, $email, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
-    $response = $browser->post('http://localhost/roamingEditor/api/auth.php',
+    $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'resetPassword', 'email'=>$email, 'sessionToken'=>$sessionToken));
     assertSuccess($response, 'resetPassword failed');
 }
 function setPasswordWithMailToken($browser, $userId, $mailToken, $password, $passwordConfirm, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
-    $response = $browser->post('http://localhost/roamingEditor/api/auth.php',
+    $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'setPassword', 'userId'=>$userId, 'mailToken'=>$mailToken, 'sessionToken'=>$sessionToken,
               'password'=>$password, 'passwordConfirm'=>$passwordConfirm));
     assertSuccess($response, 'setPasswordWithMailToken failed');
 }
 function login($browser, $email, $password, $stayLogged = false, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
-    $response = $browser->post('http://localhost/roamingEditor/api/auth.php',
+    $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'login', 'email'=>$email, 'password'=>$password,
               'stayLogged'=>$stayLogged, 'sessionToken'=>$sessionToken));
     assertSuccess($response, 'login failed');
 }
 function logout($browser, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
-    $response = $browser->post('http://localhost/roamingEditor/api/auth.php',
+    $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'logout', 'sessionToken'=>$sessionToken));
     assertSuccess($response, 'logout failed');
 }
 function setPasswordWhenLogged($browser, $password, $passwordConfirm, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
-    $response = $browser->post('http://localhost/roamingEditor/api/auth.php',
+    $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'setPassword', 'sessionToken'=>$sessionToken,
               'password'=>$password, 'passwordConfirm'=>$passwordConfirm));
     assertSuccess($response, 'setPasswordWhenLogged failed');

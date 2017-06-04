@@ -1,4 +1,4 @@
-Mois de Juin,,6,,2017,,,,,,,,,,,,,,,,,,,,,,,,
+Mois de Juin,,<?php echo $month; ?>,,<?php echo $year; ?>,,,,,,,,,,,,,,,,,,,,,,,,
 "Entre les dates de réunion, vous pouvez donner vos intentions de participation aux maraudes en envoyant un mail à     ",,,,,,,,,,,,,,,,,,,,,,,,,,,,
 XXXXXXXXX@gmail.com,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ou en téléphonant au 06 XX XX XX XX ou 06 YY YY YY YY (boite vocale en cas d'absence),,,,,,,,,,,,,,,,,,,,,,,,,,,,
