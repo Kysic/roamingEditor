@@ -1,6 +1,8 @@
 <?php
 
+require_once('conf/main.php');
 define('PERMISSIONS_LIB', 'conf/RolesPermissions.php');
+
 define('SESSION_LIB', 'lib/Session.php');
 define('VALIDATOR_LIB', 'lib/Validator.php');
 define('AUTH_LIB', 'lib/Auth.php');
@@ -18,18 +20,18 @@ define('ROAMINGS_STORAGE_LIB', 'db/RoamingsStorage.php');
 
 class Container {
 
-    private $rolesPermissions = false;
-    private $session = false;
-    private $validator = false;
-    private $auth = false;
-    private $json = false;
-    private $mail = false;
-    private $googleContacts = false;
-    private $googlePlanning = false;
-    private $spreadsheetsGenerator = false;
-    private $dbAcces = false;
-    private $usersStorage = false;
-    private $roamingsStorage = false;
+    private $rolesPermissions = NULL;
+    private $session = NULL;
+    private $validator = NULL;
+    private $auth = NULL;
+    private $json = NULL;
+    private $mail = NULL;
+    private $googleContacts = NULL;
+    private $googlePlanning = NULL;
+    private $spreadsheetsGenerator = NULL;
+    private $dbAcces = NULL;
+    private $usersStorage = NULL;
+    private $roamingsStorage = NULL;
 
     public function getRolesPermissions() {
         if (!$this->rolesPermissions) {

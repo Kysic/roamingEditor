@@ -23,6 +23,8 @@
 - Utilise un Web App manifest (https://w3c.github.io/manifest/) pour être installé en tant qu'application android via chrome
 
 ### Informations pour le développement
+- Pour lancer les tests d'intégrations, faire un lien symbolique de conf vers conf_it, modifier la conf de la base
+  de données puis accéder à la page "/api/tests".
 - Pour mettre en place les hooks git :
   ```bash
   ln -s -f ../../git-hooks/pre-commit .git/hooks/pre-commit

@@ -21,7 +21,7 @@ try {
         }
     } else if ( @$_POST['action'] == 'resetPassword' ) {
         $auth->resetPassword();
-    } else if ( @$_POST['action'] == 'signin' && !isLoggedIn() ) {
+    } else if ( @$_POST['action'] == 'signin' && !$session->isLoggedIn() ) {
         $auth->signin();
     } else if ( @$_POST['action'] == 'setPassword' ) {
         $auth->setPassword();

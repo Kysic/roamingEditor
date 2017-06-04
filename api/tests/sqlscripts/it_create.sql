@@ -1,4 +1,5 @@
-CREATE TABLE `vcr_users` (
+
+CREATE TABLE `it_users` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `lastname` varchar(50),
@@ -9,19 +10,19 @@ CREATE TABLE `vcr_users` (
   `mailToken` binary(32),
   `registrationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`userId`),
-  UNIQUE KEY `login` (`email`)
+  UNIQUE KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `vcr_autologin` (
+CREATE TABLE `it_autologin` (
   `autologinId` binary(48) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `userId` int(11) NOT NULL,
   `connectionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`autologinId`),
-  CONSTRAINT `vcr_autologin_userId_ref` FOREIGN KEY (`userId`) REFERENCES `vcr_users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  INDEX `idx_autologinConnectionDate` (`connectionDate`)
+  CONSTRAINT FOREIGN KEY (`userId`) REFERENCES `it_users` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  INDEX (`connectionDate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `vcr_roamings` (
+CREATE TABLE `it_roamings` (
   `roamingId` int NOT NULL AUTO_INCREMENT,
   `creationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `creationUserId` int NOT NULL,
@@ -32,8 +33,8 @@ CREATE TABLE `vcr_roamings` (
   `generationDate` timestamp,
   `generationUserId` int,
   PRIMARY KEY (`roamingId`),
-  CONSTRAINT `vcr_roamings_creaUserId_ref` FOREIGN KEY (`creationUserId`) REFERENCES `vcr_users` (`userId`),
-  CONSTRAINT `vcr_roamings_genUserId_ref` FOREIGN KEY (`generationUserId`) REFERENCES `vcr_users` (`userId`),
-  INDEX `idx_roamingDateVersion` (`roamingDate`, `version`)
+  CONSTRAINT FOREIGN KEY (`creationUserId`) REFERENCES `it_users` (`userId`),
+  CONSTRAINT FOREIGN KEY (`generationUserId`) REFERENCES `it_users` (`userId`),
+  INDEX (`roamingDate`, `version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

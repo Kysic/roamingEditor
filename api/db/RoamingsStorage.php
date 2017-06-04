@@ -1,7 +1,5 @@
 <?php
 
-define('ROAMINGS_TABLE', 'vcr_roamings');
-
 class RoamingsStorage {
 
     private $dbAccess;
@@ -11,7 +9,7 @@ class RoamingsStorage {
     }
 
     public function add($roaming, $userId) {
-        $query = 'INSERT INTO '.ROAMINGS_TABLE.' (roamingDate, version, creationUserId, rawJson)'.
+        $query = 'INSERT INTO '.SQL_TABLE_ROAMINGS.' (roamingDate, version, creationUserId, rawJson)'.
                  ' VALUES (:roamingDate, :version, :creationUserId, :rawJson)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':roamingDate', $roaming->date, PDO::PARAM_STR);
@@ -22,9 +20,9 @@ class RoamingsStorage {
     }
 
     public function getAll($beginDate, $endDate) {
-        $query = 'SELECT roamingId, rawJson FROM '.ROAMINGS_TABLE.' r1'.
+        $query = 'SELECT roamingId, rawJson FROM '.SQL_TABLE_ROAMINGS.' r1'.
                  ' WHERE :beginDate <= r1.roamingDate AND r1.roamingDate <= :endDate'.
-                 ' AND r1.version = (select max(r2.version) from '.ROAMINGS_TABLE.' r2 where r1.roamingDate = r2.roamingDate)';
+                 ' AND r1.version = (select max(r2.version) from '.SQL_TABLE_ROAMINGS.' r2 where r1.roamingDate = r2.roamingDate)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':beginDate', $beginDate, PDO::PARAM_STR);
         $request->bindValue(':endDate', $endDate, PDO::PARAM_STR);
@@ -33,7 +31,7 @@ class RoamingsStorage {
     }
 
     public function getDocId($roamingId) {
-        $query = 'SELECT docId FROM '.ROAMINGS_TABLE.' WHERE roamingId = :roamingId';
+        $query = 'SELECT docId FROM '.SQL_TABLE_ROAMINGS.' WHERE roamingId = :roamingId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':roamingId', $roamingId, PDO::PARAM_INT);
         $this->dbAccess->executeWithException($request);
@@ -45,7 +43,7 @@ class RoamingsStorage {
     }
 
     public function getDate($roamingId) {
-        $query = 'SELECT roamingDate FROM '.ROAMINGS_TABLE.' WHERE roamingId = :roamingId';
+        $query = 'SELECT roamingDate FROM '.SQL_TABLE_ROAMINGS.' WHERE roamingId = :roamingId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':roamingId', $roamingId, PDO::PARAM_INT);
         $this->dbAccess->executeWithException($request);
@@ -57,7 +55,7 @@ class RoamingsStorage {
     }
 
     public function getJson($roamingId) {
-        $query = 'SELECT rawJson FROM '.ROAMINGS_TABLE.' WHERE roamingId = :roamingId';
+        $query = 'SELECT rawJson FROM '.SQL_TABLE_ROAMINGS.' WHERE roamingId = :roamingId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':roamingId', $roamingId, PDO::PARAM_INT);
         $this->dbAccess->executeWithException($request);
@@ -69,7 +67,7 @@ class RoamingsStorage {
     }
 
     public function setDocId($roamingId, $docId, $userId) {
-        $query = 'UPDATE '.ROAMINGS_TABLE.
+        $query = 'UPDATE '.SQL_TABLE_ROAMINGS.
                  ' SET docId=:docId, generationDate=NOW(), generationUserId=:generationUserId'.
                  ' WHERE roamingId=:roamingId';
         $request = $this->dbAccess->getPdo()->prepare($query);

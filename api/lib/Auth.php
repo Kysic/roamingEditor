@@ -18,7 +18,7 @@ class Auth {
         $this->session->checkToken(@$_POST['sessionToken']);
         $email = strtolower(@$_POST['email']);
         $this->validator->validateEmail($email);
-        $contacts = $lazyGoogleContacts->get()->extractContacts();
+        $contacts = $this->lazyGoogleContacts->get()->extractContacts();
         $isInVinciContacts = array_key_exists($email, $contacts);
         if ($isInVinciContacts) {
             $firstname = $contacts[$email]['firstname'];
@@ -57,7 +57,7 @@ class Auth {
             $usersStorage->resetUserMailToken($userId);
             $usersStorage->deleteUserAutologinId($userId);
             $user = $usersStorage->getUserWithId($userId);
-            $this->session->setSessionUser($user);
+            $this->session->setUser($user);
         }
     }
     public function resetPassword() {

@@ -1,7 +1,5 @@
 <?php
 
-require_once('conf/main.php');
-
 # Google docs URL
 define('GOOGLE_DOC_URL', 'https://docs.google.com/spreadsheets/d/');
 define('GOOGLE_DOC_CMD_CSV', '/export?format=csv&gid=');

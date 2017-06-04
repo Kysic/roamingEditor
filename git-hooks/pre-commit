@@ -1,32 +1,37 @@
 #!/bin/bash
 
-for fc in api/conf/*
-do
-    ft="api/conf_template/$(basename $fc)"
-    if ! [ -f $ft ]
-    then
-        echo "$ft does not exist at contrary to $fc" >&2
-        exit 1
-    fi
-    SED_CMD='sed -e "s/\(define(.*, \).*\();\)/\1\2/" -e "s/array(.*)/array()/"'
-    if ! diff -q <(eval $SED_CMD "$fc") <(eval $SED_CMD "$ft")
-    then
-        echo "$ft differ from $fc :" >&2
-        diff <(eval $SED_CMD "$fc") <(eval $SED_CMD "$ft") >&2
-        exit 1
-    fi
-done
+function compareConfDir {
+    rep1="${1}"
+    rep2="${2}"
+    for f1 in api/"${rep1}"/*
+    do
+        f2="api/${rep2}/$(basename $f1)"
+        if ! [ -f "$f1" ]
+        then
+            echo "$f1 does not exist at contrary to $f2" >&2
+            exit 1
+        fi
+        SED_CMD='sed -e "s/\(define(.*, \).*\();\)/\1\2/" -e "s/array(.*)/array()/"'
+        if ! diff -q <(eval $SED_CMD "$f1") <(eval $SED_CMD "$f2")
+        then
+            echo "$f1 differ from $f2 :" >&2
+            diff <(eval $SED_CMD "$f1") <(eval $SED_CMD "$f2") >&2
+            exit 1
+        fi
+    done
+    for f2 in api/"${rep2}"/*
+    do
+        f1="api/${rep1}/$(basename $f1)"
+        if ! [ -f "$f2" ]
+        then
+            echo "$f2 does not exist at contrary to $f1" >&2
+            exit 1
+        fi
+    done
+}
 
-for ft in api/conf_template/*
-do
-    fc="api/conf/$(basename $ft)"
-    if ! [ -f $fc ]
-    then
-        echo "$fc does not exist at contrary to $ft" >&2
-        exit 1
-    fi
-done
-
+compareConfDir "conf_template" "conf_dev"
+compareConfDir "conf_template" "conf_it"
 
 exit 0
 

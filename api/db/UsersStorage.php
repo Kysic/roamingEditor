@@ -1,8 +1,5 @@
 <?php
 
-define('USERS_TABLE', 'vcr_users');
-define('AUTOLOGIN_TABLE', 'vcr_autologin');
-
 class UsersStorage {
 
     private $dbAccess;
@@ -13,7 +10,7 @@ class UsersStorage {
     public function changePassword($userId, $newPassword) {
         $passwordSalt = $this->generateSalt();
         $passwordHash = $this->hashPasssword($passwordSalt, $newPassword);
-        $query = 'UPDATE '.USERS_TABLE.
+        $query = 'UPDATE '.SQL_TABLE_USERS.
                  ' SET passwordSalt=:passwordSalt, passwordHash=:passwordHash'.
                  ' WHERE userId=:userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -25,7 +22,7 @@ class UsersStorage {
 
     public function getAllUsers() {
         $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
-                 ' FROM '.USERS_TABLE.
+                 ' FROM '.SQL_TABLE_USERS.
                  ' ORDER BY firstname, lastname';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $this->dbAccess->executeWithException($request);
@@ -34,7 +31,7 @@ class UsersStorage {
 
     public function getUserWithId($userId) {
         $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
-                 ' FROM '.USERS_TABLE.
+                 ' FROM '.SQL_TABLE_USERS.
                  ' WHERE userId = :userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':userId', $userId, PDO::PARAM_STR);
@@ -44,7 +41,7 @@ class UsersStorage {
 
     public function getUserWithEmail($email) {
         $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
-                 ' FROM '.USERS_TABLE.
+                 ' FROM '.SQL_TABLE_USERS.
                  ' WHERE email = :email';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':email', $email, PDO::PARAM_STR);
@@ -56,7 +53,7 @@ class UsersStorage {
         if ($this->getUserWithEmail($email)) {
             throw new BadRequestException('Un compte existe déjà pour cette adresse email, utilisez la procédure de mot de passe perdu si vous avez oublié votre mot de passe.');
         }
-        $query = 'INSERT INTO '.USERS_TABLE.' (email, firstname, lastname) VALUES (:email, :firstname, :lastname)';
+        $query = 'INSERT INTO '.SQL_TABLE_USERS.' (email, firstname, lastname) VALUES (:email, :firstname, :lastname)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':email', $email, PDO::PARAM_STR);
         $request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
@@ -66,7 +63,7 @@ class UsersStorage {
 
     public function checkAndGetUser($email, $password) {
         $query = 'SELECT userId, email, firstname, lastname, role, registrationDate, passwordSalt, passwordHash'.
-                 ' FROM '.USERS_TABLE.
+                 ' FROM '.SQL_TABLE_USERS.
                  ' WHERE email = :email';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':email', $email, PDO::PARAM_STR);
@@ -86,7 +83,7 @@ class UsersStorage {
     }
 
     public function updateUser($userId, $email, $firstname, $lastname) {
-        $query = 'UPDATE '.USERS_TABLE.
+        $query = 'UPDATE '.SQL_TABLE_USERS.
                  ' SET email=:email, firstname=:firstname, lastname=:lastname'.
                  ' WHERE userId=:userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -99,7 +96,7 @@ class UsersStorage {
     }
 
     public function updateUserRole($userId, $newRole) {
-        $query = 'UPDATE '.USERS_TABLE.
+        $query = 'UPDATE '.SQL_TABLE_USERS.
                  ' SET role=:role'.
                  ' WHERE userId=:userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -111,7 +108,7 @@ class UsersStorage {
 
     public function generateUserMailToken($userId) {
         $mailToken = $this->generateMailToken();
-        $query = 'UPDATE '.USERS_TABLE.
+        $query = 'UPDATE '.SQL_TABLE_USERS.
                  ' SET mailToken=:mailToken WHERE userId=:userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':userId', $userId, PDO::PARAM_INT);
@@ -125,7 +122,7 @@ class UsersStorage {
         if (!$mailToken) {
             throw new BadRequestException('Token de validation invalide, assurez-vous d\'avoir copier correctement l\'URL reçue par email.');
         }
-        $query = 'SELECT userId FROM '.USERS_TABLE.
+        $query = 'SELECT userId FROM '.SQL_TABLE_USERS.
                  ' WHERE userId=:userId AND mailToken=:mailToken';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':userId', $userId, PDO::PARAM_INT);
@@ -138,7 +135,7 @@ class UsersStorage {
     }
 
     public function resetUserMailToken($userId) {
-        $query = 'UPDATE '.USERS_TABLE.
+        $query = 'UPDATE '.SQL_TABLE_USERS.
                  ' SET mailToken = NULL WHERE userId=:userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':userId', $userId, PDO::PARAM_INT);
@@ -159,7 +156,7 @@ class UsersStorage {
 
     /// Persitent login ///
     public function deleteUserAutologinId($userId) {
-        $query = 'DELETE FROM '.AUTOLOGIN_TABLE.' WHERE userId=:userId';
+        $query = 'DELETE FROM '.SQL_TABLE_AUTOLOGIN.' WHERE userId=:userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':userId', $userId, PDO::PARAM_INT);
         $this->dbAccess->executeWithException($request);
@@ -171,7 +168,7 @@ class UsersStorage {
         }
         $this->deleteExpiredAutologinId();
         $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
-                 ' FROM '.USERS_TABLE.' JOIN '.AUTOLOGIN_TABLE.' USING(userId)'.
+                 ' FROM '.SQL_TABLE_USERS.' JOIN '.SQL_TABLE_AUTOLOGIN.' USING(userId)'.
                  ' WHERE autologinId = :autologinId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':autologinId', $autologinId, PDO::PARAM_STR);
@@ -182,7 +179,7 @@ class UsersStorage {
         $this->deleteExpiredAutologinId();
         // Create the new one
         $autologinId = openssl_random_pseudo_bytes(48);
-        $query = 'INSERT INTO '.AUTOLOGIN_TABLE.' (autologinId, userId) VALUES (:autologinId, :userId)';
+        $query = 'INSERT INTO '.SQL_TABLE_AUTOLOGIN.' (autologinId, userId) VALUES (:autologinId, :userId)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':autologinId', $autologinId, PDO::PARAM_STR);
         $request->bindValue(':userId', $userId, PDO::PARAM_STR);
@@ -190,7 +187,7 @@ class UsersStorage {
         return base64_encode($autologinId);
     }
     private function deleteExpiredAutologinId() {
-        $query = 'DELETE FROM '.AUTOLOGIN_TABLE.
+        $query = 'DELETE FROM '.SQL_TABLE_AUTOLOGIN.
                  ' WHERE connectionDate < (CURRENT_TIMESTAMP - INTERVAL '.AUTOLOGIN_COOKIE_EXPIRATION.' SECOND)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $this->dbAccess->executeWithException($request);

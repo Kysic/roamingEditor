@@ -1,5 +1,5 @@
 .project
 .settings
-api/conf/
-api/dbstruct/data.sql
-
+api/conf
+api/conf_dev/
+api/sqlscripts/populate.sql
