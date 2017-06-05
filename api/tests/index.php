@@ -19,7 +19,7 @@ require_once('lib/roamings.php');
 
 date_default_timezone_set('Europe/Paris');
 
-cleanTmp();
+cleanTmpDir();
 
 printTestCase('DB init');
 $sql = new Sql();
@@ -207,10 +207,10 @@ function printTestCase($testCase) {
     echo "==== ".$testCase." ====\r\n";
 }
 
-function cleanTmp() {
-    $files = glob('tmp');
+function cleanTmpDir() {
+    $files = glob(__dir__.'/tmp/*');
     foreach ($files as $file) {
-        if(is_file($file)) {
+        if( is_file($file) ) {
             unlink($file);
         }
     }
