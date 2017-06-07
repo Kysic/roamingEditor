@@ -28,7 +28,7 @@ $sql->reinitItDb();
 printTestCase('Signin as member should succeed');
 $browser = new Browser();
 assertIsVisitor(getSessionUser($browser));
-signinAndSetPassword($browser, 'berni@gmail.com', 'berni-password');
+signinAndSetPassword($browser, 'berni@gmail.com', 'Berni-Password');
 assertIsBernard(getSessionUser($browser));
 
 printTestCase('Signin with address not in contacts should be forbidden');
@@ -37,16 +37,13 @@ try {
     signin($browser, 'someone@gmail.com');
     throw new AssertException('signin should have raised an HttpStatusException');
 } catch (Exception $e) {
-    assertEquals($e->statusCode, 403);
-    assertEquals($e->content->status, 'error');
-    assertEquals($e->content->errorCode, 403);
-    assertEquals($e->content->errorMsg, "Cette adresse mail n'est pas repertoriée dans la liste des contacts du VINCI.");
+    assertException($e, "Cette adresse mail n'est pas repertoriée dans la liste des contacts du VINCI.", 403);
 }
 assertIsVisitor(getSessionUser($browser));
 
 printTestCase('Login as member should succeed');
 $browser = new Browser();
-login($browser, 'berni@gmail.com', 'berni-password');
+login($browser, 'berni@gmail.com', 'Berni-Password');
 assertEquals($browser->cookies['vcrPersistentLogin'], '');
 assertIsBernard(getSessionUser($browser));
 
@@ -54,7 +51,28 @@ printTestCase('Change password as member should succeed');
 setPasswordWhenLogged($browser, 'berni-password-2', 'berni-password-2');
 assertIsBernard(getSessionUser($browser));
 
+printTestCase('Change to low security password as member should failed');
+try {
+    setPasswordWhenLogged($browser, 'berni-password', 'berni-password');
+    throw new AssertException('logout should have raised an HttpStatusException');
+} catch (Exception $e) {
+    assertException(
+        $e,
+        'Le mot de passe doit faire plus de 8 caractères, contenir des minuscules, majuscules, chiffres et caractères spéciaux.',
+        400
+    );
+}
+
+printTestCase('Change password with bad confirmation as member should failed');
+try {
+    setPasswordWhenLogged($browser, 'berni-password-2', 'berni-Password-2');
+    throw new AssertException('logout should have raised an HttpStatusException');
+} catch (Exception $e) {
+    assertException($e, 'Le mot de passe et sa confirmation doivent être identiques.', 400);
+}
+
 printTestCase('Logout as member should succeed');
+assertIsBernard(getSessionUser($browser));
 logout($browser);
 assertIsVisitor(getSessionUser($browser));
 
@@ -97,10 +115,7 @@ try {
     logout($appliBrowser);
     throw new AssertException('logout should have raised an HttpStatusException');
 } catch (Exception $e) {
-    assertEquals($e->statusCode, 403);
-    assertEquals($e->content->status, 'error');
-    assertEquals($e->content->errorCode, 403);
-    assertEquals($e->content->errorMsg, "Vous n'êtes pas autorisé à vous déconnecter du site.");
+    assertException($e, 'Vous n\'êtes pas autorisé à vous déconnecter du site.', 403);
 }
 assertIsTablette1(getSessionUser($appliBrowser));
 
@@ -122,7 +137,7 @@ assertEquals($browser3->cookies['vcrPersistentLogin'], '');
 
 printTestCase('Reset password as member should succeed');
 $browser = new Browser();
-resetPassword($browser, 'berni@gmail.com', 'berni-password');
+resetPassword($browser, 'berni@gmail.com', 'Berni-Password');
 assertIsBernard(getSessionUser($browser));
 
 printTestCase('Login with previous password should failed');
@@ -131,15 +146,12 @@ try {
     login($browser, 'berni@gmail.com', 'berni-password-2');
     throw new AssertException('login should have raised an HttpStatusException');
 } catch (Exception $e) {
-    assertEquals($e->statusCode, 400);
-    assertEquals($e->content->status, 'error');
-    assertEquals($e->content->errorCode, 400);
-    assertEquals($e->content->errorMsg, 'Identifiants invalides.');
+    assertException($e, 'Identifiants invalides.', 400);
 }
 assertIsVisitor(getSessionUser($browser));
 
 printTestCase('Login as member with new password should succeed');
-login($browser, 'berni@gmail.com', 'berni-password');
+login($browser, 'berni@gmail.com', 'Berni-Password');
 assertIsBernard(getSessionUser($browser));
 
 printTestCase('GetPlanning as appli should succeed');
@@ -177,6 +189,25 @@ assertEquals($result->editUrl, $editUrl);
 
 
 
+printTestCase('Bruteforce system should forbid to much connexion attempts');
+for ($i=0 ; $i<5; $i++) {
+    try {
+        $browser = new Browser();
+        login($browser, 'berni@gmail.com', 'Berni-Password-bad');
+    } catch (Exception $e) {
+        // Nothing
+    }
+}
+try {
+    login($browser, 'berni@gmail.com', 'Berni-Password');
+    throw new AssertException('login should have raised an HttpStatusException');
+} catch (Exception $e) {
+    assertException($e, 'Trop de tentatives de connexion depuis cette IP, veillez réessayer dans un moment.', 403);
+}
+
+
+
+
 class AssertException extends Exception { }
 
 function assertNonEquals($actual, $expected, $errorMsg = NULL) {
@@ -184,9 +215,16 @@ function assertNonEquals($actual, $expected, $errorMsg = NULL) {
         if ($errorMsg) {
             throw new AssertException($errorMsg);
         } else {
-            throw new AssertException('Expected "'.print_r($actual, true).'" to be "'.print_r($expected, true).'"');
+            throw new AssertException('Expect non equals to "'.print_r($expected, true));
         }
     }
+}
+
+function assertException($exception, $errorMsg, $errorCode) {
+    assertEquals($exception->content->errorMsg, $errorMsg);
+    assertEquals($exception->content->status, 'error');
+    assertEquals($exception->statusCode, $errorCode);
+    assertEquals($exception->content->errorCode, $errorCode);
 }
 
 function assertEquals($actual, $expected, $errorMsg = NULL) {
@@ -194,7 +232,7 @@ function assertEquals($actual, $expected, $errorMsg = NULL) {
         if ($errorMsg) {
             throw new AssertException($errorMsg);
         } else {
-            throw new AssertException('Expected "'.print_r($actual, true).'" to be "'.print_r($expected, true).'"');
+            throw new AssertException('Expect "'.print_r($actual, true).'", get "'.print_r($expected, true).'"');
         }
     }
 }

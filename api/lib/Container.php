@@ -17,6 +17,7 @@ define('SPREADSHEETS_GENERATOR_LIB', 'lib/SpreadsheetsGenerator.php');
 define('DB_ACCESS_LIB', 'db/DbAccess.php');
 define('USERS_STORAGE_LIB', 'db/UsersStorage.php');
 define('ROAMINGS_STORAGE_LIB', 'db/RoamingsStorage.php');
+define('BRUTEFORCE_STORAGE_LIB', 'db/BruteforceStorage.php');
 
 class Container {
 
@@ -32,6 +33,7 @@ class Container {
     private $dbAcces = NULL;
     private $usersStorage = NULL;
     private $roamingsStorage = NULL;
+    private $bruteforceStorage = NULL;
 
     public function getRolesPermissions() {
         if (!$this->rolesPermissions) {
@@ -75,6 +77,7 @@ class Container {
                 $this->getSession(),
                 $this->getValidator(),
                 $this->lazyUsersStorage(),
+                $this->lazyBruteforceStorage(),
                 $this->lazyMail(),
                 $this->lazyGoogleContacts()
             );
@@ -154,6 +157,17 @@ class Container {
     }
     public function lazyRoamingsStorage() {
         return new LazyLoader($this, 'getRoamingsStorage');
+    }
+
+    public function getBruteforceStorage() {
+        if (!$this->bruteforceStorage) {
+            require_once(BRUTEFORCE_STORAGE_LIB);
+            $this->bruteforceStorage = new BruteforceStorage($this->getDbAccess());
+        }
+        return $this->bruteforceStorage;
+    }
+    public function lazyBruteforceStorage() {
+        return new LazyLoader($this, 'getBruteforceStorage');
     }
 
 }

@@ -4,12 +4,14 @@ class Auth {
     private $session;
     private $validator;
     private $lazyUSersStorage;
+    private $lazyBruteforceStorage;
     private $lazyMail;
     private $lazyGoogleContacts;
-    public function __construct($session, $validator, $lazyUSersStorage, $lazyMail, $lazyGoogleContacts) {
+    public function __construct($session, $validator, $lazyUSersStorage, $lazyBruteforceStorage, $lazyMail, $lazyGoogleContacts) {
         $this->session = $session;
         $this->validator = $validator;
         $this->lazyUSersStorage = $lazyUSersStorage;
+        $this->lazyBruteforceStorage = $lazyBruteforceStorage;
         $this->lazyMail = $lazyMail;
         $this->lazyGoogleContacts = $lazyGoogleContacts;
     }
@@ -79,9 +81,18 @@ class Auth {
         $email = strtolower(@$_POST['email']);
         $this->validator->validateEmail($email);
         $password = @$_POST['password'];
-        $this->validator->validatePassword($password);
+        $this->validator->validatePasswordOnLogin($password);
+        $bruteforceStorage = $this->lazyBruteforceStorage->get();
+        if ($bruteforceStorage->getNbFailedAttemptInPeriod($_SERVER['REMOTE_ADDR']) >= BRUTEFORCE_MAX_NB_ATTEMPTS) {
+            throw new ForbiddenException('Trop de tentatives de connexion depuis cette IP, veillez réessayer dans un moment.');
+        }
         $usersStorage = $this->lazyUSersStorage->get();
-        $user = $usersStorage->checkAndGetUser($email, $password);
+        try {
+            $user = $usersStorage->checkAndGetUser($email, $password);
+        } catch (Exception $e) {
+            $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
+            throw $e;
+        }
         $this->session->setUser($user);
         $usersStorage->resetUserMailToken($user->userId);
         if (@$_POST['stayLogged'] == 'true') {

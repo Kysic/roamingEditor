@@ -14,7 +14,7 @@ function compareConfDir {
         SED_CMD='sed -e "s/\(define(.*, \).*\();\)/\1\2/" -e "s/array(.*)/array()/"'
         if ! diff -q <(eval $SED_CMD "$f1") <(eval $SED_CMD "$f2")
         then
-            echo "$f1 differ from $f2 :" >&2
+            echo "$f1 differs from $f2 :" >&2
             diff <(eval $SED_CMD "$f1") <(eval $SED_CMD "$f2") >&2
             exit 1
         fi
@@ -32,6 +32,13 @@ function compareConfDir {
 
 compareConfDir "conf_template" "conf_dev"
 compareConfDir "conf_template" "conf_it"
+
+if ! diff -q api/sqlscripts/create.sql <(eval sed -e "s/it_/vcr_/" api/tests/sqlscripts/it_create.sql) 1>/dev/null
+then
+    echo "api/sqlscripts/create.sql differs from api/tests/sqlscripts/it_create.sql"
+    diff api/sqlscripts/create.sql <(eval sed -e "s/it_/vcr_/" api/tests/sqlscripts/it_create.sql)
+    exit 1
+fi
 
 exit 0
 

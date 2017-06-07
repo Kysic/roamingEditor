@@ -28,40 +28,40 @@ function signin($browser, $email, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
     $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'signin', 'email'=>$email, 'sessionToken'=>$sessionToken));
-    assertSuccess($response, 'signin failed');
+    assertSuccess($response, 'signin failed : '.print_r($response, true));
 }
 function askPasswordReset($browser, $email, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
     $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'resetPassword', 'email'=>$email, 'sessionToken'=>$sessionToken));
-    assertSuccess($response, 'resetPassword failed');
+    assertSuccess($response, 'resetPassword failed : '.print_r($response, true));
 }
 function setPasswordWithMailToken($browser, $userId, $mailToken, $password, $passwordConfirm, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
     $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'setPassword', 'userId'=>$userId, 'mailToken'=>$mailToken, 'sessionToken'=>$sessionToken,
               'password'=>$password, 'passwordConfirm'=>$passwordConfirm));
-    assertSuccess($response, 'setPasswordWithMailToken failed');
+    assertSuccess($response, 'setPasswordWithMailToken failed : '.print_r($response, true));
 }
 function login($browser, $email, $password, $stayLogged = false, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
     $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'login', 'email'=>$email, 'password'=>$password,
               'stayLogged'=>$stayLogged, 'sessionToken'=>$sessionToken));
-    assertSuccess($response, 'login failed');
+    assertSuccess($response, 'login failed : '.print_r($response, true));
 }
 function logout($browser, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
     $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'logout', 'sessionToken'=>$sessionToken));
-    assertSuccess($response, 'logout failed');
+    assertSuccess($response, 'logout failed : '.print_r($response, true));
 }
 function setPasswordWhenLogged($browser, $password, $passwordConfirm, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
     $response = $browser->post(END_POINT.'/api/auth.php',
         array('action'=>'setPassword', 'sessionToken'=>$sessionToken,
               'password'=>$password, 'passwordConfirm'=>$passwordConfirm));
-    assertSuccess($response, 'setPasswordWhenLogged failed');
+    assertSuccess($response, 'setPasswordWhenLogged failed : '.print_r($response, true));
 }
 function readMail($email) {
     return json_decode(file_get_contents('tmp/mail-'.$email));

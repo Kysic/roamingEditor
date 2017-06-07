@@ -8,8 +8,10 @@ define('ADMIN_EMAIL', 'it-test-admin@samu-social-grenoble.fr');
 define('DEFAULT_TIME_ZONE', 'Europe/Paris');
 define('APPLICATION_PATH', '/roamingEditor');
 
-define('MIN_PASSWORD_LENGTH', 6);
+define('MIN_PASSWORD_LENGTH', 8);
 define('MAX_PASSWORD_LENGTH', 50);
+define('BRUTEFORCE_PERIOD_IN_SECOND', 300);
+define('BRUTEFORCE_MAX_NB_ATTEMPTS', 5);
 define('REPORT_OLD_LIMIT_DAYS', 31);
 
 define('AUTOLOGIN_COOKIE_KEY', 'vcrPersistentLogin');

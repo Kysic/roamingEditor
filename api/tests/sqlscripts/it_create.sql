@@ -22,6 +22,13 @@ CREATE TABLE `it_autologin` (
   INDEX (`connectionDate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `it_bruteforce` (
+  `accessIp` varchar(50) NOT NULL,
+  `accessDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX (`accessIp`),
+  INDEX (`accessDate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `it_roamings` (
   `roamingId` int NOT NULL AUTO_INCREMENT,
   `creationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

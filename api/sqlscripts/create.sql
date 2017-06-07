@@ -1,5 +1,5 @@
 
-CREATE TABLE `it_users` (
+CREATE TABLE `vcr_users` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
   `lastname` varchar(50),
@@ -13,7 +13,7 @@ CREATE TABLE `it_users` (
   UNIQUE KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `it_autologin` (
+CREATE TABLE `vcr_autologin` (
   `autologinId` binary(48) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `userId` int(11) NOT NULL,
   `connectionDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -22,7 +22,14 @@ CREATE TABLE `it_autologin` (
   INDEX (`connectionDate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `it_roamings` (
+CREATE TABLE `vcr_bruteforce` (
+  `accessIp` varchar(50) NOT NULL,
+  `accessDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX (`accessIp`),
+  INDEX (`accessDate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `vcr_roamings` (
   `roamingId` int NOT NULL AUTO_INCREMENT,
   `creationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `creationUserId` int NOT NULL,

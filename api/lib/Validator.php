@@ -42,13 +42,38 @@ class Validator {
         }
     }
 
+    private function containsLowerUpperNumberAndSpecialChar($password) {
+        $nbElt = 0;
+        if (preg_match('/[a-z]+/', $password)) {
+            $nbElt++;
+        }
+        if (preg_match('/[A-Z]+/', $password)) {
+            $nbElt++;
+        }
+        if (preg_match('/[0-9]+/', $password)) {
+            $nbElt++;
+        }
+        if (preg_match('/[^0-9a-zA-Z]+/', $password)) {
+            $nbElt++;
+        }
+        return $nbElt >= 3;
+    }
+
+    public function validatePasswordOnLogin($password) {
+        if ( mb_strlen($password) > MAX_PASSWORD_LENGTH ) {
+            throw new BadRequestException('Mot de passe trop long, '.MAX_PASSWORD_LENGTH.' caractères maximum.');
+        }
+    }
+
     public function validatePassword($password) {
         if ( empty( $password ) ) {
             throw new BadRequestException('Mot de passe non renseigné');
         } else if ( mb_strlen($password) > MAX_PASSWORD_LENGTH ) {
             throw new BadRequestException('Mot de passe trop long, '.MAX_PASSWORD_LENGTH.' caractères maximum.');
-        } else if ( mb_strlen($password) < MIN_PASSWORD_LENGTH ) {
-            throw new BadRequestException('Mot de passe trop court, '.MIN_PASSWORD_LENGTH.' caractères maximum.');
+        } else if ( mb_strlen($password) < MIN_PASSWORD_LENGTH
+            || !$this->containsLowerUpperNumberAndSpecialChar($password) ) {
+            throw new BadRequestException('Le mot de passe doit faire plus de '.MIN_PASSWORD_LENGTH
+                .' caractères, contenir des minuscules, majuscules, chiffres et caractères spéciaux.');
         }
     }
 

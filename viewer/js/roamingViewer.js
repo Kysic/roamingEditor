@@ -158,7 +158,8 @@ roamingViewer.controller('RoamingListController', function RoamingListController
     }
 
     $scope.hasP = function (permission) {
-        return $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
+        return $scope.sessionInfo && $scope.sessionInfo.user
+                && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
     }
 
     $scope.printRoaming = function (roamingId) {
