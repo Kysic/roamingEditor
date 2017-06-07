@@ -12,7 +12,10 @@ try {
     $session->checkLoggedIn();
     $session->checkHasPermission(P_SEE_LAST_REPORT);
 
-    $roamings = $roamingsStorage->getAll('2000-01-01', '2020-01-01');
+    $beginDate = new DateTime();
+    $beginDate->sub(new DateInterval('P'.REPORT_OLD_LIMIT_DAYS.'D'));
+    $endDate = new DateTime();
+    $roamings = $roamingsStorage->getAll($beginDate->format('Y-m-d'), $endDate->format('Y-m-d'));
 
     $json->returnResult(array(
         'status' => 'success',

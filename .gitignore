@@ -2,4 +2,5 @@
 .settings
 api/conf
 api/conf_dev/
+api/conf_prod/
 api/sqlscripts/populate.sql
