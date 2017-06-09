@@ -70,7 +70,7 @@ class UsersStorage {
         $this->dbAccess->executeWithException($request);
         $user = $request->fetch(PDO::FETCH_OBJ);
         if ( ! $user ) {
-            throw new BadRequestException('Aucun compte utilisateur n\'est associé à cette adresse email.');
+            throw new NotFoundException('Aucun compte utilisateur n\'est associé à cette adresse email.');
         } else if ( empty($user->passwordSalt) || empty($user->passwordHash) ) {
             throw new BadRequestException('Inscription non terminée, veuillez suivre les indications du mail envoyé lors de l\'inscription.');
         } else if ( $this->hashPasssword($user->passwordSalt, $password) == $user->passwordHash ) {

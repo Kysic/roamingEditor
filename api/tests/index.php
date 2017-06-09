@@ -16,6 +16,7 @@ require_once('lib/Sql.php');
 require_once('lib/Browser.php');
 require_once('lib/auth.php');
 require_once('lib/roamings.php');
+require_once('lib/users.php');
 
 date_default_timezone_set('Europe/Paris');
 
@@ -185,6 +186,18 @@ assertEquals($result->status, 'success');
 assertEquals($result->docId, $docId);
 assertEquals($result->editUrl, $editUrl);
 
+printTestCase('Get all users as root should succeed');
+$browserRoot = new Browser();
+login($browserRoot, 'Laure.Maitre@vinci.fr', 'Laure.Maitre@vinci.fr');
+$result = getUsers($browserRoot);
+assertEquals($result->status, 'success');
+assertEquals(count($result->users), 7);
+
+printTestCase('Set user role as root should succeed');
+setUserRole($browserRoot, 15, 'tutor', $sessionToken = NULL);
+$browser = new Browser();
+login($browser, 'berni@gmail.com', 'Berni-Password');
+assertEquals(getSessionUser($browser)->role, 'tutor');
 
 
 

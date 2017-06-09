@@ -5,8 +5,7 @@ function getPlanning($browser, $roamingDate) {
 }
 
 function getRoamings($browser) {
-    $result = $browser->get(END_POINT.'/api/getRoamings.php');
-    return $result;
+    return $browser->get(END_POINT.'/api/getRoamings.php');
 }
 
 function saveRoaming($browser, $roaming) {

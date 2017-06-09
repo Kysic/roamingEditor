@@ -52,7 +52,7 @@ class Session {
 
     public function checkToken($tokenToCheck) {
         if ( $this->getToken() != $tokenToCheck ) {
-            throw new BadRequestException('Sequence d\'actions invalide, vous avez sans doute rafraîchit une page contenant un formulaire déjà envoyé.');
+            throw new BadRequestException('Jeton de session invalide, veuillez rafraîchir puis réessayer.');
         }
     }
 
