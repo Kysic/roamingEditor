@@ -1,5 +1,5 @@
 <?php
-header('Location: viewer');
+header('Location: portal');
 ?>
 <!doctype html>
 <html lang="fr">
@@ -8,6 +8,6 @@ header('Location: viewer');
   <title>Editeur de comptes rendus de maraudes</title>
 </head>
 <body>
-  <a href='viewer'>Les comptes rendus de maraudes</a>
+  <a href='portal'>Les comptes rendus de maraudes</a>
 </body>
 </html>

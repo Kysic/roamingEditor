@@ -1,6 +1,6 @@
 <?php
 
-require_once('conf/smtp.php');
+require_once(ROAMING_API_DIR.'/conf/smtp.php');
 
 class Mail {
 
@@ -33,11 +33,11 @@ class Mail {
     }
 
     private function getLoginURL($userMail) {
-        return $this->getProtocol().$_SERVER['HTTP_HOST'].APPLICATION_PATH.'/viewer/#!/login/'.$userMail;
+        return $this->getProtocol().$_SERVER['HTTP_HOST'].PORTAL_APPLICATION_PATH.'/#!/login/'.$userMail;
     }
 
     private function getPasswordURL($userId, $mailToken) {
-        return $this->getProtocol().$_SERVER['HTTP_HOST'].APPLICATION_PATH.'/viewer/#!/setPassword?userId='.$userId.'&mailToken='.urlencode($mailToken);
+        return $this->getProtocol().$_SERVER['HTTP_HOST'].PORTAL_APPLICATION_PATH.'/#!/setPassword?userId='.$userId.'&mailToken='.urlencode($mailToken);
     }
 
     private function getProtocol() {

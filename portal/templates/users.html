@@ -1,0 +1,24 @@
+<div id="usersList">
+  <h2>Liste des utilisateurs inscrits sur le site</h2>
+  <div class='error' ng-show="errorMsg">{{errorMsg}}</div>
+  <table>
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Email</th>
+      <th>Role</th>
+    </tr>
+    <tr ng-repeat="user in users | orderBy:'firstname'">
+      <td>{{user.firstname}}</td>
+      <td>{{user.lastname}}</td>
+      <td>{{user.email}}</td>
+      <td>
+        <span ng-if="!hasP('P_ASSIGN_ROLE') || user.userId == sessionInfo.user.userId">{{user.role}}</span>
+        <span ng-if="hasP('P_ASSIGN_ROLE') && user.userId != sessionInfo.user.userId">
+          <select type='text' ng-model="user.role" ng-options="role as role for role in roles" ng-change="setRole(user)">
+          </select>
+        </span>
+      </td>
+    </tr>
+  </table>
+</div>

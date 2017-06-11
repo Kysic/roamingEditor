@@ -6,6 +6,7 @@ function getSessionToken($browser) {
 }
 function getSessionUser($browser) {
     $response = $browser->get(END_POINT.'/api/auth.php');
+    assertSuccess($response, 'getSessionUser failed : '.print_r($response, true));
     return $response->user;
 }
 function signinAndSetPassword($browser, $email, $password, $sessionToken = NULL) {

@@ -1,6 +1,6 @@
 <?php
 
-require_once('conf/google.php');
+require_once(ROAMING_API_DIR.'/conf/google.php');
 
 class GoogleContacts {
 

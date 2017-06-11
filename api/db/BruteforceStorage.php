@@ -14,7 +14,7 @@ class BruteforceStorage {
         $this->dbAccess->executeWithException($request);
     }
 
-    public function getNbFailedAttemptInPeriod($ip) {
+    public function getNbFailedAttemptsInPeriod($ip) {
         $this->cleanUpOldAttempts();
         $query = 'SELECT COUNT(*) FROM '.SQL_TABLE_BRUTEFORCE.' WHERE accessIp = :ip';
         $request = $this->dbAccess->getPdo()->prepare($query);

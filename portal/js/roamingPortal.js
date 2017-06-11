@@ -1,14 +1,14 @@
 
 var roamingApiEndPoint = '../api';
 
-var roamingViewer = angular.module('roamingViewer', ['ngRoute']);
+var roamingPortal = angular.module('roamingPortal', ['ngRoute']);
 
-roamingViewer.config(['$routeProvider', function($routeProvider) {
+roamingPortal.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
         templateUrl: 'templates/roamingsList.html',
         controller: 'RoamingListController'
     })
-    .when('/login/:email?', {
+    .when('/login/:email?/:referer?', {
         templateUrl: 'templates/login.html',
         controller: 'LoginController'
     })
@@ -28,13 +28,17 @@ roamingViewer.config(['$routeProvider', function($routeProvider) {
         templateUrl: 'templates/mailSent.html',
         controller: 'MailSentController'
     })
+    .when('/users', {
+        templateUrl: 'templates/users.html',
+        controller: 'UsersController'
+    })
     .otherwise({
         redirectTo: '/roamingsList'
     });
 }]);
 
 
-roamingViewer.factory('authService', function ($rootScope, $http) {
+roamingPortal.factory('authService', function ($rootScope, $http) {
 
     var sessionInfo = { loggedIn: false, user: {}, sessionToken: '', lastError: '' };
 
@@ -135,7 +139,7 @@ roamingViewer.factory('authService', function ($rootScope, $http) {
     };
 });
 
-roamingViewer.controller('RoamingListController', function RoamingListController($scope, $http, $window, $location, authService) {
+roamingPortal.controller('RoamingListController', function RoamingListController($scope, $http, $window, $location, authService) {
 
     $scope.sessionInfo = authService.getSessionInfo();
     retrieveRoamings();
@@ -196,7 +200,7 @@ roamingViewer.controller('RoamingListController', function RoamingListController
 
 });
 
-roamingViewer.controller('LoginController', function LoginController($scope, $routeParams, $location, authService) {
+roamingPortal.controller('LoginController', function LoginController($scope, $routeParams, $location, authService) {
 
     $scope.stayLogged = true;
     $scope.sessionInfo = authService.getSessionInfo();
@@ -205,7 +209,11 @@ roamingViewer.controller('LoginController', function LoginController($scope, $ro
 
     $scope.$watch('sessionInfo', function () {
         if ($scope.sessionInfo.loggedIn) {
-            $location.path('/roamingsList');
+            if ($routeParams.referer) {
+                $location.path('/' + $routeParams.referer);
+            } else {
+                $location.path('/roamingsList');
+            }
         }
     }, true);
 
@@ -228,7 +236,7 @@ roamingViewer.controller('LoginController', function LoginController($scope, $ro
 
 });
 
-roamingViewer.controller('SetPasswordController', function SetPasswordController($scope, $routeParams, $location, authService) {
+roamingPortal.controller('SetPasswordController', function SetPasswordController($scope, $routeParams, $location, authService) {
 
     $scope.sessionInfo = authService.getSessionInfo();
     if ( ! ($scope.sessionInfo.loggedIn || ($routeParams.userId && $routeParams.mailToken) ) ) {
@@ -261,7 +269,7 @@ roamingViewer.controller('SetPasswordController', function SetPasswordController
 
 });
 
-roamingViewer.controller('SigninController', function SigninController($scope, $routeParams, $location, authService) {
+roamingPortal.controller('SigninController', function SigninController($scope, $routeParams, $location, authService) {
 
     $scope.sessionInfo = authService.getSessionInfo();
 
@@ -292,7 +300,7 @@ roamingViewer.controller('SigninController', function SigninController($scope, $
 
 });
 
-roamingViewer.controller('ResetPasswordController', function ResetPasswordController($scope, $routeParams, $location, authService) {
+roamingPortal.controller('ResetPasswordController', function ResetPasswordController($scope, $routeParams, $location, authService) {
 
     $scope.sessionInfo = authService.getSessionInfo();
 
@@ -317,7 +325,7 @@ roamingViewer.controller('ResetPasswordController', function ResetPasswordContro
 
 });
 
-roamingViewer.controller('MailSentController', function MailSentController($scope, $routeParams, $location) {
+roamingPortal.controller('MailSentController', function MailSentController($scope, $routeParams, $location) {
 
     if ($routeParams.email) {
         $scope.email = $routeParams.email;
@@ -327,6 +335,58 @@ roamingViewer.controller('MailSentController', function MailSentController($scop
 
     $scope.goLogin = function () {
         $location.path('/login/' + $scope.email);
+    }
+
+});
+
+roamingPortal.controller('UsersController', function UsersController($scope, $http, $routeParams, $location, authService) {
+
+    $scope.roles = ['appli', 'former', 'guest', 'member', 'tutor', 'board', 'admin', 'root'];
+    $scope.sessionInfo = authService.getSessionInfo();
+    retrieveUsers();
+
+    function retrieveUsers() {
+        $http.get(roamingApiEndPoint + '/getUsers.php').then(function (response) {
+            if (response.data.status == 'success' && response.data.users) {
+                $scope.users = response.data.users;
+            }
+        }, function (response) {
+            if (response.status == 401) {
+                $location.path('/login//users');
+            }
+        });
+    }
+
+    $scope.hasP = function (permission) {
+        return $scope.sessionInfo && $scope.sessionInfo.user
+                && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
+    }
+
+    function setErrorMsg(responseData) {
+        if (responseData.errorMsg) {
+            $scope.errorMsg = responseData.errorMsg;
+        } else {
+            $scope.errorMsg = 'Réponse du serveur invalide.';
+        }
+        retrieveUsers();
+    }
+
+    $scope.setRole = function (user) {
+        $scope.setRoleRunning = true;
+        $scope.errorMsg = '';
+        $http.post(roamingApiEndPoint + '/setUserRole.php',{
+            sessionToken: $scope.sessionInfo.sessionToken,
+            userId: user.userId,
+            role: user.role
+        }).then(function (response) {
+            if (response.data.status == 'success') {
+                $scope.setRoleRunning = false;
+            } else {
+                setErrorMsg(response.data);
+            }
+        }, function (response) {
+            setErrorMsg(response.data);
+        });
     }
 
 });

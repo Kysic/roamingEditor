@@ -1,6 +1,6 @@
 <?php
 
-require_once('conf/RolesPermissions.php');
+require_once(ROAMING_API_DIR.'/conf/RolesPermissions.php');
 
 class Validator {
 
@@ -86,7 +86,7 @@ class Validator {
     public function validateRole($role) {
         if ( empty( $role ) ) {
             throw new BadRequestException('Nom du rôle absent.');
-        } else if ( !in_array( $role, array(FORMER, GUEST, MEMBER, TUTOR, BOARD, ADMIN) ) ) {
+        } else if ( !in_array( $role, array(APPLI, FORMER, GUEST, MEMBER, TUTOR, BOARD, ADMIN) ) ) {
             throw new BadRequestException('Ce rôle ne peut pas être assigné par ce formulaire.');
         }
     }

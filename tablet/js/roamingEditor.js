@@ -39,14 +39,18 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
 
     function loadLocalStorage() {
         synchronizeApiKeyWithAutoLogin();
-        var rawRoamings = localStorage.getItem('roamings');
-        if (rawRoamings) {
-            try {
-                roamings = JSON.parse(rawRoamings);
-            } catch (e) {
-                console.log('Unable to restore local storage', e);
+        roamings = { };
+        Object.keys(localStorage).forEach(function(key) {
+            if (key.match(/^roaming_[0-9-]*$/)) {
+                try {
+                    var roaming = JSON.parse(localStorage.getItem(key));
+                    roamings[roaming.date] = roaming;
+                } catch (e) {
+                    console.log('Unable to restore ' + key + ' from local storage', e);
+                }
             }
-        }
+        });
+        filterOldRoamings();
     }
 
     function synchronizeApiKeyWithAutoLogin() {
@@ -56,10 +60,9 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         }
     }
 
-    function updateRoamingsInLocalStorage() {
-        var roamingsJson = JSON.stringify(roamings);
-        //console.log(new Date() + ' saving roamings to local storage ' + roamingsJson)
-        localStorage.setItem('roamings', roamingsJson);
+    function updateRoamingInLocalStorage(roaming) {
+        var roamingJson = JSON.stringify(roaming);
+        localStorage.setItem('roaming_' + roaming.date, roamingJson);
     }
 
     function getAllRoamings() {
@@ -70,13 +73,22 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         return angular.copy(roamings[roamingId]);
     }
 
+    function deleteRoaming(roamingDate) {
+        try {
+            delete roamings[roamingDate];
+            localStorage.removeItem('roaming_' + roamingDate);
+            console.log('Roaming ' + roamingDate + ' deleted');
+        } catch (e) {
+            console.log('Unable to delete roaming ' + roamingDate);
+        }
+    }
+
     function filterOldRoamings() {
         var olderRoamingDateAccepted = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000);
-        var olderRoamingAcceptedId = $filter('date')(olderRoamingDateAccepted, 'yyyy-MM-dd');
-        for (var dateId in roamings) {
-            if (dateId < olderRoamingAcceptedId) {
-                console.log('Roaming ' + dateId + 'deleted');
-                delete roamings[dateId];
+        var olderRoamingIdAccepted = $filter('date')(olderRoamingIdAccepted, 'yyyy-MM-dd');
+        for (var roamingDate in roamings) {
+            if (roamingDate < olderRoamingIdAccepted) {
+                deleteRoaming(roamingDate);
             }
         }
     }
@@ -94,7 +106,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         roaming.version = roaming.version ? roaming.version + 1 : 1;
         roamings[roaming.date] = roaming;
         filterOldRoamings();
-        updateRoamingsInLocalStorage();
+        updateRoamingInLocalStorage(roaming);
         sendRoamingToRemoteServer(roaming);
     }
 
@@ -121,7 +133,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         var roaming = roamings[roamingDate];
         if (roaming && roaming.version == roamingVersion) {
             roaming.synchroStatus = status;
-            updateRoamingsInLocalStorage();
+            updateRoamingInLocalStorage(roaming);
             notifyRoamingUpdate(roaming);
         }
     }
@@ -136,13 +148,20 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         return $filter('date')(currentRoamingDate, 'yyyy-MM-dd');
     }
 
+    function deleteAllRoamings() {
+        for (var roamingDate in roamings) {
+            deleteRoaming(roamingDate);
+        }
+    }
+
     return {
         loadLocalStorage: loadLocalStorage,
         getAllRoamings: getAllRoamings,
         getRoaming: getRoaming,
         updateRoaming: updateRoaming,
         getCurrentRoamingDateId: getCurrentRoamingDateId,
-        resynchro: resynchro
+        resynchro: resynchro,
+        deleteAllRoamings: deleteAllRoamings
     };
 });
 
@@ -493,7 +512,11 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
     }
 
     $scope.updateRoamings = function () {
-        localStorage.setItem('roamings', $scope.roamingsJSON);
+        var roamings = JSON.parse($scope.roamingsJSON);
+        roamingService.deleteAllRoamings();
+        for (var roamingDate in roamings) {
+            roamingService.updateRoaming(roamings[roamingDate]);
+        }
         roamingService.loadLocalStorage();
         loadCurrentConf();
     }

@@ -1,9 +1,9 @@
+<div class="login">
+  Connecté en tant que {{sessionInfo.user.firstname}} {{sessionInfo.user.lastname}}
+  <button ng-click="setPassword()" ng-show="hasP('P_CHANGE_PASSWORD')">Modifier mon mot de passe</button>
+  <button ng-click="logout()" ng-show="hasP('P_LOG_OUT')">Me déconnecter</button>
+</div>
 <div id="roamingList">
-  <div class="login">
-    Connecté en tant que {{sessionInfo.user.firstname}} {{sessionInfo.user.lastname}}
-    <button ng-click="setPassword()" ng-show="hasP('P_CHANGE_PASSWORD')">Modifier mon mot de passe</button>
-    <button ng-click="logout()" ng-show="hasP('P_LOG_OUT')">Me déconnecter</button>
-  </div>
   <h2>Liste des dernières maraudes</h2>
   <div class='spaceUnder'>
     Les comptes rendus de maraudes sont des informations sensibles réservées aux membres de l'association

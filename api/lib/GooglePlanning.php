@@ -1,6 +1,6 @@
 <?php
 
-require_once('conf/google.php');
+require_once(ROAMING_API_DIR.'/conf/google.php');
 
 define('DAY_INDEX', 1);
 define('MONTH_INDEX', 2);

@@ -1,23 +1,25 @@
 <?php
 
-require_once('conf/main.php');
-define('PERMISSIONS_LIB', 'conf/RolesPermissions.php');
+define('ROAMING_API_DIR', __DIR__.'/..');
 
-define('SESSION_LIB', 'lib/Session.php');
-define('VALIDATOR_LIB', 'lib/Validator.php');
-define('AUTH_LIB', 'lib/Auth.php');
+require_once(ROAMING_API_DIR.'/conf/main.php');
+define('PERMISSIONS_LIB', ROAMING_API_DIR.'/conf/RolesPermissions.php');
 
-define('MAIL_LIB', 'lib/Mail.php');
-define('JSON_LIB', 'lib/Json.php');
+define('SESSION_LIB', ROAMING_API_DIR.'/lib/Session.php');
+define('VALIDATOR_LIB', ROAMING_API_DIR.'/lib/Validator.php');
+define('AUTH_LIB', ROAMING_API_DIR.'/lib/Auth.php');
 
-define('GOOGLE_CONTACTS_LIB', 'lib/GoogleContacts.php');
-define('GOOGLE_PLANNING_LIB', 'lib/GooglePlanning.php');
-define('SPREADSHEETS_GENERATOR_LIB', 'lib/SpreadsheetsGenerator.php');
+define('MAIL_LIB', ROAMING_API_DIR.'/lib/Mail.php');
+define('JSON_LIB', ROAMING_API_DIR.'/lib/Json.php');
 
-define('DB_ACCESS_LIB', 'db/DbAccess.php');
-define('USERS_STORAGE_LIB', 'db/UsersStorage.php');
-define('ROAMINGS_STORAGE_LIB', 'db/RoamingsStorage.php');
-define('BRUTEFORCE_STORAGE_LIB', 'db/BruteforceStorage.php');
+define('GOOGLE_CONTACTS_LIB', ROAMING_API_DIR.'/lib/GoogleContacts.php');
+define('GOOGLE_PLANNING_LIB', ROAMING_API_DIR.'/lib/GooglePlanning.php');
+define('SPREADSHEETS_GENERATOR_LIB', ROAMING_API_DIR.'/lib/SpreadsheetsGenerator.php');
+
+define('DB_ACCESS_LIB', ROAMING_API_DIR.'/db/DbAccess.php');
+define('USERS_STORAGE_LIB', ROAMING_API_DIR.'/db/UsersStorage.php');
+define('ROAMINGS_STORAGE_LIB', ROAMING_API_DIR.'/db/RoamingsStorage.php');
+define('BRUTEFORCE_STORAGE_LIB', ROAMING_API_DIR.'/db/BruteforceStorage.php');
 
 class Container {
 

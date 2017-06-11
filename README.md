@@ -3,9 +3,9 @@
 
 ### Presentation
 - Le projet est composé en trois parties :
->- La partie "creator" dédiée à la création du compte rendu sur la tablette durant la maraude.
->- La partie "viewer" dédiée à fournir l'accès à ces comptes rendus à tous les membres de l'association.
->- La "webservice" dans le répertoir api utilisée par les deux autres parties pour le stockage en base de donnée
+>- La partie "tablet" dédiée à la création du compte rendu sur la tablette durant la maraude.
+>- La partie "portal" dédiée à fournir l'accès à ces comptes rendus à tous les membres de l'association.
+>- La partie "webservice" dans le répertoir api utilisée par les deux autres parties pour le stockage en base de donnée
     des comptes rendus, la récupération/conversion vers et depuis les documents sur google.
 
 ### Installation

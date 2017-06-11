@@ -54,7 +54,14 @@ class Auth {
             $mailToken = @$_POST['mailToken'];
             $this->validator->validateMailTokenFormat($mailToken);
             $usersStorage = $this->lazyUSersStorage->get();
-            $usersStorage->validateMailToken($userId, $mailToken);
+            $bruteforceStorage = $this->lazyBruteforceStorage->get();
+            $this->checkNbFailedAttempts($bruteforceStorage);
+            try {
+                $usersStorage->validateMailToken($userId, $mailToken);
+            } catch (Exception $e) {
+                $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
+                throw $e;
+            }
             $usersStorage->changePassword($userId, $password);
             $usersStorage->resetUserMailToken($userId);
             $usersStorage->deleteUserAutologinId($userId);
@@ -82,11 +89,9 @@ class Auth {
         $this->validator->validateEmail($email);
         $password = @$_POST['password'];
         $this->validator->validatePasswordOnLogin($password);
-        $bruteforceStorage = $this->lazyBruteforceStorage->get();
-        if ($bruteforceStorage->getNbFailedAttemptInPeriod($_SERVER['REMOTE_ADDR']) >= BRUTEFORCE_MAX_NB_ATTEMPTS) {
-            throw new ForbiddenException('Trop de tentatives de connexion depuis cette IP, veillez réessayer dans un moment.');
-        }
         $usersStorage = $this->lazyUSersStorage->get();
+        $bruteforceStorage = $this->lazyBruteforceStorage->get();
+        $this->checkNbFailedAttempts($bruteforceStorage);
         try {
             $user = $usersStorage->checkAndGetUser($email, $password);
         } catch (Exception $e) {
@@ -105,6 +110,11 @@ class Auth {
         $usersStorage = $this->lazyUSersStorage->get();
         $usersStorage->deleteUserAutologinId($this->session->getUser()->userId);
         $this->session->unsetUser();
+    }
+    private function checkNbFailedAttempts($bruteforceStorage) {
+        if ($bruteforceStorage->getNbFailedAttemptsInPeriod($_SERVER['REMOTE_ADDR']) >= BRUTEFORCE_MAX_NB_ATTEMPTS) {
+            throw new ForbiddenException('Trop de tentatives de connexion depuis cette IP, veillez réessayer dans un moment.');
+        }
     }
 }
 

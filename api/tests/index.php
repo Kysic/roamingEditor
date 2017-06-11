@@ -10,7 +10,7 @@
 <?php
 
 define('END_POINT', 'http://localhost/roamingEditor');
-define('TABLETTE_1_AUTOLOGIN_KEY', '8U8MPr6/ZNo4rIQHU7gvezB7lkU6aYI8LXkHH9Le7ZF2Xf8otJgmHgTiVnJnHr12');
+define('TABLET_1_AUTOLOGIN_KEY', '8U8MPr6/ZNo4rIQHU7gvezB7lkU6aYI8LXkHH9Le7ZF2Xf8otJgmHgTiVnJnHr12');
 
 require_once('lib/Sql.php');
 require_once('lib/Browser.php');
@@ -97,8 +97,8 @@ assertNonEquals($autologin1, $autologin3);
 
 printTestCase('Autologin as appli should succeed');
 $appliBrowser = new Browser();
-$appliBrowser->cookies['vcrPersistentLogin'] = TABLETTE_1_AUTOLOGIN_KEY;
-assertIsTablette1(getSessionUser($appliBrowser));
+$appliBrowser->cookies['vcrPersistentLogin'] = TABLET_1_AUTOLOGIN_KEY;
+assertIsTablet1(getSessionUser($appliBrowser));
 
 printTestCase('Autologin as member should succeed');
 $browser1 = new Browser();
@@ -118,7 +118,7 @@ try {
 } catch (Exception $e) {
     assertException($e, 'Vous n\'êtes pas autorisé à vous déconnecter du site.', 403);
 }
-assertIsTablette1(getSessionUser($appliBrowser));
+assertIsTablet1(getSessionUser($appliBrowser));
 
 printTestCase('Logout as member should unset autologin');
 assertIsBernard(getSessionUser($browser1));
@@ -245,7 +245,7 @@ function assertEquals($actual, $expected, $errorMsg = NULL) {
         if ($errorMsg) {
             throw new AssertException($errorMsg);
         } else {
-            throw new AssertException('Expect "'.print_r($actual, true).'", get "'.print_r($expected, true).'"');
+            throw new AssertException('Expect "'.print_r($expected, true).'", get "'.print_r($actual, true).'"');
         }
     }
 }
@@ -294,7 +294,7 @@ function assertIsBernard($user) {
                                      ));
 }
 
-function assertIsTablette1($user) {
+function assertIsTablet1($user) {
     assertEquals($user->role, 'appli');
     assertEquals($user->email, 'tablette1@samu-social-grenoble.fr');
     assertEquals($user->firstname, 'tablette');
