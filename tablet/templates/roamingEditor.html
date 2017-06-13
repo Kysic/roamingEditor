@@ -4,12 +4,12 @@
   <br/><br/>
   <label for="tutorField">Tuteur</label>
   <input id="tutorField" ng-model="roaming.tutor" type="text" ng-change="updateRoaming()" ng-disabled="!isEditable()" /><br/>
-  <div ng-repeat="volunteer in roaming.volunteers track by $index">
+  <div ng-repeat="teammate in roaming.teammates track by $index">
     Coéquipier
-    <input class="volunteerInput" ng-model="roaming.volunteers[$index]" ng-enter="addVolunteer()" type="text" ng-change="updateRoaming()" ng-disabled="!isEditable()" />
-    <button ng-click="removeVolunteer($index)" ng-attr-title="Enlever un bénévole" ng-disabled="roaming.volunteers.length &lt;= 1" ng-show="isEditable()">-</button>
+    <input class="teammateInput" ng-model="roaming.teammates[$index]" ng-enter="addTeammate()" type="text" ng-change="updateRoaming()" ng-disabled="!isEditable()" />
+    <button ng-click="removeTeammate($index)" ng-attr-title="Enlever un bénévole" ng-disabled="roaming.teammates.length &lt;= 1" ng-show="isEditable()">-</button>
   </div>
-  <button ng-click="addVolunteer()" ng-attr-title="Ajouter un bénévole" ng-show="roaming.volunteers.length &lt; 3 &amp;&amp; isEditable()">+</button>
+  <button ng-click="addTeammate()" ng-attr-title="Ajouter un bénévole" ng-show="roaming.teammates.length &lt; 3 &amp;&amp; isEditable()">+</button>
   <br/>
   Voiture
     <label><input ng-model="roaming.vehicle" type="radio" value="1" ng-change="updateRoaming()" ng-disabled="!isEditable()" />1</label>

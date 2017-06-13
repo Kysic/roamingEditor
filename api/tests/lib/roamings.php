@@ -26,7 +26,7 @@ function generateRoamingReport($roamingDate, $roamingVersion) {
 {
   "date": "$roamingDate",
   "tutor": "Bernard D",
-  "volunteers": [
+  "teammates": [
     "Yves S.",
     "Flore M",
     "Lyse B"

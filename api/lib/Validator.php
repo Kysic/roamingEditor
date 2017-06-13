@@ -19,7 +19,7 @@ class Validator {
 
     public function validateRoamingDate($roamingDate) {
         if ( !preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $roamingDate) ) {
-            throw new BadRequestException('Date de la maraude invalide, format attendu yyyy-mm-dd.');
+            throw new BadRequestException('Date invalide, format attendu yyyy-mm-dd.');
         }
         if ($roamingDate < $this->getOlderRoamingDateStr()) {
             $this->session->checkHasPermission(P_SEE_ALL_REPORT);

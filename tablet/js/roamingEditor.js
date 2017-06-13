@@ -222,7 +222,7 @@ roamingEditor.controller('RoamingController',
         $scope.roaming = {
             date: $routeParams.roamingId,
             tutor: '',
-            volunteers: [ '' ],
+            teammates: [ '' ],
             vehicle: getVehicleAccordingToRoamingDate($routeParams.roamingId),
             interventions: [ ]
         };
@@ -241,8 +241,8 @@ roamingEditor.controller('RoamingController',
             if (response.data.tutor && $scope.roaming.tutor == '') {
                 $scope.roaming.tutor = response.data.tutor;
             }
-            if (response.data.volunteers && angular.equals($scope.roaming.volunteers, [ '' ])) {
-                $scope.roaming.volunteers = response.data.volunteers;
+            if (response.data.teammates && angular.equals($scope.roaming.teammates, [ '' ])) {
+                $scope.roaming.teammates = response.data.teammates;
             }
             $scope.updateRoaming();
         });
@@ -263,26 +263,26 @@ roamingEditor.controller('RoamingController',
        }
     }
 
-    $scope.addVolunteer = function () {
-        $scope.roaming.volunteers.push('');
+    $scope.addTeammate = function () {
+        $scope.roaming.teammates.push('');
         $scope.updateRoaming();
         // A timeout is required because the field doesn't exist yet
         $timeout(function () {
-            var elts = document.querySelectorAll('.volunteerInput');
+            var elts = document.querySelectorAll('.teammateInput');
             if (elts && elts.length > 0) {
                 elts[elts.length-1].focus();
             }
         });
     }
-    $scope.removeVolunteer = function (volunteerIndex) {
-        if (volunteerIndex < $scope.roaming.volunteers.length
-            && ($scope.roaming.volunteers[volunteerIndex] == ''
-                    || confirm('Etes vous sûr de vouloir enlever ' + $scope.roaming.volunteers[volunteerIndex] + ' ?')
+    $scope.removeTeammate = function (teammateIndex) {
+        if (teammateIndex < $scope.roaming.teammates.length
+            && ($scope.roaming.teammates[teammateIndex] == ''
+                    || confirm('Etes vous sûr de vouloir enlever ' + $scope.roaming.teammates[teammateIndex] + ' ?')
             )
         ) {
-            $scope.roaming.volunteers.splice(volunteerIndex, 1);
-            if ($scope.roaming.volunteers.length == 0) {
-                $scope.roaming.volunteers.push('');
+            $scope.roaming.teammates.splice(teammateIndex, 1);
+            if ($scope.roaming.teammates.length == 0) {
+                $scope.roaming.teammates.push('');
             }
             $scope.updateRoaming();
         }

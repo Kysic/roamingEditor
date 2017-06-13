@@ -6,26 +6,41 @@ define('DAY_INDEX', 1);
 define('MONTH_INDEX', 2);
 define('YEAR_INDEX', 4);
 define('TUTOR_INDEX', 2);
-define('DIFF_INDEX_VOLUNTEER', 2);
+define('DIFF_INDEX_TEAMMATE', 2);
 define('COMMENT_INDEX', 8);
 define('BREAD_INDEX', 10);
 
 class GooglePlanning {
 
-    private function getVolunteerName($data, $volunteerIndex) {
+    public function getRoamingOfDate($roamingDate) {
+        $dateId = date('Y-m-d', $roamingDate);
+        $monthId = date('Y-m', $roamingDate);
+        if ( !array_key_exists($monthId, $this->roamingMonthData) ) {
+            $this->extractRoamingsOfMonth($monthId);
+        }
+        $roamingMonthData = $this->roamingMonthData[$monthId];
+        if ( array_key_exists($dateId, $roamingMonthData) ) {
+            return $roamingMonthData[$dateId];
+        } else {
+            return array();
+        }
+    }
+
+    private $roamingMonthData = array();
+
+    private function getTeammateName($data, $teammateIndex) {
         return implode('-', array_map('ucwords', explode('-',
-                    strtolower(trim($data[TUTOR_INDEX + ($volunteerIndex * DIFF_INDEX_VOLUNTEER)]))
+                    strtolower(trim($data[TUTOR_INDEX + ($teammateIndex * DIFF_INDEX_TEAMMATE)]))
                )));
     }
-    private function getVolunteerGender($data, $volunteerIndex) {
-        return strtolower(trim($data[TUTOR_INDEX + ($volunteerIndex * DIFF_INDEX_VOLUNTEER) + 1]));
+    private function getTeammateGender($data, $teammateIndex) {
+        return strtolower(trim($data[TUTOR_INDEX + ($teammateIndex * DIFF_INDEX_TEAMMATE) + 1]));
     }
-    public function extractRoamingsOfMonth($roamingMonthDate) {
-        $monthId = date('Y-m', $roamingMonthDate);
+    private function extractRoamingsOfMonth($monthId) {
         $docId = GooglePlanningRef::getDocId($monthId);
         $sheetId = GooglePlanningRef::getSheetId($monthId);
-        $roamingData = array();
         $planningUrl = GOOGLE_DOC_URL . $docId . GOOGLE_DOC_CMD_CSV . $sheetId;
+        $roamingMonthData = array();
         if (($handle = fopen($planningUrl, 'r')) !== FALSE) {
             if (($data = fgetcsv($handle, 1000, ',')) === FALSE) {
                 return $roamingData;
@@ -34,35 +49,35 @@ class GooglePlanning {
             $roamingYear = $data[YEAR_INDEX];
             $roamingDay = 1;
             while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
-                // echo '<!--'.implode(';',$data).'-->'."\n";
-                if (  ( stristr($data[0], 'réunion') !== false || stristr($data[0], 'reunion') !== false )
+                //echo '<!--'.implode(';',$data).'-->'."\n";
+                /*if (  ( stristr($data[0], 'réunion') !== false || stristr($data[0], 'reunion') !== false )
                       && stristr($data[0], 'mensuelle ') !== false
                    ) {
                     $roamingData['meeting'] = $data[0];
-                }
+                }*/
                 if (count($data) >= 2 && $data[DAY_INDEX] == $roamingDay
                                 && checkDate($roamingMonth, $roamingDay, $roamingYear)) {
-                    $roamingDate = date('Y-m-d', mktime(0, 0, 0, $roamingMonth, $roamingDay, $roamingYear));
-                    $roamingData[$roamingDate] = array();
-                    for ($i = 0; $i < 4; $i ++) {
-                        $roamingData[$roamingDate][$i] = array('name' => $this->getVolunteerName($data, $i),
-                                                             'gender' => $this->getVolunteerGender($data, $i));
+                    $dateId = date('Y-m-d', mktime(0, 0, 0, $roamingMonth, $roamingDay, $roamingYear));
+                    $tutor = $this->getTeammateName($data, 0);
+                    $teammates = array();
+                    for ($i = 1; $i < 4; $i ++) {
+                        array_push($teammates, $this->getTeammateName($data, $i));
                     }
+                    /*
                     if (@$data[COMMENT_INDEX]) {
                         $roamingData[$roamingDate]['comment'] = $data[COMMENT_INDEX];
                     }
                     if (@$data[BREAD_INDEX]) {
                         $roamingData[$roamingDate]['bread'] = $data[BREAD_INDEX];
-                    }
+                    }*/
+                    $team = array('tutor' => $tutor, 'teammates' => $teammates);
+                    $roamingMonthData[$dateId] = $team;
                     $roamingDay++;
                 }
             }
             fclose($handle);
         }
-        return $roamingData;
-    }
-    public function getRoamingOfDate($roamingMonthData, $roamingDate) {
-        return @$roamingMonthData[date('Y-m-d', $roamingDate)];
+        $this->roamingMonthData[$monthId] = $roamingMonthData;
     }
 
 }

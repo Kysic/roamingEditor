@@ -24,9 +24,9 @@
     <tr ng-repeat="roaming in roamings | orderBy:'-date'">
       <td>{{roaming.date}}</td>
       <td>{{roaming.tutor}}</td>
-      <td>{{roaming.volunteers[0]}}</td>
-      <td>{{roaming.volunteers[1]}}</td>
-      <td>{{roaming.volunteers[2]}}</td>
+      <td>{{roaming.teammates[0]}}</td>
+      <td>{{roaming.teammates[1]}}</td>
+      <td>{{roaming.teammates[2]}}</td>
       <td>
         <button ng-click="printRoaming(roaming.id)" ng-disabled="editRunning"
             ng-show="hasP('P_SEE_LAST_REPORT')">Visualiser</button>

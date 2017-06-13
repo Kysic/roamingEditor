@@ -16,9 +16,9 @@
     <tr ng-repeat="roaming in roamings">
       <td>{{roaming.date}}</td>
       <td>{{roaming.tutor}}</td>
-      <td>{{roaming.volunteers[0]}}</td>
-      <td>{{roaming.volunteers[1]}}</td>
-      <td>{{roaming.volunteers[2]}}</td>
+      <td>{{roaming.teammates[0]}}</td>
+      <td>{{roaming.teammates[1]}}</td>
+      <td>{{roaming.teammates[2]}}</td>
       <td>{{roaming.interventions.length}}</td>
       <td class="{{ {IN_PROGRESS:'statusInProgress', SYNCHRONIZED:'statusDone', FAILED:'statusFailed'}[roaming.synchroStatus] }}">
         {{ {IN_PROGRESS:'en cours', SYNCHRONIZED:'synchronisé', FAILED:'échec'}[roaming.synchroStatus] }}

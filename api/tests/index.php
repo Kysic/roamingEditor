@@ -158,7 +158,7 @@ assertIsBernard(getSessionUser($browser));
 printTestCase('GetPlanning as appli should succeed');
 $twentiethDayOfLastMonth = date('Y-m-d', strtotime('+19 day', strtotime('first day of last month')));
 $result = getplanning($appliBrowser, $twentiethDayOfLastMonth);
-assertEquals($result, (object) array('tutor'=>'Nicole P','volunteers'=>array('Olivier C', 'Sonia Jb', 'Aude P')));
+assertEquals($result, (object) array('tutor'=>'Nicole P','teammates'=>array('Olivier C', 'Sonia Jb', 'Aude P')));
 
 printTestCase('SaveRoaming as appli should succeed');
 $roaming = generateRoamingReport($twentiethDayOfLastMonth, 5);

@@ -22,7 +22,7 @@ function createNewCRFromTemplate(roamingDate) {
 function fillRoamingSheet(roaming, sheet) {
   sheet.getRange('c1').setValue(roaming.date);
   sheet.getRange('c2').setValue(roaming.vehicle);
-  sheet.getRange('c3').setValue(roaming.volunteers.join(', ') + ' et ' + roaming.tutor);
+  sheet.getRange('c3').setValue(roaming.teammates.join(', ') + ' et ' + roaming.tutor);
   for (var i = 0; i < roaming.interventions.length; i++) {
     var intervention = roaming.interventions[i];
     var line = i + 15;
