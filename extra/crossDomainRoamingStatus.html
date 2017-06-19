@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+<head>
+<meta charset="utf-8"/>
+<script src="https://u.jimcdn.com/e/o/seefd1de40a16eb08/userlayout/js/jquery-min.js"></script>
+<style>
+.canceled {
+  font-weight: bold;
+}
+</style>
+<script type="text/javascript">
+function getStatusText(status) {
+    switch(status) {
+    case 'canceled':
+        return 'maraude annulée, désolé, il n\'y aura pas de maraude';
+    case 'unsure':
+        return 'nombre de bénévoles inscrits insuffisant pour l\'instant';
+    case 'planned-uncomplete':
+    case 'planned-complete':
+        return 'maraude prévue, il y a suffisamment de bénévoles inscrits';
+    default:
+        return 'erreur, il n\'a pu être déterminé si la maraude est prévue ou non.';
+    }
+}
+
+function toHumanDate(isoDate) {
+    var objDate = new Date(isoDate)
+    return objDate.toLocaleString('fr-FR', {weekday: 'long'}) + ' ' + objDate.toLocaleDateString("fr-FR");
+}
+
+$(document).ready(function(){
+
+    $.getJSON( "https://mydomain.com/api/nextDaysStatus.php", function( data ) {
+        var items = [];
+        $.each( data, function( index, elt ) {
+            if (elt['status'] != 'unknown') {
+                items.push( '<li class="' + elt['status'] + '">' + toHumanDate(index)
+                        + ' : ' + getStatusText(elt['status']) + '</li>' );
+            }
+        });
+        $('#roamingStatusContainer').html('<strong>Statut des maraudes du VINCI pour les jours à venir :</strong>');
+        $( '<ul/>', {
+            html: items.join( '' )
+        }).appendTo( '#roamingStatusContainer' );
+    });
+
+});
+</script>
+</head>
+</body>
+<div id='roamingStatusContainer'></div>
+</body>
+</html>

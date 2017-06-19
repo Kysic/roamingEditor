@@ -158,7 +158,32 @@ assertIsBernard(getSessionUser($browser));
 printTestCase('GetPlanning as appli should succeed');
 $twentiethDayOfLastMonth = date('Y-m-d', strtotime('+19 day', strtotime('first day of last month')));
 $result = getplanning($appliBrowser, $twentiethDayOfLastMonth);
-assertEquals($result, (object) array('tutor'=>'Nicole P','teammates'=>array('Olivier C', 'Sonia Jb', 'Aude P')));
+assertEquals($result, (object) array('tutor'=>'Nicole P','teammates'=>array('Olivier C', 'Sonia Jb', 'Aude P'),'status'=>'planned-complete'));
+
+printTestCase('GetPlanning on a period should succeed');
+$thirdDayOfMonth = date('Y-m-d', strtotime('+2 day', strtotime('first day of this month')));
+$fourthDayOfMonth = date('Y-m-d', strtotime('+3 day', strtotime('first day of this month')));
+$fifthDayOfMonth = date('Y-m-d', strtotime('+4 day', strtotime('first day of this month')));
+$result = getplannings($appliBrowser, $thirdDayOfMonth, $fifthDayOfMonth);
+assertEquals($result, (object) array(
+        $thirdDayOfMonth => (object) array('tutor'=>'','teammates'=>array('Akim.s', 'Tatiana', 'Amelie G'),'status'=>'unsure'),
+        $fourthDayOfMonth => (object) array('tutor'=>'Maraude','teammates'=>array('Annulee', '', ''),'status'=>'canceled'),
+        $fifthDayOfMonth => (object) array('tutor'=>'Roland T','teammates'=>array('Annie B', '', ''),'status'=>'planned-uncomplete')
+    ));
+
+printTestCase('nextDaysStatus should succeed');
+$browserVisitor = new Browser();
+$result = nextDaysStatus($browserVisitor);
+assertEquals(count((array)$result), 4);
+foreach($result as $key => $value) {
+    if ( !preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $key) ) {
+        throw new AssertException('Expected date with format yyyy-mm-dd, get '.$key);
+    }
+    assertEquals(count((array)$value), 1);
+    if ( !in_array($value->status, array('canceled', 'unsure', 'planned-uncomplete', 'planned-complete')) ) {
+        throw new AssertException('Unexpected status : '.$value->status);
+    }
+}
 
 printTestCase('SaveRoaming as appli should succeed');
 $roaming = generateRoamingReport($twentiethDayOfLastMonth, 5);

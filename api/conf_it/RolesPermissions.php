@@ -46,7 +46,7 @@ class RolesPermissions {
         $this->tutor = array_merge(array(  ), $this->member);
         $this->board = array_merge(array( P_SEE_ALL_REPORT ), $this->tutor);
         $this->admin = array_merge(array( P_SEE_USERS_LIST, P_ASSIGN_ROLE ), $this->board);
-        $this->root = array_merge(array( P_GENERATE_PASSWORD_TOKEN ), $this->admin);
+        $this->root = array_merge(array( P_SAVE_ROAMINGS, P_GENERATE_PASSWORD_TOKEN ), $this->admin);
     }
 
     public function getPermissions($role) {

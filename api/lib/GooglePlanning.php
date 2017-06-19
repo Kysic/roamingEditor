@@ -70,14 +70,43 @@ class GooglePlanning {
                     if (@$data[BREAD_INDEX]) {
                         $roamingData[$roamingDate]['bread'] = $data[BREAD_INDEX];
                     }*/
-                    $team = array('tutor' => $tutor, 'teammates' => $teammates);
-                    $roamingMonthData[$dateId] = $team;
+                    $roamingMonthData[$dateId] = array(
+                        'tutor' => $tutor,
+                        'teammates' => $teammates,
+                        'status' => $this->getStatus($tutor, $teammates)
+                    );
                     $roamingDay++;
                 }
             }
             fclose($handle);
         }
         $this->roamingMonthData[$monthId] = $roamingMonthData;
+    }
+
+    private function containsCancel($str) {
+        return stristr(@$str, 'annulée') || stristr(@$str, 'annulee');
+    }
+
+    private function getStatus($tutor, $teammates) {
+        if ($teammates) {
+            if ( $this->containsCancel($tutor) ) {
+                return 'canceled';
+            }
+            foreach ($teammates as $teammate) {
+                if ( $this->containsCancel($teammate) ) {
+                    return 'canceled';
+                }
+            }
+            if ($tutor == '' || ( $teammates[0] == '' && $teammates[1] == '' ) ) {
+                return 'unsure';
+            }
+            if ($teammates[0] == '' || $teammates[1] == '') {
+                return 'planned-uncomplete';
+            }
+            return 'planned-complete';
+        } else {
+            return 'unknown';
+        }
     }
 
 }

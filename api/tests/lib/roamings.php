@@ -4,6 +4,14 @@ function getPlanning($browser, $roamingDate) {
     return $browser->get(END_POINT.'/api/getPlanning.php?roamingDate='.$roamingDate);
 }
 
+function getPlannings($browser, $fromDate, $toDate) {
+    return $browser->get(END_POINT.'/api/getPlanning.php?from='.$fromDate.'&to='.$toDate);
+}
+
+function nextDaysStatus($browser) {
+    return $browser->get(END_POINT.'/api/nextDaysStatus.php');
+}
+
 function getRoamings($browser) {
     return $browser->get(END_POINT.'/api/getRoamings.php');
 }
