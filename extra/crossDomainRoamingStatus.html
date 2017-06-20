@@ -24,13 +24,12 @@ function getStatusText(status) {
 }
 
 function toHumanDate(isoDate) {
-    var objDate = new Date(isoDate)
-    return objDate.toLocaleString('fr-FR', {weekday: 'long'}) + ' ' + objDate.toLocaleDateString("fr-FR");
+    return new Date(isoDate).toLocaleString('fr-FR', {weekday: 'long', year: 'numeric', month: 'long', day: '2-digit'});
 }
 
 $(document).ready(function(){
 
-    $.getJSON( "https://mydomain.com/api/nextDaysStatus.php", function( data ) {
+    $.getJSON( "https://example.com/api/nextDaysStatus.php", function( data ) {
         var items = [];
         $.each( data, function( index, elt ) {
             if (elt['status'] != 'unknown') {

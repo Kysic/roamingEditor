@@ -6,16 +6,28 @@ try {
 
     $container = new Container();
     $session = $container->getSession();
+    $validator = $container->getValidator();
     $json = $container->getJson();
     $roamingsStorage = $container->getRoamingsStorage();
 
     $session->checkLoggedIn();
     $session->checkHasPermission(P_SEE_LAST_REPORT);
 
-    $beginDate = new DateTime();
-    $beginDate->sub(new DateInterval('P'.REPORT_OLD_LIMIT_DAYS.'D'));
-    $endDate = new DateTime();
-    $roamings = $roamingsStorage->getAll($beginDate->format('Y-m-d'), $endDate->format('Y-m-d'));
+    if ( !empty($_GET['from']) ) {
+        $validator->validateRoamingDate(@$_GET['from']);
+        $fromDate = DateTime::createFromFormat('Y-m-d', $_GET['from']);
+    } else {
+        $fromDate = new DateTime();
+        $fromDate->sub(new DateInterval('P'.REPORT_OLD_LIMIT_DAYS.'D'));
+    }
+    if ( !empty($_GET['to']) ) {
+        $validator->validateRoamingDate(@$_GET['to']);
+        $toDate = DateTime::createFromFormat('Y-m-d', $_GET['to']);
+    } else {
+        $toDate = new DateTime();
+    }
+
+    $roamings = $roamingsStorage->getAll($fromDate->format('Y-m-d'), $toDate->format('Y-m-d'));
 
     $json->returnResult(array(
         'status' => 'success',

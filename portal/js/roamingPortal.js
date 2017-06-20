@@ -4,9 +4,10 @@ var roamingApiEndPoint = '../api';
 var roamingPortal = angular.module('roamingPortal', ['ngRoute']);
 
 roamingPortal.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/roamingsList', {
+    $routeProvider.when('/roamingsList/', {
         templateUrl: 'templates/roamingsList.html',
-        controller: 'RoamingListController'
+        controller: 'RoamingListController',
+        reloadOnSearch: false
     })
     .when('/login/:email?/:referer?', {
         templateUrl: 'templates/login.html',
@@ -37,10 +38,10 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
     });
 }]);
 
-
+/* Services */
 roamingPortal.factory('authService', function ($rootScope, $http) {
 
-    var sessionInfo = { loggedIn: false, user: {}, sessionToken: '', lastError: '' };
+    var sessionInfo = { loggedIn: 'unknown', user: {}, sessionToken: '', lastError: '' };
 
     function updateSessionInfo(responseData) {
         sessionInfo.lastError = '';
@@ -139,19 +140,105 @@ roamingPortal.factory('authService', function ($rootScope, $http) {
     };
 });
 
-roamingPortal.controller('RoamingListController', function RoamingListController($scope, $http, $window, $location, authService) {
+/* Filters */
+roamingPortal.filter('humanDate', function() {
+    return function(date) {
+        var objDate = typeof date === 'string' ? new Date(date) : date;
+        return objDate.toLocaleString(
+            'fr-FR',
+            { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' }
+        );
+    };
+});
+roamingPortal.filter('humanMonth', function() {
+    return function(date) {
+        var objDate = typeof date === 'string' ? new Date(date) : date;
+        return objDate.toLocaleString(
+            'fr-FR',
+            { year: 'numeric', month: 'long' }
+        );
+    };
+});
+roamingPortal.filter('capitalize', function() {
+    return function(input) {
+        return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+    }
+});
+
+/* Controllers */
+roamingPortal.controller('RoamingListController', function RoamingListController($scope, $http, $window, $routeParams, $location, authService) {
 
     $scope.sessionInfo = authService.getSessionInfo();
+    $scope.monthList;
+    $scope.month;
+    $scope.calendar;
+    $scope.roamings;
+    $scope.planning;
+    $scope.editRunning;
+    $scope.showMonth = showMonth;
+    $scope.printRoaming = printRoaming;
+    $scope.editRoaming = editRoaming;
+    $scope.setPassword = setPassword;
+    $scope.logout = logout;
+    $scope.hasP = hasP;
+    $scope.isToday = isToday;
+    $scope.isSelectedMonth = isSelectedMonth;
+
+    $scope.$watch('sessionInfo', function () {
+        if ($scope.sessionInfo.loggedIn === false) {
+            $location.path('/login');
+        }
+        populateMonthList();
+    }, true);
+
+
+    populateMonth();
+    populateMonthList();
+    populateCalendar();
     retrieveRoamings();
+    retrievePlanning();
+
+
+    function populateMonth() {
+        var d = new Date();
+        $scope.month = new Date(Date.UTC(d.getFullYear(), d.getMonth(), 1));
+        if ($routeParams.month) {
+            try {
+                $scope.month = new Date($routeParams.month + '-01');
+            } catch (e) {
+                console.log('Unable to parse date ' + $routeParams.month + '-01');
+            }
+        }
+    }
+
+    function populateMonthList() {
+        $scope.monthList = [];
+        var d = new Date();
+        var histo = hasP('P_SEE_ALL_REPORT') ? -6 : -1;
+        for (i = histo; i <= 2; i++) {
+            $scope.monthList.push(new Date(Date.UTC(d.getFullYear(), d.getMonth() + i, 1)));
+        }
+    }
+
+    function populateCalendar() {
+        $location.search('month', $scope.month.toISOString().substring(0, 7));
+        $scope.calendar = []
+        var lastDayOfMonth = new Date(Date.UTC($scope.month.getFullYear(), $scope.month.getMonth() + 1, 0));
+        for (var d = $scope.month; d <= lastDayOfMonth;
+                 d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() +1))) {
+            $scope.calendar.push(d.toISOString().substring(0, 10));
+        }
+    }
 
     function retrieveRoamings() {
-        $http.get(roamingApiEndPoint + '/getRoamings.php').then(function (response) {
+        $scope.roamings = {};
+        $http.get(roamingApiEndPoint + '/getRoamings.php?'+dateRangeQuerySelector()).then(function (response) {
             if (response.data.status == 'success' && response.data.roamings) {
                 var roamingsObject = response.data.roamings;
-                $scope.roamings = Object.keys(roamingsObject).map(function(roamingId) {
+                Object.keys(roamingsObject).forEach(function(roamingId) {
                     var roaming = roamingsObject[roamingId];
                     roaming.id = roamingId;
-                    return roaming;
+                    $scope.roamings[roaming.date] = roaming;
                 });
             }
         }, function (response) {
@@ -161,16 +248,34 @@ roamingPortal.controller('RoamingListController', function RoamingListController
         });
     }
 
-    $scope.hasP = function (permission) {
+    function retrievePlanning() {
+        $scope.planning = {};
+        $http.get(roamingApiEndPoint + '/getPlanning.php?'+dateRangeQuerySelector()).then(function (response) {
+            $scope.planning = response.data;
+        }, function (response) {
+            if (response.status == 401) {
+                $location.path('/login');
+            }
+        });
+    }
+
+    function showMonth(month) {
+        $scope.month = month;
+        populateCalendar();
+        retrieveRoamings();
+        retrievePlanning();
+    }
+
+    function hasP(permission) {
         return $scope.sessionInfo && $scope.sessionInfo.user
                 && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
     }
 
-    $scope.printRoaming = function (roamingId) {
+    function printRoaming(roamingId) {
         $window.open(roamingApiEndPoint + '/getPdf.php?roamingId=' + roamingId);
     }
 
-    $scope.editRoaming = function (roamingId) {
+    function editRoaming(roamingId) {
         $scope.editRunning = true;
         $http.get(roamingApiEndPoint + '/getDocUrl.php?roamingId=' + roamingId).then(function (response) {
             if (response.data.status == 'success' && response.data.editUrl) {
@@ -186,17 +291,27 @@ roamingPortal.controller('RoamingListController', function RoamingListController
         
     }
 
-    $scope.setPassword = function () {
+    function setPassword() {
         $location.path('/setPassword');
     }
-    $scope.logout = function () {
+    function logout() {
         authService.logout();
     }
-    $scope.$watch('sessionInfo', function () {
-        if (!$scope.sessionInfo.loggedIn) {
-            $location.path('/login');
-        }
-    }, true);
+
+    function dateRangeQuerySelector() {
+        var c = $scope.calendar;
+        return 'from=' + c[0] + '&to=' + c[c.length-1];
+    }
+
+    function isSelectedMonth(date) {
+        return date.getMonth() == $scope.month.getMonth() && date.getFullYear() == $scope.month.getFullYear();
+    }
+
+    function isToday(dateStr) {
+        var today = new Date();
+        var d = new Date(dateStr);
+        return d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear();
+    }
 
 });
 
@@ -204,11 +319,13 @@ roamingPortal.controller('LoginController', function LoginController($scope, $ro
 
     $scope.stayLogged = true;
     $scope.sessionInfo = authService.getSessionInfo();
-
     $scope.email = $routeParams.email;
+    $scope.login = login;
+    $scope.signin = signin;
+    $scope.resetPassword = resetPassword;
 
     $scope.$watch('sessionInfo', function () {
-        if ($scope.sessionInfo.loggedIn) {
+        if ($scope.sessionInfo.loggedIn === true) {
             if ($routeParams.referer) {
                 $location.path('/' + $routeParams.referer);
             } else {
@@ -217,20 +334,20 @@ roamingPortal.controller('LoginController', function LoginController($scope, $ro
         }
     }, true);
 
-    $scope.login = function () {
-        $scope.loginInProgress = true;
-        authService.login($scope.email, $scope.password, $scope.stayLogged);
-    }
-
     $scope.$on('login_fail', function () {
         $scope.loginInProgress = false;
     });
 
-    $scope.signin = function () {
+    function login() {
+        $scope.loginInProgress = true;
+        authService.login($scope.email, $scope.password, $scope.stayLogged);
+    }
+
+    function signin() {
         $location.path('/signin');
     }
 
-    $scope.resetPassword = function () {
+    function resetPassword() {
         $location.path('/resetPassword');
     }
 
@@ -276,7 +393,7 @@ roamingPortal.controller('SigninController', function SigninController($scope, $
     $scope.email = $routeParams.email;
 
     $scope.$watch('sessionInfo', function () {
-        if ($scope.sessionInfo.loggedIn) {
+        if ($scope.sessionInfo.loggedIn === true) {
             $location.path('/roamingsList');
         }
     }, true);
@@ -343,6 +460,9 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
 
     $scope.roles = ['appli', 'former', 'guest', 'member', 'tutor', 'board', 'admin', 'root'];
     $scope.sessionInfo = authService.getSessionInfo();
+    $scope.hasP = hasP;
+    $scope.setRole = setRole;
+
     retrieveUsers();
 
     function retrieveUsers() {
@@ -357,7 +477,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
         });
     }
 
-    $scope.hasP = function (permission) {
+    function hasP(permission) {
         return $scope.sessionInfo && $scope.sessionInfo.user
                 && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
     }
@@ -371,7 +491,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
         retrieveUsers();
     }
 
-    $scope.setRole = function (user) {
+    function setRole(user) {
         $scope.setRoleRunning = true;
         $scope.errorMsg = '';
         $http.post(roamingApiEndPoint + '/setUserRole.php',{

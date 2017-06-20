@@ -1,6 +1,8 @@
 
 var roamingApiEndPoint = '../api';
 
+var roamingHistoryNbDays = 20;
+
 var roamingEditor = angular.module('roamingEditor', ['ngRoute', 'ngCookies']);
 
 roamingEditor.config(['$routeProvider', function($routeProvider) {
@@ -29,7 +31,7 @@ roamingEditor.config(['$cookiesProvider', function($cookiesProvider) {
     $cookiesProvider.defaults.path = '/';
 }]);
 
-
+/* Services */
 roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $cookies) {
 
     var roamings = { };
@@ -84,7 +86,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
     }
 
     function filterOldRoamings() {
-        var olderRoamingDateAccepted = new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000);
+        var olderRoamingDateAccepted = new Date(new Date().getTime() - roamingHistoryNbDays * 24 * 60 * 60 * 1000);
         var olderRoamingIdAccepted = $filter('date')(olderRoamingIdAccepted, 'yyyy-MM-dd');
         for (var roamingDate in roamings) {
             if (roamingDate < olderRoamingIdAccepted) {
@@ -165,6 +167,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
     };
 });
 
+/* Directives */
 roamingEditor.directive('ngEnter', function() {
     return function(scope, element, attrs) {
         element.bind("keydown keypress", function(event) {
@@ -178,6 +181,24 @@ roamingEditor.directive('ngEnter', function() {
     };
 });
 
+/* Filters */
+roamingEditor.filter('humanDate', function() {
+    return function(date) {
+        var objDate = typeof date === 'string' ? new Date(date) : date;
+        return objDate.toLocaleString(
+            'fr-FR',
+            { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' }
+        );
+    };
+});
+
+roamingEditor.filter('capitalize', function() {
+    return function(input) {
+        return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+    }
+});
+
+/* Controllers */
 roamingEditor.controller('RoamingListController', function RoamingListController($scope, $location, $filter, roamingService) {
 
     retrieveRoamings();

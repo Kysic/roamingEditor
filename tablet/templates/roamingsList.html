@@ -14,7 +14,7 @@
       <th>Action</th>
     </tr>
     <tr ng-repeat="roaming in roamings">
-      <td>{{roaming.date}}</td>
+      <td>{{roaming.date | humanDate | capitalize}}</td>
       <td>{{roaming.tutor}}</td>
       <td>{{roaming.teammates[0]}}</td>
       <td>{{roaming.teammates[1]}}</td>

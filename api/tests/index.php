@@ -213,7 +213,7 @@ assertEquals($result->editUrl, $editUrl);
 
 printTestCase('Get all users as root should succeed');
 $browserRoot = new Browser();
-login($browserRoot, 'Laure.Maitre@vinci.fr', 'Laure.Maitre@vinci.fr');
+login($browserRoot, 'Laure.Maitre@example.com', 'Laure.Maitre@example.com');
 $result = getUsers($browserRoot);
 assertEquals($result->status, 'success');
 assertEquals(count($result->users), 7);
@@ -321,7 +321,7 @@ function assertIsBernard($user) {
 
 function assertIsTablet1($user) {
     assertEquals($user->role, 'appli');
-    assertEquals($user->email, 'tablette1@samu-social-grenoble.fr');
+    assertEquals($user->email, 'tablet1@example.com');
     assertEquals($user->firstname, 'tablette');
     assertEquals($user->lastname, '1');
     assertEquals($user->permissions, array(

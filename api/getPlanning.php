@@ -22,15 +22,13 @@ try {
             $validator->validateRoamingDate(@$_GET['from']);
             $fromDate = DateTime::createFromFormat('Y-m-d', $_GET['from']);
         } else {
-            $fromDate = new DateTime();
-            $fromDate->sub(new DateInterval('P'.REPORT_OLD_LIMIT_DAYS.'D'));
+            $fromDate = new DateTime('first day of this month');
         }
         if ( !empty($_GET['to']) ) {
             $validator->validateRoamingDate(@$_GET['to']);
             $toDate = DateTime::createFromFormat('Y-m-d', $_GET['to']);
         } else {
-            $toDate = new DateTime();
-            $toDate->add(new DateInterval('P'.REPORT_OLD_LIMIT_DAYS.'D'));
+            $toDate = new DateTime('last day of this month');
         }
         $response = array();
         $periodInterval = new DateInterval('P1D');

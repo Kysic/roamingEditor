@@ -9,10 +9,12 @@
     Les comptes rendus de maraudes sont des informations sensibles réservées aux membres de l'association
     <a target='_blank' href='https://www.samu-social-grenoble.fr/'>VINCI</a>.<br>
   </div>
-  <div ng-show="roamings.length == 0">
-    Aucun compte rendu de maraude n'est disponible pour l'instant
-  </div>
-  <table ng-show="roamings.length > 0">
+  <ul class="tabs">
+    <li ng-repeat="tabMonth in monthList" class="{{isSelectedMonth(tabMonth) ? 'selected' : 'notselected'}}" ng-click="showMonth(tabMonth)">
+        {{tabMonth | humanMonth | capitalize}}
+    </li>
+  </ul>
+  <table>
     <tr>
       <th>Date</th>
       <th>Tuteur</th>
@@ -21,17 +23,17 @@
       <th>Coéquipier</th>
       <th>Action</th>
     </tr>
-    <tr ng-repeat="roaming in roamings | orderBy:'-date'">
-      <td>{{roaming.date}}</td>
-      <td>{{roaming.tutor}}</td>
-      <td>{{roaming.teammates[0]}}</td>
-      <td>{{roaming.teammates[1]}}</td>
-      <td>{{roaming.teammates[2]}}</td>
-      <td>
-        <button ng-click="printRoaming(roaming.id)" ng-disabled="editRunning"
-            ng-show="hasP('P_SEE_LAST_REPORT')">Visualiser</button>
-        <button ng-click="editRoaming(roaming.id)" ng-disabled="editRunning"
-            ng-show="hasP('P_EDIT_REPORT')">Editer</button>
+    <tr ng-repeat="day in calendar" class="{{roamings[day] ? 'done' : planning[day]['status'] }} {{isToday(day) ? 'planningToday' :'' }}">
+      <td class="date">{{day | humanDate | capitalize}}</td>
+      <td class="tutor">{{roamings[day] ? roamings[day]['tutor'] : planning[day]['tutor']}}</td>
+      <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][0] : planning[day]['teammates'][0]}}</td>
+      <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][1] : planning[day]['teammates'][1]}}</td>
+      <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][2] : planning[day]['teammates'][2]}}</td>
+      <td class="actions">
+        <button ng-click="printRoaming(roamings[day]['id'])" ng-disabled="editRunning"
+            ng-show="roamings[day] && hasP('P_SEE_LAST_REPORT')">Visualiser</button>
+        <button ng-click="editRoaming(roamings[day]['id'])" ng-disabled="editRunning"
+            ng-show="roamings[day] && hasP('P_EDIT_REPORT')">Editer</button>
       </td>
     </tr>
   </table>

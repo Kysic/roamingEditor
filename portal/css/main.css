@@ -8,7 +8,7 @@ body {
     height: 100%;
     text-align: center;
     background: #fbfbfb;
-    color: #3d4045;
+    color: #1f2123;
 }
 table, tr, th, td {
     margin: auto;
@@ -20,6 +20,28 @@ th, td {
 }
 th {
     background: #ddd;
+}
+ul.tabs {
+    display: flex;
+    justify-content: center;
+}
+ul.tabs>li {
+    list-style-type: none;
+    display: inline-block;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    padding: 7px 20px 5px 20px;
+}
+ul.tabs>li:last-child {
+    border-right: 2px solid black;
+}
+ul.tabs>li.selected {
+    font-weight: bold;
+}
+ul.tabs>li.notselected {
+    background: #eeeeee;
+    cursor: pointer;
+    border-bottom: 2px solid black;
 }
 #email {
     width: 250px;
@@ -57,4 +79,23 @@ th {
     color: blue;
     cursor: pointer;
     text-decoration: underline;
+}
+.planningToday {
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+}
+.done .date {
+    background: #ddffdd;
+}
+.planned-complete .date {
+    background: #ddffdd;
+}
+.planned-uncomplete .date {
+    background: #f0ffd8;
+}
+.unsure .date {
+    background: #ffddcc;
+}
+.canceled {
+    background: #ffbbbb;
 }
