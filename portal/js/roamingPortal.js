@@ -182,6 +182,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     $scope.logout = logout;
     $scope.hasP = hasP;
     $scope.isToday = isToday;
+    $scope.isYesterday = isYesterday;
     $scope.isSelectedMonth = isSelectedMonth;
 
     $scope.$watch('sessionInfo', function () {
@@ -311,6 +312,13 @@ roamingPortal.controller('RoamingListController', function RoamingListController
         var today = new Date();
         var d = new Date(dateStr);
         return d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear();
+    }
+
+    function isYesterday(dateStr) {
+        var today = new Date();
+        var yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1);
+        var d = new Date(dateStr);
+        return d.getDate() == yesterday.getDate() && d.getMonth() == yesterday.getMonth() && d.getFullYear() == yesterday.getFullYear();
     }
 
 });

@@ -21,7 +21,7 @@
       <th>Coéquipier</th>
       <th>Coéquipier</th>
       <th>Coéquipier</th>
-      <th>Action</th>
+      <th>Compte rendu</th>
     </tr>
     <tr ng-repeat="day in calendar" class="{{roamings[day] ? 'done' : planning[day]['status'] }} {{isToday(day) ? 'planningToday' :'' }}">
       <td class="date">{{day | humanDate | capitalize}}</td>
@@ -33,7 +33,7 @@
         <button ng-click="printRoaming(roamings[day]['id'])" ng-disabled="editRunning"
             ng-show="roamings[day] && hasP('P_SEE_LAST_REPORT')">Visualiser</button>
         <button ng-click="editRoaming(roamings[day]['id'])" ng-disabled="editRunning"
-            ng-show="roamings[day] && hasP('P_EDIT_REPORT')">Editer</button>
+            ng-show="roamings[day] && hasP('P_EDIT_REPORT') && isYesterday(day)">Editer</button>
       </td>
     </tr>
   </table>
