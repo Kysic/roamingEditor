@@ -6,8 +6,7 @@ $docId = @$_GET['docId'];
 $type = @$_GET['type'];
 $sheetId = @$_GET['sheetId'];
 if ($docId == 'planningDocId') {
-    $month = $sheetId;
-    $year = date('Y');
+    list($year, $month) = explode('-', $sheetId);
     include('planning-csv.php');
 } else if ($docId == 'contactDocId') {
     include('contact-csv.php');
