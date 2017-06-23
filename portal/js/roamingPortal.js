@@ -139,24 +139,32 @@ roamingPortal.factory('authService', function ($rootScope, $http) {
         setPassword: setPassword
     };
 });
-
-/* Filters */
-roamingPortal.filter('humanDate', function() {
-    return function(date) {
-        var objDate = typeof date === 'string' ? new Date(date) : date;
-        return objDate.toLocaleString(
-            'fr-FR',
-            { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' }
-        );
+roamingPortal.factory('dateUtils', function () {
+    var weekDays = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi' ];
+    var months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+    function humanDate(date) {
+        return weekDays[date.getDay()] + ' ' + date.getDate() + ' ' +  humanMonth(date);
+    }
+    function humanMonth(date) {
+        return months[date.getMonth()] + ' ' + date.getFullYear();
+    }
+    return {
+        humanDate: humanDate,
+        humanMonth: humanMonth
     };
 });
-roamingPortal.filter('humanMonth', function() {
+
+/* Filters */
+roamingPortal.filter('humanDate', function(dateUtils) {
     return function(date) {
         var objDate = typeof date === 'string' ? new Date(date) : date;
-        return objDate.toLocaleString(
-            'fr-FR',
-            { year: 'numeric', month: 'long' }
-        );
+        return dateUtils.humanDate(objDate);
+    };
+});
+roamingPortal.filter('humanMonth', function(dateUtils) {
+    return function(date) {
+        var objDate = typeof date === 'string' ? new Date(date) : date;
+        return dateUtils.humanMonth(objDate);
     };
 });
 roamingPortal.filter('capitalize', function() {
@@ -174,6 +182,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     $scope.calendar;
     $scope.roamings;
     $scope.planning;
+    $scope.reportsFiles;
     $scope.editRunning;
     $scope.showMonth = showMonth;
     $scope.printRoaming = printRoaming;
@@ -195,9 +204,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
 
     populateMonth();
     populateMonthList();
-    populateCalendar();
-    retrieveRoamings();
-    retrievePlanning();
+    showMonth($scope.month)
 
 
     function populateMonth() {
@@ -222,7 +229,6 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     }
 
     function populateCalendar() {
-        $location.search('month', $scope.month.toISOString().substring(0, 7));
         $scope.calendar = []
         var lastDayOfMonth = new Date(Date.UTC($scope.month.getFullYear(), $scope.month.getMonth() + 1, 0));
         for (var d = $scope.month; d <= lastDayOfMonth;
@@ -249,6 +255,19 @@ roamingPortal.controller('RoamingListController', function RoamingListController
         });
     }
 
+    function retrieveReportsFiles() {
+        $scope.reportsFiles = {};
+        $http.get(roamingApiEndPoint + '/getReportsFiles.php?'+dateRangeQuerySelector()).then(function (response) {
+            if (response.data.status == 'success' && response.data.reports) {
+                $scope.reportsFiles = response.data.reports;
+            }
+        }, function (response) {
+            if (response.status == 401) {
+                $location.path('/login');
+            }
+        });
+    }
+
     function retrievePlanning() {
         $scope.planning = {};
         $http.get(roamingApiEndPoint + '/getPlanning.php?'+dateRangeQuerySelector()).then(function (response) {
@@ -261,9 +280,13 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     }
 
     function showMonth(month) {
-        $scope.month = month;
+        if (month != $scope.month) {
+            $scope.month = month;
+            $location.search('month', month.toISOString().substring(0, 7));
+        }
         populateCalendar();
         retrieveRoamings();
+        retrieveReportsFiles();
         retrievePlanning();
     }
 

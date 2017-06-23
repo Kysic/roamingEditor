@@ -15,6 +15,7 @@ define('JSON_LIB', ROAMING_API_DIR.'/lib/Json.php');
 define('GOOGLE_CONTACTS_LIB', ROAMING_API_DIR.'/lib/GoogleContacts.php');
 define('GOOGLE_PLANNING_LIB', ROAMING_API_DIR.'/lib/GooglePlanning.php');
 define('SPREADSHEETS_GENERATOR_LIB', ROAMING_API_DIR.'/lib/SpreadsheetsGenerator.php');
+define('REPORT_FILES_LIB', ROAMING_API_DIR.'/lib/ReportFiles.php');
 
 define('DB_ACCESS_LIB', ROAMING_API_DIR.'/db/DbAccess.php');
 define('USERS_STORAGE_LIB', ROAMING_API_DIR.'/db/UsersStorage.php');
@@ -32,6 +33,7 @@ class Container {
     private $googleContacts = NULL;
     private $googlePlanning = NULL;
     private $spreadsheetsGenerator = NULL;
+    private $reportFiles;
     private $dbAcces = NULL;
     private $usersStorage = NULL;
     private $roamingsStorage = NULL;
@@ -170,6 +172,14 @@ class Container {
     }
     public function lazyBruteforceStorage() {
         return new LazyLoader($this, 'getBruteforceStorage');
+    }
+
+    public function getReportFiles() {
+        if (!$this->reportFiles) {
+            require_once(REPORT_FILES_LIB);
+            $this->reportFiles = new ReportFiles();
+        }
+        return $this->reportFiles;
     }
 
 }

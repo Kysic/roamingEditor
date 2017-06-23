@@ -11,6 +11,8 @@ define('P_SAVE_ROAMINGS', 'P_SAVE_ROAMINGS');
 define('P_SEE_NAMES', 'P_SEE_NAMES');
 define('P_SEE_LAST_REPORT', 'P_SEE_LAST_REPORT');
 define('P_EDIT_REPORT', 'P_EDIT_REPORT');
+define('P_UPLOAD_REPORT', 'P_UPLOAD_REPORT');
+define('P_DELETE_REPORT', 'P_DELETE_REPORT');
 define('P_SEE_ALL_REPORT', 'P_SEE_ALL_REPORT');
 define('P_SEE_USERS_LIST', 'P_SEE_USERS_LIST');
 define('P_ASSIGN_ROLE', 'P_ASSIGN_ROLE');
@@ -45,7 +47,7 @@ class RolesPermissions {
         $this->member = array_merge(array( P_SEE_LAST_REPORT, P_EDIT_REPORT ), $this->guest);
         $this->tutor = array_merge(array(  ), $this->member);
         $this->board = array_merge(array( P_SEE_ALL_REPORT ), $this->tutor);
-        $this->admin = array_merge(array( P_SEE_USERS_LIST, P_ASSIGN_ROLE ), $this->board);
+        $this->admin = array_merge(array( P_SEE_USERS_LIST, P_ASSIGN_ROLE, P_UPLOAD_REPORT, P_DELETE_REPORT ), $this->board);
         $this->root = array_merge(array( P_GENERATE_PASSWORD_TOKEN ), $this->admin);
     }
 

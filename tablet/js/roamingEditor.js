@@ -166,6 +166,20 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         deleteAllRoamings: deleteAllRoamings
     };
 });
+roamingPortal.factory('dateUtils', function () {
+    var weekDays = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi' ];
+    var months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+    function humanDate(date) {
+        return weekDays[date.getDay()] + ' ' + date.getDate() + ' ' +  humanMonth(date);
+    }
+    function humanMonth(date) {
+        return months[date.getMonth()] + ' ' + date.getFullYear();
+    }
+    return {
+        humanDate: humanDate,
+        humanMonth: humanMonth
+    };
+});
 
 /* Directives */
 roamingEditor.directive('ngEnter', function() {
@@ -182,16 +196,12 @@ roamingEditor.directive('ngEnter', function() {
 });
 
 /* Filters */
-roamingEditor.filter('humanDate', function() {
+roamingPortal.filter('humanDate', function(dateUtils) {
     return function(date) {
         var objDate = typeof date === 'string' ? new Date(date) : date;
-        return objDate.toLocaleString(
-            'fr-FR',
-            { weekday: 'long', year: 'numeric', month: 'long', day: '2-digit' }
-        );
+        return dateUtils.humanDate(objDate);
     };
 });
-
 roamingEditor.filter('capitalize', function() {
     return function(input) {
         return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';

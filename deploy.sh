@@ -8,6 +8,7 @@ rsync $RSYNC_OPTIONS . $DEST \
     --exclude .git \
     --exclude .gitattributes \
     --exclude .gitignore \
+    --exclude cr \
     --exclude api/tests \
     --exclude api/conf \
     --exclude api/conf_dev \
@@ -17,5 +18,6 @@ rsync $RSYNC_OPTIONS . $DEST \
     --exclude git-hooks \
     --exclude googlescripts \
     --exclude README.md \
-    --exclude sqlscripts
+    --exclude sqlscripts \
+    --exclude extra
 

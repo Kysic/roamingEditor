@@ -29,9 +29,11 @@
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][0] : planning[day]['teammates'][0]}}</td>
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][1] : planning[day]['teammates'][1]}}</td>
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][2] : planning[day]['teammates'][2]}}</td>
-      <td class="actions">
+      <td class="reportsActions">
+        <button ng-click="printRoaming(day)"
+            ng-show="reportsFiles.includes(day) && hasP('P_SEE_LAST_REPORT')">Visualiser</button>
         <button ng-click="printRoaming(roamings[day]['id'])" ng-disabled="editRunning"
-            ng-show="roamings[day] && hasP('P_SEE_LAST_REPORT')">Visualiser</button>
+            ng-show="roamings[day] && hasP('P_SEE_LAST_REPORT') && !isToday(day)">Visualiser</button>
         <button ng-click="editRoaming(roamings[day]['id'])" ng-disabled="editRunning"
             ng-show="roamings[day] && hasP('P_EDIT_REPORT') && isYesterday(day)">Editer</button>
       </td>
