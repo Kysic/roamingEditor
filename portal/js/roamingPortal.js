@@ -185,7 +185,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     $scope.reportsFiles;
     $scope.editRunning;
     $scope.showMonth = showMonth;
-    $scope.printRoaming = printRoaming;
+    $scope.roamingApiEndPoint = roamingApiEndPoint;
     $scope.editRoaming = editRoaming;
     $scope.setPassword = setPassword;
     $scope.logout = logout;
@@ -293,10 +293,6 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     function hasP(permission) {
         return $scope.sessionInfo && $scope.sessionInfo.user
                 && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
-    }
-
-    function printRoaming(roamingId) {
-        $window.open(roamingApiEndPoint + '/getPdf.php?roamingId=' + roamingId);
     }
 
     function editRoaming(roamingId) {

@@ -52,13 +52,13 @@ class Mail {
             require_once('tests/lib/mailStub.php');
             sendMailStub($to, $subject, $body, $from);
         } else {
-            sendMailSMTP($to, $subject, $body, $from);
+            $this->sendMailSMTP($to, $subject, $body, $from);
         }
     }
 
     private function sendMailSMTP($to, $subject, $body, $from) {
-        require_once('lib/ext/class.phpmailer.php');
-        require_once('lib/ext/class.smtp.php');
+        require_once(ROAMING_API_DIR.'/lib/ext/class.phpmailer.php');
+        require_once(ROAMING_API_DIR.'/lib/ext/class.smtp.php');
 
         $mail = new PHPMailer;
 

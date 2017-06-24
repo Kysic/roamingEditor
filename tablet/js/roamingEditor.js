@@ -166,7 +166,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         deleteAllRoamings: deleteAllRoamings
     };
 });
-roamingPortal.factory('dateUtils', function () {
+roamingEditor.factory('dateUtils', function () {
     var weekDays = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi' ];
     var months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
     function humanDate(date) {
@@ -196,7 +196,7 @@ roamingEditor.directive('ngEnter', function() {
 });
 
 /* Filters */
-roamingPortal.filter('humanDate', function(dateUtils) {
+roamingEditor.filter('humanDate', function(dateUtils) {
     return function(date) {
         var objDate = typeof date === 'string' ? new Date(date) : date;
         return dateUtils.humanDate(objDate);
