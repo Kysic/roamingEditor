@@ -1,6 +1,8 @@
 <?php
 
 require_once(ROAMING_API_DIR.'/conf/smtp.php');
+require_once(ROAMING_API_DIR.'/lib/ext/class.phpmailer.php');
+require_once(ROAMING_API_DIR.'/lib/ext/class.smtp.php');
 
 class Mail {
 
@@ -57,8 +59,6 @@ class Mail {
     }
 
     private function sendMailSMTP($to, $subject, $body, $from) {
-        require_once(ROAMING_API_DIR.'/lib/ext/class.phpmailer.php');
-        require_once(ROAMING_API_DIR.'/lib/ext/class.smtp.php');
 
         $mail = new PHPMailer;
 

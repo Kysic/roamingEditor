@@ -2,7 +2,7 @@
     "short_name": "Editeur de maraudes",
     "name": "Editeur de maraudes du VINCI",
     "icons": [{
-        "src": "images/logoSamuSocial_128x128.png",
+        "src": "img/logoSamuSocial_128x128.png",
         "sizes": "128X128",
         "type": "image/png"
     }],

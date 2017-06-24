@@ -12,6 +12,7 @@
 - Copier le repertoire conf_template en conf et particulariser les différents paramètres de configuration
 - Renseigner la clé d'API google dans la page index.html
 - Déposer les fichiers sur le serveur web/php
+- Interdire l'accès au dossier cr dans la configuration du serveur web
 
 ### Outils externes
 - angular js avec le module angular-route
