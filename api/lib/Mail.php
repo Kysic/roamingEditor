@@ -43,7 +43,7 @@ class Mail {
     }
 
     private function getProtocol() {
-        return stripos($_SERVER['SERVER_PROTOCOL'],'https') === true ? 'https://' : 'http://';
+        return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
     }
 
     public function sendMail($to, $subject, $body, $from=false) {

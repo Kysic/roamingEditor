@@ -4,13 +4,12 @@
   <button ng-click="logout()" ng-show="hasP('P_LOG_OUT')">Me déconnecter</button>
 </div>
 <div id="roamingList">
-  <h2>Liste des dernières maraudes</h2>
-  <div class='spaceUnder'>
-    Les comptes rendus de maraudes sont des informations sensibles réservées aux membres de l'association
-    <a target='_blank' href='https://www.samu-social-grenoble.fr/'>VINCI</a>.<br>
+  <div class='warningCNIL'>
+    Les informations contenues dans les comptes rendus de maraudes ne doivent pas être communiquées en dehors de l'association
+    <a target='_blank' href='https://www.samu-social-grenoble.fr/'>VINCI</a>.
   </div>
   <ul class="tabs">
-    <li ng-repeat="tabMonth in monthList" class="{{isSelectedMonth(tabMonth) ? 'selected' : 'notselected'}}" ng-click="showMonth(tabMonth)">
+    <li ng-repeat="tabMonth in monthList" ng-class="isSelectedMonth(tabMonth) ? 'selected' : 'notselected'" ng-click="showMonth(tabMonth)">
         {{tabMonth | humanMonth | capitalize}}
     </li>
   </ul>
@@ -23,7 +22,7 @@
       <th>Coéquipier</th>
       <th>Compte rendu</th>
     </tr>
-    <tr ng-repeat="day in calendar" class="{{roamings[day] ? 'done' : planning[day]['status'] }} {{isToday(day) ? 'planningToday' :'' }}">
+    <tr ng-repeat="day in calendar" class="{{ (roamings[day] || reportsFiles.includes(day)) ? 'done' : planning[day]['status'] }} {{isToday(day) ? 'planningToday' :'' }}">
       <td class="date">{{day | humanDate | capitalize}}</td>
       <td class="tutor">{{roamings[day] ? roamings[day]['tutor'] : planning[day]['tutor']}}</td>
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][0] : planning[day]['teammates'][0]}}</td>
@@ -31,11 +30,11 @@
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][2] : planning[day]['teammates'][2]}}</td>
       <td class="reportsActions">
         <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{day}}"
-            ng-show="reportsFiles.includes(day) && hasP('P_SEE_LAST_REPORT')" target="_blank">{{day}}.pdf</a>
+            ng-if="reportsFiles.includes(day)" target="_blank">{{day}}.pdf</a>
         <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{roamings[day]['id']}}"
-            ng-show="roamings[day] && hasP('P_SEE_LAST_REPORT') && !isToday(day)" target="_blank">{{day}}.pdf</a>
+            ng-if="roamings[day] && !isToday(day)" target="_blank">{{day}}.pdf</a>
         <button ng-click="editRoaming(roamings[day]['id'])" ng-disabled="editRunning"
-            ng-show="roamings[day] && hasP('P_EDIT_REPORT') && isYesterday(day)">Editer</button>
+            ng-if="roamings[day] && hasP('P_EDIT_REPORT') && isYesterday(day)">Editer</button>
       </td>
     </tr>
   </table>

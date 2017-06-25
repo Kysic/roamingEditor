@@ -6,17 +6,17 @@ try {
 
     $container = new Container();
     $session = $container->getSession();
-    $usersStorage = $container->getUsersStorage();
+    $googleContacts = $container->getGoogleContacts();
     $json = $container->getJson();
 
     $session->checkLoggedIn();
     $session->checkHasPermission(P_SEE_USERS_LIST);
 
-    $users = $usersStorage->getAllUsers();
+    $members = $googleContacts->extractContacts();
 
     $json->returnResult(array(
         'status' => 'success',
-        'users' => $users
+        'members' => $members
     ));
 
 } catch (Exception $e) {

@@ -198,6 +198,8 @@ roamingPortal.controller('RoamingListController', function RoamingListController
         if ($scope.sessionInfo.loggedIn === false) {
             $location.path('/login');
         }
+        // the number of tabs shown differs according to the
+        // user permission
         populateMonthList();
     }, true);
 
@@ -489,13 +491,30 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.hasP = hasP;
     $scope.setRole = setRole;
+    $scope.users;
+    $scope.members;
 
     retrieveUsers();
+    retrieveMembers();
 
     function retrieveUsers() {
         $http.get(roamingApiEndPoint + '/getUsers.php').then(function (response) {
             if (response.data.status == 'success' && response.data.users) {
                 $scope.users = response.data.users;
+                checkUserRole();
+            }
+        }, function (response) {
+            if (response.status == 401) {
+                $location.path('/login//users');
+            }
+        });
+    }
+
+    function retrieveMembers() {
+        $http.get(roamingApiEndPoint + '/getMembers.php').then(function (response) {
+            if (response.data.status == 'success' && response.data.members) {
+                $scope.members = response.data.members;
+                checkUserRole();
             }
         }, function (response) {
             if (response.status == 401) {
@@ -507,6 +526,25 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
     function hasP(permission) {
         return $scope.sessionInfo && $scope.sessionInfo.user
                 && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
+    }
+
+    function checkUserRole() {
+        if ($scope.users === undefined || $scope.members === undefined) {
+            return;
+        }
+        for (var i = 0, len = $scope.users.length; i < len; i++) {
+            var user = $scope.users[i];
+            var member = $scope.members[user.email.toLowerCase()];
+            if (member === undefined) {
+                user.rightRole = user.role == 'appli' || user.role == 'former' || user.role == 'guest';
+            } else {
+                if (user.role == 'tutor') {
+                    user.rightRole = member.isTutor;
+                } else {
+                    user.rightRole = user.role == 'member' || user.role == 'board' || user.role == 'admin' || user.role == 'root';
+                }
+            }
+        }
     }
 
     function setErrorMsg(responseData) {
@@ -528,6 +566,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
         }).then(function (response) {
             if (response.data.status == 'success') {
                 $scope.setRoleRunning = false;
+                checkUserRole();
             } else {
                 setErrorMsg(response.data);
             }

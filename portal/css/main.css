@@ -51,8 +51,9 @@ ul.tabs>li.notselected:hover {
 #email {
     width: 250px;
 }
-.spaceUnder {
-    padding-bottom: 15px;
+.warningCNIL {
+    padding-top: 15px;
+    padding-bottom: 5px;
 }
 .login {
     background: #eeeeee;
@@ -108,5 +109,8 @@ ul.tabs>li.notselected:hover {
     background: #ffddcc;
 }
 .canceled {
+    background: #ffbbbb;
+}
+.wrongRole {
     background: #ffbbbb;
 }
