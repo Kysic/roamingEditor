@@ -22,7 +22,7 @@
       <th>Coéquipier</th>
       <th>Compte rendu</th>
     </tr>
-    <tr ng-repeat="day in calendar" class="{{ (roamings[day] || reportsFiles.includes(day)) ? 'done' : planning[day]['status'] }} {{isToday(day) ? 'planningToday' :'' }}">
+    <tr ng-repeat="day in calendar" class="{{ (roamings[day] || reportsFiles.indexOf(day) !== -1) ? 'done' : planning[day]['status'] }} {{isToday(day) ? 'planningToday' :'' }}">
       <td class="date">{{day | humanDate | capitalize}}</td>
       <td class="tutor">{{roamings[day] ? roamings[day]['tutor'] : planning[day]['tutor']}}</td>
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][0] : planning[day]['teammates'][0]}}</td>
@@ -30,7 +30,7 @@
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][2] : planning[day]['teammates'][2]}}</td>
       <td class="reportsActions">
         <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{day}}"
-            ng-if="reportsFiles.includes(day)" target="_blank">{{day}}.pdf</a>
+            ng-if="reportsFiles.indexOf(day) !== -1" target="_blank">{{day}}.pdf</a>
         <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{roamings[day]['id']}}"
             ng-if="roamings[day] && !isToday(day)" target="_blank">{{day}}.pdf</a>
         <button ng-click="editRoaming(roamings[day]['id'])" ng-disabled="editRunning"

@@ -148,9 +148,13 @@ roamingPortal.factory('dateUtils', function () {
     function humanMonth(date) {
         return months[date.getMonth()] + ' ' + date.getFullYear();
     }
+    function toLocalIsoDate(date) {
+        return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+    }
     return {
         humanDate: humanDate,
-        humanMonth: humanMonth
+        humanMonth: humanMonth,
+        toLocalIsoDate: toLocalIsoDate
     };
 });
 
@@ -174,7 +178,8 @@ roamingPortal.filter('capitalize', function() {
 });
 
 /* Controllers */
-roamingPortal.controller('RoamingListController', function RoamingListController($scope, $http, $window, $routeParams, $location, authService) {
+roamingPortal.controller('RoamingListController', function RoamingListController(
+$scope, $http, $window, $routeParams, $location, authService, dateUtils) {
 
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.monthList;
@@ -211,7 +216,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
 
     function populateMonth() {
         var d = new Date();
-        $scope.month = new Date(Date.UTC(d.getFullYear(), d.getMonth(), 1));
+        $scope.month = new Date(d.getFullYear(), d.getMonth(), 1);
         if ($routeParams.month) {
             try {
                 $scope.month = new Date($routeParams.month + '-01');
@@ -226,16 +231,16 @@ roamingPortal.controller('RoamingListController', function RoamingListController
         var d = new Date();
         var histo = hasP('P_SEE_ALL_REPORT') ? -6 : -1;
         for (i = histo; i <= 2; i++) {
-            $scope.monthList.push(new Date(Date.UTC(d.getFullYear(), d.getMonth() + i, 1)));
+            $scope.monthList.push(new Date(d.getFullYear(), d.getMonth() + i, 1));
         }
     }
 
     function populateCalendar() {
         $scope.calendar = []
-        var lastDayOfMonth = new Date(Date.UTC($scope.month.getFullYear(), $scope.month.getMonth() + 1, 0));
+        var lastDayOfMonth = new Date($scope.month.getFullYear(), $scope.month.getMonth() + 1, 0);
         for (var d = $scope.month; d <= lastDayOfMonth;
-                 d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate() +1))) {
-            $scope.calendar.push(d.toISOString().substring(0, 10));
+                 d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
+            $scope.calendar.push(dateUtils.toLocalIsoDate(d));
         }
     }
 
@@ -284,7 +289,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     function showMonth(month) {
         if (month != $scope.month) {
             $scope.month = month;
-            $location.search('month', month.toISOString().substring(0, 7));
+            $location.search('month', dateUtils.toLocalIsoDate(month));
         }
         populateCalendar();
         retrieveRoamings();
@@ -294,7 +299,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
 
     function hasP(permission) {
         return $scope.sessionInfo && $scope.sessionInfo.user
-                && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
+                && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.indexOf(permission) !== -1;
     }
 
     function editRoaming(roamingId) {
@@ -525,7 +530,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
 
     function hasP(permission) {
         return $scope.sessionInfo && $scope.sessionInfo.user
-                && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.includes(permission);
+                && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.indexOf(permission) !== -1;
     }
 
     function checkUserRole() {
