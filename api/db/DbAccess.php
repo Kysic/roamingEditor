@@ -1,6 +1,6 @@
 <?php
 
-require_once('conf/sql.php');
+require_once(ROAMING_API_DIR.'/conf/sql.php');
 
 class DbAccess {
 

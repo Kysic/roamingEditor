@@ -51,7 +51,7 @@ class Mail {
             $from = ADMIN_EMAIL;
         }
         if (MAIL_MODE == 'STUB') {
-            require_once('tests/lib/mailStub.php');
+            require_once(ROAMING_API_DIR.'/tests/lib/mailStub.php');
             sendMailStub($to, $subject, $body, $from);
         } else {
             $this->sendMailSMTP($to, $subject, $body, $from);

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DEST=ovh-1:/var/www/vinci/
+DEST=ovh:/var/www/vinci/
 
 RSYNC_OPTIONS="--times --recursive --verbose --delete-after"
 
