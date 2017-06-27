@@ -7,8 +7,8 @@ function areRolesConsistent($users, $members) {
         $email = strtolower($user->email);
         if (array_key_exists($email, $members)) {
             $member = $members[$email];
-            if ($user->role == TUTOR) {
-                if ( !$member['isTutor'] ) {
+            if ($member['isTutor']) {
+                if ( !in_array( $user->role, array(TUTOR, BOARD, ADMIN, ROOT) ) ) {
                     return false;
                 }
             } else {

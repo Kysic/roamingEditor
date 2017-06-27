@@ -542,12 +542,10 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
             var member = $scope.members[user.email.toLowerCase()];
             if (member === undefined) {
                 user.rightRole = user.role == 'appli' || user.role == 'former' || user.role == 'guest';
+            } else if (member.isTutor) {
+                user.rightRole = user.role == 'tutor' || user.role == 'board' || user.role == 'admin' || user.role == 'root';
             } else {
-                if (user.role == 'tutor') {
-                    user.rightRole = member.isTutor;
-                } else {
-                    user.rightRole = user.role == 'member' || user.role == 'board' || user.role == 'admin' || user.role == 'root';
-                }
+                user.rightRole = user.role == 'member' || user.role == 'board' || user.role == 'admin' || user.role == 'root';
             }
         }
     }
