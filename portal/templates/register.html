@@ -7,7 +7,7 @@
   <div class='error' ng-show="sessionInfo.lastError">{{sessionInfo.lastError}}</div>
   <label for='email'>Email</label>
   <input id='email' type='text' name='email' ng-model='email' placeholder="Votre adresse email" /><br/>
-  <button ng-click='signin()' ng-disabled='signinInProgress'>M'inscrire</button>
+  <button ng-click='register()' ng-disabled='registerInProgress'>M'inscrire</button>
 </div>
 <br/>
 <button ng-click='cancel()'>Retour</button>

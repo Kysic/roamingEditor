@@ -1,6 +1,6 @@
 <?php
 
-require_once('../api/lib/Container.php');
+require_once('/var/www/vinci/api/lib/Container.php');
 
 function areRolesConsistent($users, $members) {
     foreach ($users as $user) {

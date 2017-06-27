@@ -13,9 +13,9 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
         templateUrl: 'templates/login.html',
         controller: 'LoginController'
     })
-    .when('/signin/:email?', {
-        templateUrl: 'templates/signin.html',
-        controller: 'SigninController'
+    .when('/register/:email?', {
+        templateUrl: 'templates/register.html',
+        controller: 'RegisterController'
     })
     .when('/resetPassword/:email?', {
         templateUrl: 'templates/resetPassword.html',
@@ -98,9 +98,9 @@ roamingPortal.factory('authService', function ($rootScope, $http) {
         });
     }
 
-    function signin(email) {
+    function register(email) {
         doAuthAction({
-            action: 'signin',
+            action: 'register',
             sessionToken: sessionInfo.sessionToken,
             email: email
         });
@@ -134,7 +134,7 @@ roamingPortal.factory('authService', function ($rootScope, $http) {
         getSessionInfo: getSessionInfo,
         login: login,
         logout: logout,
-        signin: signin,
+        register: register,
         resetPassword: resetPassword,
         setPassword: setPassword
     };
@@ -217,9 +217,9 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     function populateMonth() {
         var d = new Date();
         $scope.month = new Date(d.getFullYear(), d.getMonth(), 1);
-        if ($routeParams.month) {
+        if ($routeParams.month && $routeParams.month.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)) {
             try {
-                $scope.month = new Date($routeParams.month + '-01');
+                $scope.month = new Date($routeParams.month);
             } catch (e) {
                 console.log('Unable to parse date ' + $routeParams.month + '-01');
             }
@@ -355,7 +355,7 @@ roamingPortal.controller('LoginController', function LoginController($scope, $ro
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.email = $routeParams.email;
     $scope.login = login;
-    $scope.signin = signin;
+    $scope.register = register;
     $scope.resetPassword = resetPassword;
 
     $scope.$watch('sessionInfo', function () {
@@ -377,8 +377,8 @@ roamingPortal.controller('LoginController', function LoginController($scope, $ro
         authService.login($scope.email, $scope.password, $scope.stayLogged);
     }
 
-    function signin() {
-        $location.path('/signin');
+    function register() {
+        $location.path('/register');
     }
 
     function resetPassword() {
@@ -420,7 +420,7 @@ roamingPortal.controller('SetPasswordController', function SetPasswordController
 
 });
 
-roamingPortal.controller('SigninController', function SigninController($scope, $routeParams, $location, authService) {
+roamingPortal.controller('RegisterController', function RegisterController($scope, $routeParams, $location, authService) {
 
     $scope.sessionInfo = authService.getSessionInfo();
 
@@ -432,17 +432,17 @@ roamingPortal.controller('SigninController', function SigninController($scope, $
         }
     }, true);
 
-    $scope.signin = function () {
-        $scope.signinInProgress = true;
-        authService.signin($scope.email);
+    $scope.register = function () {
+        $scope.registerInProgress = true;
+        authService.register($scope.email);
     }
 
-    $scope.$on('signin', function () {
+    $scope.$on('register', function () {
         $location.path('/mailSent/' + $scope.email);
     });
 
-    $scope.$on('signin_fail', function () {
-        $scope.signinInProgress = false;
+    $scope.$on('register_fail', function () {
+        $scope.registerInProgress = false;
     });
 
     $scope.cancel = function () {

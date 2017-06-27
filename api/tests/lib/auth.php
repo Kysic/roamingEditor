@@ -9,9 +9,9 @@ function getSessionUser($browser) {
     assertSuccess($response, 'getSessionUser failed : '.print_r($response, true));
     return $response->user;
 }
-function signinAndSetPassword($browser, $email, $password, $sessionToken = NULL) {
+function registerAndSetPassword($browser, $email, $password, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
-    signin($browser, $email, $sessionToken);
+    register($browser, $email, $sessionToken);
     $mail = readMail($email);
     $mailInfo = extractMailTokenReceived($mail);
     $browser->get($mailInfo['setPasswordUrl']);
@@ -25,11 +25,11 @@ function resetPassword($browser, $email, $password, $sessionToken = NULL) {
     $browser->get($mailInfo['setPasswordUrl']);
     setPasswordWithMailToken($browser, $mailInfo['userId'], $mailInfo['mailToken'], $password, $password, $sessionToken);
 }
-function signin($browser, $email, $sessionToken = NULL) {
+function register($browser, $email, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
     $response = $browser->post(END_POINT.'/api/auth.php',
-        array('action'=>'signin', 'email'=>$email, 'sessionToken'=>$sessionToken));
-    assertSuccess($response, 'signin failed : '.print_r($response, true));
+        array('action'=>'register', 'email'=>$email, 'sessionToken'=>$sessionToken));
+    assertSuccess($response, 'register failed : '.print_r($response, true));
 }
 function askPasswordReset($browser, $email, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);

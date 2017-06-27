@@ -26,17 +26,17 @@ printTestCase('DB init');
 $sql = new Sql();
 $sql->reinitItDb();
 
-printTestCase('Signin as member should succeed');
+printTestCase('Register as member should succeed');
 $browser = new Browser();
 assertIsVisitor(getSessionUser($browser));
-signinAndSetPassword($browser, 'berni@gmail.com', 'Berni-Password');
+registerAndSetPassword($browser, 'berni@gmail.com', 'Berni-Password');
 assertIsBernard(getSessionUser($browser));
 
-printTestCase('Signin with address not in contacts should be forbidden');
+printTestCase('Register with address not in contacts should be forbidden');
 $browser = new Browser();
 try {
-    signin($browser, 'someone@gmail.com');
-    throw new AssertException('signin should have raised an HttpStatusException');
+    register($browser, 'someone@gmail.com');
+    throw new AssertException('register should have raised an HttpStatusException');
 } catch (Exception $e) {
     assertException($e, "Cette adresse mail n'est pas repertoriée dans la liste des contacts du VINCI.", 403);
 }

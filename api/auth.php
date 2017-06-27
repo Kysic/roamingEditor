@@ -13,18 +13,22 @@ try {
 
     if ( @$_POST['action'] == 'login' ) {
         if (!$session->isLoggedIn()) {
-            $auth->login();
+            $auth->login(@$_POST['email'], @$_POST['password'], @$_POST['stayLogged'] == 'true', @$_POST['sessionToken']);
         }
     } else if ( @$_POST['action'] == 'logout' ) {
         if ($session->isLoggedIn()) {
-            $auth->logout();
+            $auth->logout(@$_POST['sessionToken']);
         }
     } else if ( @$_POST['action'] == 'resetPassword' ) {
-        $auth->resetPassword();
-    } else if ( @$_POST['action'] == 'signin' && !$session->isLoggedIn() ) {
-        $auth->signin();
+        $auth->resetPassword(@$_POST['email'], @$_POST['sessionToken']);
+    } else if ( @$_POST['action'] == 'register' && !$session->isLoggedIn() ) {
+        $auth->register(@$_POST['email'], @$_POST['sessionToken']);
     } else if ( @$_POST['action'] == 'setPassword' ) {
-        $auth->setPassword();
+        if ($session->isLoggedIn()) {
+            $auth->changePassword(@$_POST['password'], @$_POST['passwordConfirm'], @$_POST['sessionToken']);
+        } else {
+            $auth->setPassword(@$_POST['password'], @$_POST['passwordConfirm'], @$_POST['userId'], @$_POST['mailToken'], @$_POST['sessionToken']);
+        }
     } else if ( @$_POST['action'] ) {
         throw new BadRequestException('Action inattendue dans ce contexte.');
     }

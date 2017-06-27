@@ -1,6 +1,6 @@
 fti,NOM (MAJUSCULES),PRÉNOM (MAJUSCULES),NUMÉRO DE TÉLÉPHONE,ANNÉE DE NAISSANCE (sous forme 19xx),MAIL,VILLE DE RÉSIDENCE ,Age Bénévole,BUREAU VINCI,TUTEUR,"Date d'entrée 
 dans l'association "
-F,MAITRE,LAURE,667788990,1985,laure.maitre@vinci.fr,GRENOBLE,32,,,mars. 2017
+F,MAITRE,LAURE,667788990,1985,Laure.Maitre@example.com,GRENOBLE,32,,,mars. 2017
 H,DUPONT,BERNARD,0,1974,berni@gmail.com,Grenoble,43,,,mars. 2017
 H,MARTIN,ALEXIS,670004952,1982,martin-alexis@hotmail.com,Grenoble,35,MEMBRE,TUTEUR,01/04/2017
 H,MATTHIEU,CERISE,607644444,1992,cerise.matthieu@gmail.com,PONTCHARRA ,25,,TUTEUR,avril 2016

@@ -6,7 +6,7 @@ require_once(ROAMING_API_DIR.'/lib/ext/class.smtp.php');
 
 class Mail {
 
-    public function sendSigninToken($to, $firstname, $lastname, $userId, $mailToken) {
+    public function sendRegisterToken($to, $firstname, $lastname, $userId, $mailToken) {
         $this->sendMail($to, '[VINCI] Inscription sur le site de comptes rendus de maraudes du VINCI',
                 'Bonjour '.$firstname.' '.$lastname.','."\n".
                 "\n".
