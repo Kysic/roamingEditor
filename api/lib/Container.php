@@ -50,7 +50,11 @@ class Container {
     public function getSession() {
         if (!$this->session) {
             require_once(SESSION_LIB);
-            $this->session = new Session($this->getRolesPermissions(), $this->lazyUsersStorage());
+            $this->session = new Session(
+                $this->getRolesPermissions(),
+                $this->lazyUsersStorage(),
+                $this->lazyBruteforceStorage()
+            );
         }
         return $this->session;
     }

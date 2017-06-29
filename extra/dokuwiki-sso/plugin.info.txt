@@ -1,0 +1,7 @@
+base   vinciSSO
+author kysic
+email  kysic@github.com
+date   2017-06-29
+name   VINCI SSO auth plugin
+desc   Authenticate against VINCI auth mechanism
+url    https://github.com/kysic

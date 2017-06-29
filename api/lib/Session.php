@@ -4,10 +4,12 @@ class Session {
 
     private $rolesPermissions;
     private $lazyUSersStorage;
+    private $lazyBruteforceStorage;
 
-    public function __construct($rolesPermissions, $lazyUSersStorage, $autologin = true) {
+    public function __construct($rolesPermissions, $lazyUSersStorage, $lazyBruteforceStorage, $autologin = true) {
         $this->rolesPermissions = $rolesPermissions;
         $this->lazyUSersStorage = $lazyUSersStorage;
+        $this->lazyBruteforceStorage = $lazyBruteforceStorage;
         session_start();
         if ($autologin) {
             $this->doAutologin();
@@ -77,10 +79,14 @@ class Session {
         if ( !$this->isLoggedIn() ) {
             $autologin = @$_COOKIE[AUTOLOGIN_COOKIE_KEY];
             if ( !empty($autologin) ) {
-                try {
-                    $this->connectWithAutologin($autologin);
-                } catch (Exception $e) {
-                    $this->resetAutologinIdCookie();
+                $bruteforceStorage = $this->lazyBruteforceStorage->get();
+                if ($bruteforceStorage->getNbFailedAttemptsInPeriod($_SERVER['REMOTE_ADDR']) < BRUTEFORCE_MAX_NB_ATTEMPTS) {
+                    try {
+                        $this->connectWithAutologin($autologin);
+                    } catch (Exception $e) {
+                        $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
+                        $this->resetAutologinIdCookie();
+                    }
                 }
             }
         }
