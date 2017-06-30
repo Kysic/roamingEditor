@@ -13,7 +13,10 @@ try {
     $session->checkLoggedIn();
     $session->checkHasPermission(P_DELETE_REPORT);
 
-    $roamingDate = @$_GET['roamingDate'];
+    $json->mergeJsonParameterToPost();
+
+    $session->checkToken(@$_POST['sessionToken']);
+    $roamingDate = @$_POST['roamingDate'];
     if ( !$roamingDate ) {
         throw new BadRequestException('Date de maraude (roamingDate) attendue.');
     }

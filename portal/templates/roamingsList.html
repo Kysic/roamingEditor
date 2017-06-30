@@ -32,6 +32,8 @@
       <td class="reportsActions">
         <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{day}}"
             ng-if="reportsFiles.indexOf(day) !== -1" target="_blank">{{day}}.pdf</a>
+        <img ng-click="deleteReport(day)" ng-if="reportsFiles.indexOf(day) !== -1 && hasP('P_DELETE_REPORT')" alt="[Supprimer]"
+             src="img/trash.gif" />
         <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{roamings[day]['id']}}"
             ng-if="roamings[day] && !isToday(day)" target="_blank">{{day}}.pdf</a>
         <button ng-click="editRoaming(roamings[day]['id'])" ng-disabled="editRunning"

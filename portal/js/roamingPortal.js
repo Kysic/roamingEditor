@@ -192,6 +192,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     $scope.showMonth = showMonth;
     $scope.roamingApiEndPoint = roamingApiEndPoint;
     $scope.editRoaming = editRoaming;
+    $scope.deleteReport = deleteReport;
     $scope.setPassword = setPassword;
     $scope.logout = logout;
     $scope.hasP = hasP;
@@ -316,6 +317,26 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
             }
         });
         
+    }
+
+    function deleteReport(roamingDate) {
+        if ( confirm('Supprimer le compte-rendu du ' + dateUtils.humanDate(new Date(roamingDate)) + ' ?') ) {
+            $http.post(
+                roamingApiEndPoint + '/rmReport.php',
+                {
+                    roamingDate: roamingDate,
+                    sessionToken: $scope.sessionInfo.sessionToken
+                }
+            ).then(function (response) {
+                if (response.data.status == 'success') {
+                    $scope.reportsFiles = $scope.reportsFiles.filter(
+                        function(item) { 
+                            return item !== roamingDate;
+                        }
+                    );
+                }
+            });
+        }
     }
 
     function setPassword() {
