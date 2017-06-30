@@ -4,9 +4,10 @@
   <button ng-click="logout()" ng-show="hasP('P_LOG_OUT')">Me déconnecter</button>
 </div>
 <div id="roamingList">
+  <div class='homeLink'><a href='../dokuwiki'><img src='img/home-32x32.png'></a></div>
   <div class='warningCNIL'>
-    Les informations contenues dans les comptes rendus de maraudes ne doivent pas être communiquées en dehors de l'association
-    <a target='_blank' href='https://www.samu-social-grenoble.fr/'>VINCI</a>.
+    Les informations contenues dans les comptes rendus de maraudes sont réservées à un usage interne à
+    <a target='_blank' href='https://www.samu-social-grenoble.fr/'>l'association VINCI</a>.
   </div>
   <ul class="tabs">
     <li ng-repeat="tabMonth in monthList" ng-class="isSelectedMonth(tabMonth) ? 'selected' : 'notselected'" ng-click="showMonth(tabMonth)">

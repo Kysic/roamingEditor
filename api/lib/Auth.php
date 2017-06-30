@@ -89,7 +89,6 @@ class Auth {
     }
     public function login($pEmail, $pPassword, $pStayLogged = false, $pSessionToken = false) {
         $this->session->checkHasPermission(P_LOG_IN, 'Vous n\'êtes pas autorisé à vous connecter sur le site.');
-        $this->checkToken($pSessionToken);
         $email = strtolower($pEmail);
         $this->validator->validateEmail($email);
         $password = $pPassword;

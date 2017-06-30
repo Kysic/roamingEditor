@@ -10,6 +10,9 @@ body {
     background: #fbfbfb;
     color: #1f2123;
 }
+a > img {
+    border: 0;
+}
 table, tr, th, td {
     margin: auto;
     border: 1px solid black;
@@ -51,7 +54,15 @@ ul.tabs>li.notselected:hover {
 #email {
     width: 250px;
 }
+.homeLink {
+    display: inline-block;
+    vertical-align: middle;
+    padding-top: 10px;
+    padding-right: 30px;
+}
 .warningCNIL {
+    display: inline-block;
+    vertical-align: middle;
     padding-top: 15px;
     padding-bottom: 5px;
 }
