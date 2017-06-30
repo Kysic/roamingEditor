@@ -8,13 +8,13 @@ class GoogleContacts {
         return implode('-', array_map('ucwords', explode('-', strtolower(trim($txt)))));
     }
     private function getContactFirstname($data) {
-        return $this->toPascalCase($data[2]);
+        return $this->toPascalCase(trim($data[2]));
     }
     private function getContactLastname($data) {
         return strtoupper(trim($data[1]));
     }
     private function getContactEmail($data) {
-        return strtolower($data[5]);
+        return strtolower(trim($data[5]));
     }
     private function isBoard($data) {
         $trimStr = trim($data[8]);
