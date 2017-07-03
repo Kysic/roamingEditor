@@ -7,12 +7,16 @@ function areRolesConsistent($users, $members) {
         $email = strtolower($user->email);
         if (array_key_exists($email, $members)) {
             $member = $members[$email];
-            if ($member['isTutor']) {
-                if ( !in_array( $user->role, array(TUTOR, BOARD, ADMIN, ROOT) ) ) {
+            if ($member['isBoard']) {
+                if ( !in_array( $user->role, array(BOARD, ADMIN, ROOT) ) ) {
+                    return false;
+                }
+            } else if ($member['isTutor']) {
+                if ( !in_array( $user->role, array(TUTOR, ADMIN, ROOT) ) ) {
                     return false;
                 }
             } else {
-                if ( !in_array( $user->role, array(MEMBER, BOARD, ADMIN, ROOT) ) ) {
+                if ( !in_array( $user->role, array(MEMBER, ADMIN, ROOT) ) ) {
                     return false;
                 }
             }
@@ -41,7 +45,7 @@ try {
             'Some user doesn\'t have the right role.'
         );
     }
-    echo 'done';
+    echo 'done'."\n";
 
 } catch (Exception $e) {
     $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while checking users roles',

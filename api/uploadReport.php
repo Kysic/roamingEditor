@@ -33,8 +33,14 @@ try {
         throw new BadRequestException('There is already a report for the roaming '.$roamingDate.'.');
     }
 
-    if ( !@move_uploaded_file($_FILES['report']['tmp_name'], $reportFiles->getFileUrl($roamingDate)) ) {
-        throw new Exception('Internal error, unable to move the uploaded file.');
+    $reportFileUrl = $reportFiles->getFileUrl($roamingDate);
+    $reportMonthDir = dirname($reportFileUrl);
+    if ( !is_dir($reportMonthDir) ) {
+        mkdir($reportMonthDir, 0775, true);
+    }
+    if ( !@move_uploaded_file($_FILES['report']['tmp_name'], $reportFileUrl) ) {
+        throw new Exception('Internal error, unable to move the uploaded file from '.$_FILES['report']['tmp_name'].
+                            ' to '.$reportFileUrl);
     }
 
     $json->returnResult(array(
