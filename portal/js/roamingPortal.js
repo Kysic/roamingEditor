@@ -199,6 +199,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     $scope.isToday = isToday;
     $scope.isYesterday = isYesterday;
     $scope.isSelectedMonth = isSelectedMonth;
+    $scope.existsReportFile = existsReportFile;
 
     $scope.$watch('sessionInfo', function () {
         if ($scope.sessionInfo.loggedIn === false) {
@@ -366,6 +367,10 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         var yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1);
         var d = new Date(dateStr);
         return d.getDate() == yesterday.getDate() && d.getMonth() == yesterday.getMonth() && d.getFullYear() == yesterday.getFullYear();
+    }
+
+    function existsReportFile(day) {
+        return $scope.reportsFiles.length > 0 && $scope.reportsFiles.indexOf(day) !== -1;
     }
 
 });
