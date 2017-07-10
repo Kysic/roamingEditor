@@ -240,6 +240,17 @@ roamingEditor.controller('RoamingListController', function RoamingListController
 roamingEditor.controller('RoamingController',
   function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, roamingService) {
 
+    $scope.synchroStatus;
+    $scope.roaming;
+    $scope.addIntervention = addIntervention;
+    $scope.editIntervention = editIntervention;
+    $scope.deleteIntervention = deleteIntervention;
+    $scope.addTeammate = addTeammate;
+    $scope.removeTeammate = removeTeammate;
+    $scope.updateRoaming = updateRoaming;
+    $scope.goBack = goBack;
+    $scope.isEditable = isEditable;
+
     if ( ! /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test($routeParams.roamingId)) {
         $location.path('/roamingsList');
         return;
@@ -247,8 +258,10 @@ roamingEditor.controller('RoamingController',
     if ($routeParams.roamingId) {
         $scope.roaming = roamingService.getRoaming($routeParams.roamingId);
     }
-    if ( !$scope.roaming ) {
-        initRoaming();
+    if ($scope.roaming ) {
+      $scope.synchroStatus = $scope.roaming.synchroStatus;
+    } else {
+      initRoaming();
     }
 
     function initRoaming() {
@@ -281,22 +294,22 @@ roamingEditor.controller('RoamingController',
         });
     }
 
-    $scope.addIntervention = function () {
+    function addIntervention() {
         $scope.editIntervention(-1);
     }
 
-    $scope.editIntervention = function (interventionIndex) {
+    function editIntervention(interventionIndex) {
         $location.path('/roaming/' + $routeParams.roamingId + '/intervention/' + interventionIndex);
     }
 
-    $scope.deleteIntervention = function (interventionIndex) {
+    function deleteIntervention(interventionIndex) {
         if (confirm('Etes vous sur de vouloir supprimer cette intervention ?')) {
             $scope.roaming.interventions.splice(interventionIndex, 1);
             $scope.updateRoaming();
        }
     }
 
-    $scope.addTeammate = function () {
+    function addTeammate() {
         $scope.roaming.teammates.push('');
         $scope.updateRoaming();
         // A timeout is required because the field doesn't exist yet
@@ -307,7 +320,7 @@ roamingEditor.controller('RoamingController',
             }
         });
     }
-    $scope.removeTeammate = function (teammateIndex) {
+    function removeTeammate(teammateIndex) {
         if (teammateIndex < $scope.roaming.teammates.length
             && ($scope.roaming.teammates[teammateIndex] == ''
                     || confirm('Etes vous sûr de vouloir enlever ' + $scope.roaming.teammates[teammateIndex] + ' ?')
@@ -321,17 +334,24 @@ roamingEditor.controller('RoamingController',
         }
     }
 
-    $scope.updateRoaming = function () {
+    function updateRoaming() {
         roamingService.updateRoaming($scope.roaming);
     }
 
-    $scope.goBack = function () {
+    function goBack() {
         $location.path('/roamingsList');
     }
 
-    $scope.isEditable = function () {
+    function isEditable() {
         return $routeParams.roamingId == roamingService.getCurrentRoamingDateId();
     }
+
+    $scope.$on('roamingUpdate', function (event, roaming) {
+        if ($scope.roaming.date == roaming.date) {
+            $scope.synchroStatus = roaming.synchroStatus;
+        }
+    });
+
     $interval(function(){
         // Allow to refresh read only status every hour
     },3600000)

@@ -21,6 +21,10 @@ th, td {
 th {
     background: #ddd;
 }
+.titleExtra {
+    font-weight: normal;
+    font-size: medium;
+}
 .statusDone {
     color: #080;
 }

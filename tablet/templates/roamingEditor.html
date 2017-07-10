@@ -1,5 +1,16 @@
 <div id="roaming">
-  <h2>Maraude du {{roaming.date}}</h2>
+  <h2>
+    Maraude du {{roaming.date}}
+    <span class="titleExtra {{ {IN_PROGRESS:'statusInProgress', SYNCHRONIZED:'statusDone', FAILED:'statusFailed'}[synchroStatus] }}">
+    {{
+      {
+          IN_PROGRESS:'[synchronisation en cours]',
+          SYNCHRONIZED:'[synchronisée]',
+          FAILED:'[échec de la synchronisation]'
+      }[synchroStatus]
+    }}
+    </span>
+  </h2>
   <button ng-click="goBack()">Revenir à la liste des maraudes</button>
   <br/><br/>
   <label for="tutorField">Tuteur</label>
