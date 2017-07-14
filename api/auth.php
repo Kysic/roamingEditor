@@ -11,6 +11,10 @@ try {
 
     $json->mergeJsonParameterToPost();
 
+    if ( @$_GET['emulateRole'] ) {
+        $auth->emulateRole(@$_GET['emulateRole']);
+    }
+
     if ( @$_POST['action'] == 'login' ) {
         if (!$session->isLoggedIn()) {
             $auth->login(@$_POST['email'], @$_POST['password'], @$_POST['stayLogged'] == 'true', @$_POST['sessionToken']);

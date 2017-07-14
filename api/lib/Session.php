@@ -10,6 +10,7 @@ class Session {
         $this->rolesPermissions = $rolesPermissions;
         $this->lazyUSersStorage = $lazyUSersStorage;
         $this->lazyBruteforceStorage = $lazyBruteforceStorage;
+        session_name(SESSION_COOKIE_KEY);
         session_start();
         if ($autologin) {
             $this->doAutologin();
@@ -67,6 +68,12 @@ class Session {
     public function checkHasPermission($permission, $errorMsg = 'Vous n\'êtes pas authorisé à faire cette action.') {
         if (!$this->hasPermission($permission)) {
             throw new ForbiddenException($errorMsg);
+        }
+    }
+
+    public function checkIsRoot() {
+        if ($this->getUser()->role != ROOT) {
+            throw new ForbiddenException('Seul root peut effectuer cette action');
         }
     }
 

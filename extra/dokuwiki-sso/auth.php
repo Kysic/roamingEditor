@@ -5,9 +5,12 @@ require_once('/var/www/vinci/api/lib/Container.php');
 /**
  * VINCI auth plugin
  * Should be in <dokuwiki>/lib/plugins/vinciSSO/auth.php
- * and <dokuwiki>/conf/local.php should contains:
+ * <dokuwiki>/conf/local.php should contains:
  *  $conf['authtype'] = 'vinciSSO';
  *  $conf['superuser'] = '@root';
+ * <dokuwiki>/conf/local.protected.php should contains:
+ *  <?php
+ *  define('DOKU_SESSION_NAME', "vinciSession");
  */
 class auth_plugin_vinciSSO extends DokuWiki_Auth_Plugin {
 

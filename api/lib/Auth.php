@@ -115,6 +115,20 @@ class Auth {
         $usersStorage->deleteUserAutologinId($this->session->getUser()->userId);
         $this->session->unsetUser();
     }
+    public function emulateRole($role) {
+        $this->restoreRole();
+        $this->session->checkIsRoot();
+        $user = $this->session->getUser();
+        $user->role = $role;
+        $this->session->setUser($user);
+    }
+    private function restoreRole() {
+        $this->session->checkLoggedIn();
+        $userId = $this->session->getUser()->userId;
+        $usersStorage = $this->lazyUSersStorage->get();
+        $user = $usersStorage->getUserWithId($userId);
+        $this->session->setUser($user);
+    }
     private function checkNbFailedAttempts($bruteforceStorage) {
         if ($bruteforceStorage->getNbFailedAttemptsInPeriod($_SERVER['REMOTE_ADDR']) >= BRUTEFORCE_MAX_NB_ATTEMPTS) {
             throw new ForbiddenException('Trop de tentatives de connexion depuis cette IP, veillez réessayer dans un moment.');

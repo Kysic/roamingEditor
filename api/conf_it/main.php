@@ -15,7 +15,8 @@ define('BRUTEFORCE_PERIOD_IN_SECOND', 300);
 define('BRUTEFORCE_MAX_NB_ATTEMPTS', 5);
 define('REPORT_OLD_LIMIT_DAYS', 62);
 
-define('AUTOLOGIN_COOKIE_KEY', 'vcrPersistentLogin');
+define('SESSION_COOKIE_KEY', 'vinciSession');
+define('AUTOLOGIN_COOKIE_KEY', 'vinciPersistentLogin');
 define('AUTOLOGIN_COOKIE_EXPIRATION', '5356800'); // 62 jours
 
 # Set TimeZone
