@@ -125,3 +125,17 @@ ul.tabs>li.notselected:hover {
 .wrongRole {
     background: #ffbbbb;
 }
+.uploadReportField {
+    display: none;
+}
+.uploadReportLabel {
+    border: 1px solid #ccc;
+    background: #eee;
+    display: inline-block;
+    padding: 2px 8px 1px 8px;
+    cursor: pointer;
+    font-size: small;
+}
+.uploadReportLabel:hover {
+    background: #fff;
+}

@@ -189,16 +189,20 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     $scope.planning;
     $scope.reportsFiles;
     $scope.editRunning;
+    $scope.uploadRunning;
     $scope.showMonth = showMonth;
     $scope.roamingApiEndPoint = roamingApiEndPoint;
     $scope.editRoaming = editRoaming;
+    $scope.uploadReport = uploadReport;
     $scope.deleteReport = deleteReport;
     $scope.setPassword = setPassword;
     $scope.logout = logout;
     $scope.hasP = hasP;
+    $scope.reportUploadId = reportUploadId;
     $scope.isToday = isToday;
     $scope.isYesterday = isYesterday;
     $scope.isSelectedMonth = isSelectedMonth;
+    $scope.isPast = isPast;
     $scope.existsReportFile = existsReportFile;
 
     $scope.$watch('sessionInfo', function () {
@@ -320,6 +324,47 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         
     }
 
+    function reportUploadId(roamingDate) {
+        return 'report-' + roamingDate;
+    }
+
+    function uploadReport(roamingDate) {
+        var file = document.getElementById(reportUploadId(roamingDate)).files[0];
+        if (file) {
+            var formData = new FormData();
+            formData.append('sessionToken', $scope.sessionInfo.sessionToken);
+            formData.append('report', file);
+            var reader = new FileReader();
+            reader.onloadend = function(event) {
+                var data = event.target.result;
+                $scope.uploadRunning = true;
+                $http({
+                    method: 'POST',
+                    url: roamingApiEndPoint + '/uploadReport.php?roamingDate=' + roamingDate,
+                    data: formData,
+                    headers: { 'Content-Type': undefined }
+                }).then(function successCallback(response) {
+                    if (response.data.status == 'success') {
+                        $scope.reportsFiles.push(roamingDate);
+                    } else {
+                        alert('Upload failed, see console log');
+                        console.log(response);
+                    }
+                    $scope.uploadRunning = false;
+                }, function errorCallback(response) {
+                    if (response.data.errorMsg) {
+                        alert(response.data.errorMsg);
+                    } else {
+                        alert('Upload failed, see console log');
+                        console.log(response);
+                    }
+                    $scope.uploadRunning = false;
+                });
+            }
+            reader.readAsBinaryString(file);
+        }
+    }
+
     function deleteReport(roamingDate) {
         if ( confirm('Supprimer le compte-rendu du ' + dateUtils.humanDate(new Date(roamingDate)) + ' ?') ) {
             $http.post(
@@ -367,6 +412,12 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         var yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1);
         var d = new Date(dateStr);
         return d.getDate() == yesterday.getDate() && d.getMonth() == yesterday.getMonth() && d.getFullYear() == yesterday.getFullYear();
+    }
+
+    function isPast(dateStr) {
+        var today = new Date();
+        var d = new Date(dateStr);
+        return d < today;
     }
 
     function existsReportFile(day) {

@@ -10,7 +10,8 @@ require_once('/var/www/vinci/api/lib/Container.php');
  *  $conf['superuser'] = '@root';
  * <dokuwiki>/conf/local.protected.php should contains:
  *  <?php
- *  define('DOKU_SESSION_NAME', "vinciSession");
+ *  define('DOKU_SESSION_NAME', 'vinciSession');
+ *  define('DOKU_SESSION_PATH', '/');
  */
 class auth_plugin_vinciSSO extends DokuWiki_Auth_Plugin {
 

@@ -13,6 +13,7 @@ try {
     if ( hash('sha256', @$_POST['apiKey'], false) != '4eaa6a402e3c1b40917170a9bd7f64aad744292bc91ac4264c1958389fd79d57' ) {
         $session->checkLoggedIn();
         $session->checkHasPermission(P_UPLOAD_REPORT);
+        $session->checkToken(@$_POST['sessionToken']);
     }
 
     if (!@$_FILES['report']['tmp_name']) {
