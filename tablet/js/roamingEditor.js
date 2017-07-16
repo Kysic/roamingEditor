@@ -1,7 +1,7 @@
 
 var roamingApiEndPoint = '../api';
 
-var roamingHistoryNbDays = 20;
+var roamingHistoryNbDays = 30;
 
 var roamingEditor = angular.module('roamingEditor', ['ngRoute', 'ngCookies']);
 
@@ -17,6 +17,10 @@ roamingEditor.config(['$routeProvider', function($routeProvider) {
     .when('/roaming/:roamingId/intervention/:interventionId', {
         templateUrl: 'templates/interventionEditor.html',
         controller: 'InterventionController'
+    })
+    .when('/donations/:roamingId?', {
+        templateUrl: 'templates/donations.html',
+        controller: 'DonationsController'
     })
     .when('/debug', {
         templateUrl: 'templates/debug.html',
@@ -58,7 +62,9 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
     function synchronizeApiKeyWithAutoLogin() {
         var apiKey = localStorage.getItem('apiKey');
         if ( apiKey ) {
-            $cookies.put('vcrPersistentLogin', apiKey);
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 365);
+            $cookies.put('vinciPersistentLogin', apiKey, {'expires':expireDate});
         }
     }
 
@@ -231,6 +237,10 @@ roamingEditor.controller('RoamingListController', function RoamingListController
         $location.path('/roaming/' + roamingService.getCurrentRoamingDateId());
     }
 
+    $scope.goDonations = function () {
+        $location.path('/donations');
+    }
+
     $scope.$on('roamingUpdate', function () {
         retrieveRoamings();
     });
@@ -248,7 +258,8 @@ roamingEditor.controller('RoamingController',
     $scope.addTeammate = addTeammate;
     $scope.removeTeammate = removeTeammate;
     $scope.updateRoaming = updateRoaming;
-    $scope.goBack = goBack;
+    $scope.goRoamingList = goRoamingList;
+    $scope.goDonations = goDonations;
     $scope.isEditable = isEditable;
 
     if ( ! /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test($routeParams.roamingId)) {
@@ -338,8 +349,12 @@ roamingEditor.controller('RoamingController',
         roamingService.updateRoaming($scope.roaming);
     }
 
-    function goBack() {
+    function goRoamingList() {
         $location.path('/roamingsList');
+    }
+
+    function goDonations() {
+        $location.path('/donations/' + $scope.roaming.date);
     }
 
     function isEditable() {
@@ -541,6 +556,37 @@ roamingEditor.controller('InterventionController',
 
 });
 
+roamingEditor.controller('DonationsController', function DonationsController($scope, $routeParams, $location, roamingService) {
+
+    $scope.donations;
+    $scope.goBack = goBack;
+
+    retrieveDonations();
+
+    function retrieveDonations() {
+        var roamingsMap = roamingService.getAllRoamings();
+        $scope.donations = [];
+        for (var roamingDate in roamingsMap) {
+            var roaming = roamingsMap[roamingDate];
+            for (var intervention in roaming.interventions) {
+                var donation = roaming.interventions[intervention];
+                if (donation.blankets > 0 || donation.tents > 0) {
+                    donation.date = roamingDate;
+                    $scope.donations.push(donation);
+                }
+            }
+        }
+    }
+
+    function goBack() {
+        if ($routeParams.roamingId) {
+            $location.path('/roaming/' + $routeParams.roamingId);
+        } else {
+            $location.path('/roamingsList');
+        }
+    }
+
+});
 
 roamingEditor.controller('DebugController', function DebugController($scope, $cookies, $filter, $location, roamingService) {
 
@@ -548,7 +594,7 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
 
     function loadCurrentConf() {
         $scope.roamingsJSON = $filter('json')(roamingService.getAllRoamings());
-        $scope.autoLogin = $cookies.get('vcrPersistentLogin');
+        $scope.autoLogin = $cookies.get('vinciPersistentLogin');
         $scope.apiKey = localStorage.getItem('apiKey');
     }
 
@@ -558,8 +604,8 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
 
     $scope.updateApiKey = function () {
         localStorage.setItem('apiKey', $scope.apiKey);
-        $cookies.remove('PHPSESSID');
-        $cookies.put('vcrPersistentLogin', $scope.apiKey);
+        $cookies.remove('vinciSession');
+        $cookies.put('vinciPersistentLogin', $scope.apiKey);
         roamingService.loadLocalStorage();
         loadCurrentConf();
     }

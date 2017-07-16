@@ -1,5 +1,7 @@
 <div id="roamingList">
   <h2>Liste des dernières maraudes</h2>
+  <button ng-click="goDonations()">Voir les dons de couvertures</button>
+  <br/><br/>
   <button ng-click="createRoaming()">Editer le compte rendu du jour</button>
   <br/><br/>
   <table ng-show="roamings.length > 0">
@@ -24,7 +26,7 @@
         {{ {IN_PROGRESS:'en cours', SYNCHRONIZED:'synchronisé', FAILED:'échec'}[roaming.synchroStatus] }}
       </td>
       <td>
-        <button ng-click="editRoaming(roaming)">Editer</button>
+        <button ng-click="editRoaming(roaming)">Consulter</button>
         <button ng-click="resynchro()" ng-show="roaming.synchroStatus != 'SYNCHRONIZED' && roaming.synchroStatus != 'IN_PROGRESS'">Resynchroniser</button>
       </td>
     </tr>

@@ -1,6 +1,6 @@
 <div id="roaming">
   <h2>
-    Maraude du {{roaming.date}}
+    Maraude du {{roaming.date | humanDate}}
     <span class="titleExtra {{ {IN_PROGRESS:'statusInProgress', SYNCHRONIZED:'statusDone', FAILED:'statusFailed'}[synchroStatus] }}">
     {{
       {
@@ -11,7 +11,7 @@
     }}
     </span>
   </h2>
-  <button ng-click="goBack()">Revenir à la liste des maraudes</button>
+  <button ng-click="goDonations()">Voir les dons de couvertures</button>
   <br/><br/>
   <label for="tutorField">Tuteur</label>
   <input id="tutorField" ng-model="roaming.tutor" type="text" ng-change="updateRoaming()" ng-disabled="!isEditable()" /><br/>
@@ -60,6 +60,6 @@
   <br/>
   <button ng-click="addIntervention()" ng-show="roaming.interventions.length > 0 &amp;&amp; isEditable()">Ajouter une intervention</button>
   <br/><br/>
-  <button ng-click="goBack()">Revenir à la liste des maraudes</button>
+  <button ng-click="goRoamingList()">Revenir à la liste des maraudes</button>
   <br/><br/>
 </div>
