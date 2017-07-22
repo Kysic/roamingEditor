@@ -20,7 +20,7 @@
       <th>Tuteur</th>
       <th>Coéquipier</th>
       <th>Coéquipier</th>
-      <th>Coéquipier</th>
+      <th ng-show="roamingByFour">Coéquipier</th>
       <th>Compte rendu</th>
     </tr>
     <tr ng-repeat="day in calendar" class="{{ (roamings[day] || existsReportFile(day)) ? 'done' : planning[day]['status'] }} {{isToday(day) ? 'planningToday' : '' }}">
@@ -28,7 +28,7 @@
       <td class="tutor">{{roamings[day] ? roamings[day]['tutor'] : planning[day]['tutor']}}</td>
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][0] : planning[day]['teammates'][0]}}</td>
       <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][1] : planning[day]['teammates'][1]}}</td>
-      <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][2] : planning[day]['teammates'][2]}}</td>
+      <td class="teammates" ng-show="roamingByFour">{{roamings[day] ? roamings[day]['teammates'][2] : planning[day]['teammates'][2]}}</td>
       <td class="reportsActions">
         <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{day}}"
             ng-if="existsReportFile(day)" target="_blank">{{day}}.pdf</a>

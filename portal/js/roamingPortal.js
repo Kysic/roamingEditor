@@ -188,6 +188,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     $scope.roamings;
     $scope.planning;
     $scope.reportsFiles;
+    $scope.roamingByFour;
     $scope.editRunning;
     $scope.uploadRunning;
     $scope.showMonth = showMonth;
@@ -259,6 +260,9 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
                     var roaming = roamingsObject[roamingId];
                     roaming.id = roamingId;
                     $scope.roamings[roaming.date] = roaming;
+                    if (roaming.teammates.length >= 3 && roaming.teammates[2] != '') {
+                        $scope.roamingByFour = true;
+                    }
                 });
             }
         }, function (response) {
@@ -285,6 +289,13 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         $scope.planning = {};
         $http.get(roamingApiEndPoint + '/getPlanning.php?'+dateRangeQuerySelector()).then(function (response) {
             $scope.planning = response.data;
+            for (var i = 0; i < $scope.calendar.length; i++) {
+                var day = $scope.calendar[i];
+                var roamingTeammates = $scope.planning[day]['teammates'];
+                if (roamingTeammates.length >= 3 && roamingTeammates[2] != '') {
+                    $scope.roamingByFour = true;
+                }
+            }
         }, function (response) {
             if (response.status == 401) {
                 $location.path('/login');
@@ -297,6 +308,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
             $scope.month = month;
             $location.search('month', dateUtils.toLocalIsoDate(month));
         }
+        $scope.roamingByFour = false;
         populateCalendar();
         retrieveRoamings();
         retrieveReportsFiles();
