@@ -581,21 +581,23 @@ roamingPortal.controller('MailSentController', function MailSentController($scop
 
 roamingPortal.controller('UsersController', function UsersController($scope, $http, $routeParams, $location, authService) {
 
-    $scope.roles = ['appli', 'former', 'guest', 'member', 'tutor', 'board', 'admin', 'root'];
+    $scope.roles = ['unregistered', 'appli', 'former', 'guest', 'member', 'tutor', 'board', 'admin', 'root'];
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.hasP = hasP;
     $scope.setRole = setRole;
-    $scope.users;
+    $scope.sendInvitation = sendInvitation;
+    $scope.dbUsers;
     $scope.members;
+    $scope.users;
 
-    retrieveUsers();
+    retrieveDbUsers();
     retrieveMembers();
 
-    function retrieveUsers() {
+    function retrieveDbUsers() {
         $http.get(roamingApiEndPoint + '/getUsers.php').then(function (response) {
             if (response.data.status == 'success' && response.data.users) {
-                $scope.users = response.data.users;
-                checkUserRole();
+                $scope.dbUsers = response.data.users;
+                mergeUsersList();
             }
         }, function (response) {
             if (response.status == 401) {
@@ -608,7 +610,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
         $http.get(roamingApiEndPoint + '/getMembers.php').then(function (response) {
             if (response.data.status == 'success' && response.data.members) {
                 $scope.members = response.data.members;
-                checkUserRole();
+                mergeUsersList();
             }
         }, function (response) {
             if (response.status == 401) {
@@ -622,8 +624,12 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
                 && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.indexOf(permission) !== -1;
     }
 
-    function checkUserRole() {
-        if ($scope.users === undefined || $scope.members === undefined) {
+    function mergeUsersList() {
+        if ($scope.dbUsers === undefined) {
+            return;
+        }
+        $scope.users = $scope.dbUsers.slice();
+        if ($scope.members === undefined) {
             return;
         }
         for (var i = 0, len = $scope.users.length; i < len; i++) {
@@ -639,6 +645,27 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
                 user.rightRole = user.role == 'member' || user.role == 'admin' || user.role == 'root';
             }
         }
+        for (var email in $scope.members) {
+            if (!hasUserWithMail(email)) {
+                var member = $scope.members[email];
+                $scope.users.push({
+                    'firstname': member.firstname,
+                    'lastname': member.lastname,
+                    'email': email,
+                    'role': 'unregistered',
+                    'rightRole': true
+                });
+            }
+        }
+    }
+
+    function hasUserWithMail(email) {
+        for (var i = 0, len = $scope.users.length; i < len; i++) {
+            if ($scope.users[i].email.toLowerCase() == email) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function setErrorMsg(responseData) {
@@ -647,7 +674,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
         } else {
             $scope.errorMsg = 'Réponse du serveur invalide.';
         }
-        retrieveUsers();
+        retrieveDbUsers();
     }
 
     function setRole(user) {
@@ -660,7 +687,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
         }).then(function (response) {
             if (response.data.status == 'success') {
                 $scope.setRoleRunning = false;
-                checkUserRole();
+                mergeUsersList();
             } else {
                 setErrorMsg(response.data);
             }
@@ -668,6 +695,14 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
             setErrorMsg(response.data);
         });
     }
+
+    function sendInvitation(user) {
+        authService.register(user.email);
+    }
+
+    $scope.$on('register', function () {
+        retrieveDbUsers();
+    });
 
 });
 

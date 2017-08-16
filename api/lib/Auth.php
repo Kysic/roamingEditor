@@ -20,7 +20,7 @@ class Auth {
         $this->checkFormToken = $noFormTokenCheck !== true;
     }
     public function register($pEmail, $pSessionToken = false) {
-        $this->session->checkHasPermission(P_LOG_IN, 'Vous n\'êtes pas autorisé à vous inscrire sur le site.');
+        $this->session->checkHasPermission(P_REGISTER, 'Vous n\'êtes pas autorisé à vous inscrire sur le site.');
         $this->checkToken($pSessionToken);
         $email = strtolower($pEmail);
         $this->validator->validateEmail($email);

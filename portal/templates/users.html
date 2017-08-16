@@ -12,11 +12,14 @@
       <td>{{user.firstname}}</td>
       <td>{{user.lastname}}</td>
       <td>{{user.email}}</td>
-      <td ng-class="user.rightRole ? 'rightRole' : 'wrongRole'">
+      <td ng-class="user.role == 'unregistered' ? 'unregistered' : user.rightRole ? 'rightRole' : 'wrongRole'">
         <span ng-if="!hasP('P_ASSIGN_ROLE') || user.userId == sessionInfo.user.userId">{{user.role}}</span>
-        <span ng-if="hasP('P_ASSIGN_ROLE') && user.userId != sessionInfo.user.userId">
+        <span ng-if="hasP('P_ASSIGN_ROLE') && user.userId != sessionInfo.user.userId && user.role != 'unregistered'">
           <select type='text' ng-model="user.role" ng-options="role as role for role in roles" ng-change="setRole(user)">
           </select>
+        </span>
+        <span ng-if="hasP('P_REGISTER') && user.role == 'unregistered'" class="invitation">
+          <button ng-click='sendInvitation(user)'>Envoyer invitation</button>
         </span>
       </td>
     </tr>

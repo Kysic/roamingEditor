@@ -30,7 +30,7 @@ class GooglePlanning {
 
     private function getTeammateName($data, $teammateIndex) {
         return implode('-', array_map('ucwords', explode('-',
-                    strtolower(trim($data[TUTOR_INDEX + ($teammateIndex * DIFF_INDEX_TEAMMATE)]))
+                    mb_strtolower(trim($data[TUTOR_INDEX + ($teammateIndex * DIFF_INDEX_TEAMMATE)]))
                )));
     }
     private function getTeammateGender($data, $teammateIndex) {

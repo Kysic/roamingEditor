@@ -298,7 +298,7 @@ function assertIsVisitor($user) {
     assertEquals($user->firstname, '');
     assertEquals($user->lastname, '');
     assertEquals($user->permissions, array(
-                                        'P_SIGN_IN',
+                                        'P_REGISTER',
                                         'P_LOG_IN',
                                         'P_RESET_PASSWORD'
                                      ));

@@ -5,7 +5,7 @@ require_once(ROAMING_API_DIR.'/conf/google.php');
 class GoogleContacts {
 
     private function toPascalCase($txt) {
-        return implode('-', array_map('ucwords', explode('-', strtolower(trim($txt)))));
+        return implode('-', array_map('ucwords', explode('-', mb_strtolower(trim($txt)))));
     }
     private function getContactFirstname($data) {
         return $this->toPascalCase(trim($data[2]));

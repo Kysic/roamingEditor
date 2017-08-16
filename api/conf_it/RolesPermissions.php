@@ -1,7 +1,7 @@
 <?php
 
 # Permissions
-define('P_SIGN_IN', 'P_SIGN_IN');
+define('P_REGISTER', 'P_REGISTER');
 define('P_LOG_IN', 'P_LOG_IN');
 define('P_LOG_OUT', 'P_LOG_OUT');
 define('P_RESET_PASSWORD', 'P_RESET_PASSWORD');
@@ -16,7 +16,6 @@ define('P_DELETE_REPORT', 'P_DELETE_REPORT');
 define('P_SEE_ALL_REPORT', 'P_SEE_ALL_REPORT');
 define('P_SEE_USERS_LIST', 'P_SEE_USERS_LIST');
 define('P_ASSIGN_ROLE', 'P_ASSIGN_ROLE');
-define('P_GENERATE_PASSWORD_TOKEN', 'P_GENERATE_PASSWORD_TOKEN');
 # Roles
 define('VISITOR', 'visitor');
 define('APPLI', 'appli');
@@ -40,7 +39,7 @@ class RolesPermissions {
     private $root;
 
     public function __construct() {
-        $this->visitor = array( P_SIGN_IN, P_LOG_IN, P_RESET_PASSWORD );
+        $this->visitor = array( P_REGISTER, P_LOG_IN, P_RESET_PASSWORD );
         $this->appli = array ( P_SEE_PLANNING, P_SEE_LAST_REPORT, P_SAVE_ROAMINGS );
         $this->former = array( P_LOG_OUT, P_CHANGE_PASSWORD );
         $this->guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES ), $this->former);
@@ -48,7 +47,7 @@ class RolesPermissions {
         $this->tutor = array_merge(array(  ), $this->member);
         $this->board = array_merge(array( P_SEE_ALL_REPORT ), $this->tutor);
         $this->admin = array_merge(array( P_SEE_USERS_LIST, P_ASSIGN_ROLE, P_UPLOAD_REPORT, P_DELETE_REPORT ), $this->board);
-        $this->root = array_merge(array( P_SAVE_ROAMINGS, P_GENERATE_PASSWORD_TOKEN ), $this->admin);
+        $this->root = array_merge(array( P_SAVE_ROAMINGS, P_REGISTER ), $this->admin);
     }
 
     public function getPermissions($role) {

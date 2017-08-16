@@ -7,10 +7,12 @@ require_once(ROAMING_API_DIR.'/lib/ext/class.smtp.php');
 class Mail {
 
     public function sendRegisterToken($to, $firstname, $lastname, $userId, $mailToken) {
-        $this->sendMail($to, '[VINCI] Inscription sur le site de comptes rendus de maraudes du VINCI',
+        $this->sendMail($to, '[VINCI] Inscription site Samu Social de Grenoble - VINCI',
                 'Bonjour '.$firstname.' '.$lastname.','."\n".
                 "\n".
-                'Bienvenue sur le site de consultations des comptes rendus de maraudes du VINCI.'."\n".
+                'Vous recevez cet email en tant que membre de l\'association de Samu Social de Grenoble VINCI,'."\n".
+                'afin de vous donner l\'accès au site de consultation des comptes rendus de maraudes.'."\n".
+                "\n".
                 'Pour finaliser votre inscription, veuillez vous rendre à l\'adresse suivante afin de choisir votre mot de passe :'."\n".
                 $this->getPasswordURL($userId, $mailToken)."\n".
                 "\n".
