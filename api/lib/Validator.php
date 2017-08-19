@@ -73,7 +73,7 @@ class Validator {
         } else if ( mb_strlen($password) < MIN_PASSWORD_LENGTH
             || !$this->containsLowerUpperNumberAndSpecialChar($password) ) {
             throw new BadRequestException('Le mot de passe doit faire plus de '.MIN_PASSWORD_LENGTH
-                .' caractères, contenir des minuscules, majuscules, chiffres et caractères spéciaux.');
+                .' caractères, contenir des minuscules, majuscules, chiffres et/ou caractères spéciaux (au moins 3 éléments parmis les 4).');
         }
     }
 
