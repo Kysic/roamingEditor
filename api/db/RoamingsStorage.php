@@ -78,5 +78,13 @@ class RoamingsStorage {
         return $request->errorCode();
     }
 
+    public function lock() {
+        $this->dbAccess->getPdo()->exec('LOCK TABLES '.SQL_TABLE_ROAMINGS.' WRITE');
+    }
+
+    public function unlock() {
+        $this->dbAccess->getPdo()->exec('UNLOCK TABLES');
+    }
+
 }
 

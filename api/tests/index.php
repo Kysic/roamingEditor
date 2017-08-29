@@ -59,7 +59,7 @@ try {
 } catch (Exception $e) {
     assertException(
         $e,
-        'Le mot de passe doit faire plus de 8 caractères, contenir des minuscules, majuscules, chiffres et caractères spéciaux.',
+        'Le mot de passe doit faire plus de 8 caractères, contenir des minuscules, majuscules, chiffres et/ou caractères spéciaux (au moins 3 éléments parmis les 4).',
         400
     );
 }

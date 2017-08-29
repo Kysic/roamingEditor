@@ -41,11 +41,17 @@ class SpreadsheetsGenerator {
         return $docId;
     }
 
-    public function getOrCreateDocId($roamingId, $userId) {
+    public function getOrCreateDocId($roamingId, $userId, $tableLocked=false) {
         $docId = $this->roamingsStorage->getDocId($roamingId);
         if ( !$docId ) {
-            $docId = $this->generateSpreadSheets($roamingId);
-            $this->roamingsStorage->setDocId($roamingId, $docId, $userId);
+            if ($tableLocked) {
+                $docId = $this->generateSpreadSheets($roamingId);
+                $this->roamingsStorage->setDocId($roamingId, $docId, $userId);
+            } else {
+                $this->roamingsStorage->lock();
+                $docId = $this->getOrCreateDocId($roamingId, $userId, true);
+                $this->roamingsStorage->unlock();
+            }
         }
         return $docId;
     }
