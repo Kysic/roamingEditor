@@ -7,6 +7,7 @@ try {
     $container = new Container();
     $validator = $container->getValidator();
     $reportFiles = $container->getReportFiles();
+    $roamingsStorage = $container->getRoamingsStorage();
     $session = $container->getSession();
     $json = $container->getJson();
 
@@ -30,7 +31,7 @@ try {
         $roamingDate = roamingDateFromReportName($_FILES['report']['name']);
     }
 
-    if ($reportFiles->reportFileExists($roamingDate)) {
+    if ($reportFiles->reportFileExists($roamingDate) || $roamingsStorage->reportExistsFor($roamingDate)) {
         throw new BadRequestException('There is already a report for the roaming '.$roamingDate.'.');
     }
 
