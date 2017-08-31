@@ -95,5 +95,17 @@ class RoamingsStorage {
         $this->dbAccess->getPdo()->exec('UNLOCK TABLES');
     }
 
+    public function cleanOldRoamingsVersion() {
+        $query = 'DELETE FROM '.SQL_TABLE_ROAMINGS.' WHERE roamingId IN ('.
+                 '  SELECT r3.roamingID FROM ('.
+                 '    SELECT r1.roamingID FROM '.SQL_TABLE_ROAMINGS.' r1 WHERE r1.docId IS NULL'.
+                 '    AND r1.roamingDate < (NOW() - INTERVAL 2 DAY)'.
+                 '    AND r1.version <> (select max(r2.version) from '.SQL_TABLE_ROAMINGS.' r2 where r1.roamingDate = r2.roamingDate)'.
+                 '  ) r3'.
+                 ' )';
+        $request = $this->dbAccess->getPdo()->prepare($query);
+        $this->dbAccess->executeWithException($request);
+    }
+
 }
 

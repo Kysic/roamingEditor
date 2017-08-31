@@ -48,9 +48,13 @@ class SpreadsheetsGenerator {
                 $docId = $this->generateSpreadSheets($roamingId);
                 $this->roamingsStorage->setDocId($roamingId, $docId, $userId);
             } else {
-                $this->roamingsStorage->lock();
-                $docId = $this->getOrCreateDocId($roamingId, $userId, true);
-                $this->roamingsStorage->unlock();
+                try {
+                    $this->roamingsStorage->lock();
+                    $docId = $this->getOrCreateDocId($roamingId, $userId, true);
+                } finally {
+                    $this->roamingsStorage->unlock();
+                }
+                $this->roamingsStorage->cleanOldRoamingsVersion();
             }
         }
         return $docId;
