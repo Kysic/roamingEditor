@@ -324,7 +324,9 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         $scope.editRunning = true;
         $http.get(roamingApiEndPoint + '/getDocUrl.php?roamingId=' + roamingId).then(function (response) {
             if (response.data.status == 'success' && response.data.editUrl) {
-                $window.open(response.data.editUrl);
+                if (!$window.open(response.data.editUrl)) {
+                    window.location = response.data.editUrl;
+                }
             }
             $scope.editRunning = false;
         }, function (response) {
