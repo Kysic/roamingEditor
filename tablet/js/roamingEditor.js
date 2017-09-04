@@ -274,6 +274,9 @@ roamingEditor.controller('RoamingController',
     } else {
       initRoaming();
     }
+    if ($scope.roaming.tutor == '' && angular.equals($scope.roaming.teammates, [ '' ])) {
+        getTeammates()
+    }
 
     function initRoaming() {
         $scope.roaming = {
@@ -284,7 +287,6 @@ roamingEditor.controller('RoamingController',
             interventions: [ ]
         };
         roamingService.updateRoaming($scope.roaming);
-        getTeammates();
     }
 
     function getVehicleAccordingToRoamingDate(roamingDate) {
