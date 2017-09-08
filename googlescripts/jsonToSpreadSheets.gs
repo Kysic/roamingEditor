@@ -1,8 +1,20 @@
 function doPost(request) {
+  revokeEditPermissions();
   var roaming = JSON.parse(request.postData.getDataAsString());
   var crFile = createRoamingCR(roaming);
   var responseJson = JSON.stringify({ docId: crFile.getId(), docUrl: crFile.getUrl() });
   return ContentService.createTextOutput(responseJson).setMimeType(ContentService.MimeType.JSON);
+}
+
+function revokeEditPermissions() {
+  var folder = DriveApp.getFolderById("0000000000000000000000000000");
+  var files = folder.getFiles();
+  while (files.hasNext()) {
+    var file = files.next();
+    if (file.getSharingAccess() == DriveApp.Access.ANYONE_WITH_LINK && file.getSharingPermission() == DriveApp.Permission.EDIT) {
+      file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    }
+  }
 }
 
 function createRoamingCR(roaming) {
@@ -10,12 +22,12 @@ function createRoamingCR(roaming) {
   var crSpreadSheep = SpreadsheetApp.open(crFile);
   var sheet = crSpreadSheep.getSheets()[0];
   fillRoamingSheet(roaming, sheet);
-  crFile.setSharing(DriveApp.Access.ANYONE, DriveApp.Permission.EDIT);
+  crFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.EDIT);
   return crFile;
 }
 
 function createNewCRFromTemplate(roamingDate) {
-  var template = DriveApp.getFileById('9M3OkV8cKWUAwzdT-Ep9bABzKlt7egfhttyXq80y_ksA');
+  var template = DriveApp.getFileById('aaaaaaaaaaaaaaaa-aaaaaaaaaaaaaaaaaaaaaaa_aaa');
   return template.makeCopy('CR_' + roamingDate);
 }
 
