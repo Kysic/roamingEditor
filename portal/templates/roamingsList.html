@@ -12,6 +12,8 @@
   <ul class="tabs">
     <li ng-repeat="tabMonth in monthList" ng-class="isSelectedMonth(tabMonth) ? 'selected' : 'notselected'" ng-click="showMonth(tabMonth)">
         {{tabMonth | humanMonth | capitalize}}
+        <img ng-click="editPlanning(tabMonth)" ng-show="hasP('P_EDIT_PLANNING') && isSelectedMonth(tabMonth)"
+            title="Editer le planning" alt="[E]" src="img/edit.png" class="editPlanning" />
     </li>
   </ul>
   <table>

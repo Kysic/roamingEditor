@@ -7,6 +7,7 @@ define('P_LOG_OUT', 'P_LOG_OUT');
 define('P_RESET_PASSWORD', 'P_RESET_PASSWORD');
 define('P_CHANGE_PASSWORD', 'P_CHANGE_PASSWORD');
 define('P_SEE_PLANNING', 'P_SEE_PLANNING');
+define('P_EDIT_PLANNING', 'P_EDIT_PLANNING');
 define('P_SAVE_ROAMINGS', 'P_SAVE_ROAMINGS');
 define('P_SEE_NAMES', 'P_SEE_NAMES');
 define('P_SEE_LAST_REPORT', 'P_SEE_LAST_REPORT');
@@ -43,7 +44,7 @@ class RolesPermissions {
         $this->appli = array ( P_SEE_PLANNING, P_SEE_LAST_REPORT, P_SAVE_ROAMINGS );
         $this->former = array( P_LOG_OUT, P_CHANGE_PASSWORD );
         $this->guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES ), $this->former);
-        $this->member = array_merge(array( P_SEE_LAST_REPORT ), $this->guest);
+        $this->member = array_merge(array( P_EDIT_PLANNING, P_SEE_LAST_REPORT ), $this->guest);
         $this->tutor = array_merge(array( P_EDIT_REPORT ), $this->member);
         $this->board = array_merge(array( P_SEE_ALL_REPORT ), $this->tutor);
         $this->admin = array_merge(array( P_SEE_USERS_LIST, P_ASSIGN_ROLE, P_UPLOAD_REPORT, P_DELETE_REPORT ), $this->board);

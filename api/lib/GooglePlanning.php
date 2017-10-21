@@ -12,6 +12,13 @@ define('BREAD_INDEX', 10);
 
 class GooglePlanning {
 
+    public function getUrl($monthId) {
+        $docId = GooglePlanningRef::getDocId($monthId);
+        $sheetId = GooglePlanningRef::getSheetId($monthId);
+        $planningUrl = GOOGLE_DOC_URL . $docId . GOOGLE_DOC_CMD_EDIT . $sheetId;
+        return $planningUrl;
+    }
+
     public function getRoamingOfDate($roamingDate) {
         $dateId = date('Y-m-d', $roamingDate);
         $monthId = date('Y-m', $roamingDate);

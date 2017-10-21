@@ -91,4 +91,10 @@ class Validator {
         }
     }
 
+    public function validateMonthId($monthId) {
+        if ( !preg_match("/^[0-9]{4}-[0-9]{2}$/", $monthId) ) {
+            throw new BadRequestException('MonthId invalide, format attendu yyyy-mm.');
+        }
+    }
+
 }

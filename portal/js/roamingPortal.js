@@ -148,12 +148,16 @@ roamingPortal.factory('dateUtils', function () {
     function humanMonth(date) {
         return months[date.getMonth()] + ' ' + date.getFullYear();
     }
+    function toLocalMonthId(date) {
+        return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2);
+    }
     function toLocalIsoDate(date) {
         return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
     }
     return {
         humanDate: humanDate,
         humanMonth: humanMonth,
+        toLocalMonthId: toLocalMonthId,
         toLocalIsoDate: toLocalIsoDate
     };
 });
@@ -194,6 +198,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     $scope.showMonth = showMonth;
     $scope.roamingApiEndPoint = roamingApiEndPoint;
     $scope.editRoaming = editRoaming;
+    $scope.editPlanning = editPlanning;
     $scope.uploadReport = uploadReport;
     $scope.deleteReport = deleteReport;
     $scope.setPassword = setPassword;
@@ -336,6 +341,21 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
             }
         });
         
+    }
+
+    function editPlanning(date) {
+        var monthId = dateUtils.toLocalMonthId(date);
+        $http.get(roamingApiEndPoint + '/getPlanningUrl.php?monthId=' + monthId).then(function (response) {
+            if (response.data.status == 'success' && response.data.editUrl) {
+                if (!$window.open(response.data.editUrl)) {
+                    window.location = response.data.editUrl;
+                }
+            }
+        }, function (response) {
+            if (response.status == 401) {
+                $location.path('/login');
+            }
+        });
     }
 
     function reportUploadId(roamingDate) {

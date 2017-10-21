@@ -97,6 +97,9 @@ ul.tabs>li.notselected:hover {
     cursor: pointer;
     text-decoration: underline;
 }
+.editPlanning {
+    cursor: pointer;
+}
 .tutor, .teammates {
     width: 170px;
 }
