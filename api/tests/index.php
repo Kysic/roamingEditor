@@ -310,6 +310,7 @@ function assertIsBernard($user) {
     assertEquals($user->firstname, 'Bernard');
     assertEquals($user->lastname, 'DUPONT');
     assertEquals($user->permissions, array(
+                                        'P_EDIT_PLANNING',
                                         'P_SEE_LAST_REPORT',
                                         'P_EDIT_REPORT',
                                         'P_SEE_PLANNING',

@@ -93,7 +93,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
 
     function filterOldRoamings() {
         var olderRoamingDateAccepted = new Date(new Date().getTime() - roamingHistoryNbDays * 24 * 60 * 60 * 1000);
-        var olderRoamingIdAccepted = $filter('date')(olderRoamingIdAccepted, 'yyyy-MM-dd');
+        var olderRoamingIdAccepted = $filter('date')(olderRoamingDateAccepted, 'yyyy-MM-dd');
         for (var roamingDate in roamings) {
             if (roamingDate < olderRoamingIdAccepted) {
                 deleteRoaming(roamingDate);
