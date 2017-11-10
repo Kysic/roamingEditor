@@ -30,6 +30,16 @@ class RoamingsStorage {
         return $request->fetchAll(PDO::FETCH_FUNC|PDO::FETCH_GROUP|PDO::FETCH_UNIQUE, 'json_decode');
     }
 
+    public function getRoamingId($roamingDate) {
+        $query = 'SELECT roamingId FROM '.SQL_TABLE_ROAMINGS.' r1 WHERE roamingDate = :roamingDate '.
+                 ' AND r1.version = (select max(r2.version) from '.SQL_TABLE_ROAMINGS.' r2 where r2.roamingDate = :roamingDate)';
+        $request = $this->dbAccess->getPdo()->prepare($query);
+        $request->bindValue(':roamingDate', $roamingDate, PDO::PARAM_STR);
+        $this->dbAccess->executeWithException($request);
+        $report = $request->fetch(PDO::FETCH_OBJ);
+        return $report ? $report->roamingId : 0;
+    }
+
     public function reportExistsFor($roamingDate) {
         $query = 'SELECT max(roamingId) maxId FROM '.SQL_TABLE_ROAMINGS.' WHERE roamingDate = :roamingDate';
         $request = $this->dbAccess->getPdo()->prepare($query);
