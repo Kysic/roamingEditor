@@ -10,9 +10,11 @@
     <a target='_blank' href='https://www.samu-social-grenoble.fr/'>l'association VINCI</a>.
   </div>
   <ul class="tabs">
-    <li ng-repeat="tabMonth in monthList" ng-class="isSelectedMonth(tabMonth) ? 'selected' : 'notselected'" ng-click="showMonth(tabMonth)">
+    <li ng-repeat="tabMonth in monthList" ng-class="isSelectedMonth(tabMonth) ? 'selected' : 'notselected'"
+        ng-click="showMonth(tabMonth)">
         {{tabMonth | humanMonth | capitalize}}
-        <img ng-click="editPlanning(tabMonth)" ng-show="hasP('P_EDIT_PLANNING') && isSelectedMonth(tabMonth)"
+        <img ng-click="editPlanning(tabMonth); $event.stopPropagation();"
+            ng-show="hasP('P_EDIT_PLANNING') && isSelectedMonth(tabMonth)"
             title="Editer le planning" alt="[E]" src="img/edit.png" class="editPlanning" />
     </li>
   </ul>

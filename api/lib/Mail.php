@@ -7,7 +7,7 @@ require_once(ROAMING_API_DIR.'/lib/ext/class.smtp.php');
 class Mail {
 
     public function sendRegisterToken($to, $firstname, $lastname, $userId, $mailToken) {
-        $this->sendMail($to, '[VINCI] Inscription site Samu Social de Grenoble - VINCI',
+        $this->sendMail($to, '[VINCI] Inscription site Samu Social de Grenoble',
                 'Bonjour '.$firstname.' '.$lastname.','."\n".
                 "\n".
                 'Vous recevez cet email en tant que membre de l\'association de Samu Social de Grenoble VINCI,'."\n".
