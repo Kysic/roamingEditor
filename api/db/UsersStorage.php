@@ -21,7 +21,8 @@ class UsersStorage {
     }
 
     public function getAllUsers() {
-        $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
+        $query = 'SELECT userId, email, firstname, lastname, role, registrationDate,'.
+                 '  NOT(ISNULL(passwordHash)) as registrationFinalised'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' ORDER BY firstname, lastname';
         $request = $this->dbAccess->getPdo()->prepare($query);
