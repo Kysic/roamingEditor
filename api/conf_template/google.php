@@ -42,7 +42,20 @@ class GooglePlanningRef {
         '2017-09' => array( DOC_ID => '', SHEET_ID => ''),
         '2017-10' => array( DOC_ID => '', SHEET_ID => ''),
         '2017-11' => array( DOC_ID => '', SHEET_ID => ''),
-        '2017-12' => array( DOC_ID => '', SHEET_ID => '')
+        '2017-12' => array( DOC_ID => '', SHEET_ID => ''),
+
+        '2018-01' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-02' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-03' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-04' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-05' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-06' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-07' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-08' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-09' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-10' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-11' => array( DOC_ID => '', SHEET_ID => ''),
+        '2018-12' => array( DOC_ID => '', SHEET_ID => '')
     );
     public static function exists($monthId) {
         array_key_exists($monthId, self::$DOC_REF);

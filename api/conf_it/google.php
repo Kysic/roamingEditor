@@ -42,7 +42,20 @@ class GooglePlanningRef {
         '2017-09' => array( DOC_ID => 'planningDocId', SHEET_ID => '2017-09'),
         '2017-10' => array( DOC_ID => 'planningDocId', SHEET_ID => '2017-10'),
         '2017-11' => array( DOC_ID => 'planningDocId', SHEET_ID => '2017-11'),
-        '2017-12' => array( DOC_ID => 'planningDocId', SHEET_ID => '2017-12')
+        '2017-12' => array( DOC_ID => 'planningDocId', SHEET_ID => '2017-12'),
+
+        '2018-01' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-01'),
+        '2018-02' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-02'),
+        '2018-03' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-03'),
+        '2018-04' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-04'),
+        '2018-05' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-05'),
+        '2018-06' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-06'),
+        '2018-07' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-07'),
+        '2018-08' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-08'),
+        '2018-09' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-09'),
+        '2018-10' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-10'),
+        '2018-11' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-11'),
+        '2018-12' => array( DOC_ID => 'planningDocId', SHEET_ID => '2018-12')
     );
     public static function exists($monthId) {
         array_key_exists($monthId, self::$DOC_REF);
