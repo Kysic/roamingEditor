@@ -57,11 +57,6 @@ class GooglePlanning {
             $roamingDay = 1;
             while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
                 //echo '<!--'.implode(';',$data).'-->'."\n";
-                /*if (  ( stristr($data[0], 'réunion') !== false || stristr($data[0], 'reunion') !== false )
-                      && stristr($data[0], 'mensuelle ') !== false
-                   ) {
-                    $roamingData['meeting'] = $data[0];
-                }*/
                 if (count($data) >= 2 && $data[DAY_INDEX] == $roamingDay
                                 && checkDate($roamingMonth, $roamingDay, $roamingYear)) {
                     $dateId = date('Y-m-d', mktime(0, 0, 0, $roamingMonth, $roamingDay, $roamingYear));

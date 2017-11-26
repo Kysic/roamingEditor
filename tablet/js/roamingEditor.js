@@ -36,12 +36,22 @@ roamingEditor.config(['$cookiesProvider', function($cookiesProvider) {
 }]);
 
 /* Services */
-roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $cookies) {
+roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $cookies, $interval) {
 
     var roamings = { };
+    var resynchroTimer;
 
     loadLocalStorage();
     resynchro();
+
+    // Trigger a resynchro every hour between 4h and 16h
+    var resynchroTimer = $interval(function(){
+        var n = new Date();
+        var h = n.getHours();
+        if (4 <= h && h <= 16) {
+            resynchro();
+        }
+    },3600000);
 
     function loadLocalStorage() {
         synchronizeApiKeyWithAutoLogin();
@@ -262,6 +272,8 @@ roamingEditor.controller('RoamingController',
     $scope.goDonations = goDonations;
     $scope.isEditable = isEditable;
 
+    var refreshTimer;
+
     if ( ! /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test($routeParams.roamingId)) {
         $location.path('/roamingsList');
         return;
@@ -269,7 +281,7 @@ roamingEditor.controller('RoamingController',
     if ($routeParams.roamingId) {
         $scope.roaming = roamingService.getRoaming($routeParams.roamingId);
     }
-    if ($scope.roaming ) {
+    if ($scope.roaming) {
       $scope.synchroStatus = $scope.roaming.synchroStatus;
     } else {
       initRoaming();
@@ -277,6 +289,20 @@ roamingEditor.controller('RoamingController',
     if ($scope.roaming.tutor == '' && angular.equals($scope.roaming.teammates, [ '' ])) {
         getTeammates()
     }
+
+    $scope.$on('roamingUpdate', function (event, roaming) {
+        if ($scope.roaming.date == roaming.date) {
+            $scope.synchroStatus = roaming.synchroStatus;
+        }
+    });
+
+    refreshTimer = $interval(function(){
+        // Allow to refresh read only status every hour
+    },3600000);
+
+    $scope.$on('$destroy', function() {
+        $interval.cancel(refreshTimer);
+    });
 
     function initRoaming() {
         $scope.roaming = {
@@ -362,16 +388,6 @@ roamingEditor.controller('RoamingController',
     function isEditable() {
         return $routeParams.roamingId == roamingService.getCurrentRoamingDateId();
     }
-
-    $scope.$on('roamingUpdate', function (event, roaming) {
-        if ($scope.roaming.date == roaming.date) {
-            $scope.synchroStatus = roaming.synchroStatus;
-        }
-    });
-
-    $interval(function(){
-        // Allow to refresh read only status every hour
-    },3600000)
 
 });
 
@@ -594,12 +610,6 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
 
     loadCurrentConf();
 
-    function loadCurrentConf() {
-        $scope.roamingsJSON = $filter('json')(roamingService.getAllRoamings());
-        $scope.autoLogin = $cookies.get('vinciPersistentLogin');
-        $scope.apiKey = localStorage.getItem('apiKey');
-    }
-
     $scope.goRoamingsList = function () {
         $location.path('/roamingsList');
     }
@@ -620,6 +630,12 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
         }
         roamingService.loadLocalStorage();
         loadCurrentConf();
+    }
+
+    function loadCurrentConf() {
+        $scope.roamingsJSON = $filter('json')(roamingService.getAllRoamings());
+        $scope.autoLogin = $cookies.get('vinciPersistentLogin');
+        $scope.apiKey = localStorage.getItem('apiKey');
     }
 
 });
