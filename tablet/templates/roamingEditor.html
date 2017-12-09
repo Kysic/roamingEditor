@@ -1,15 +1,15 @@
 <div id="roaming">
   <h2>
     Maraude du {{roaming.date | humanDate}}
-    <span class="titleExtra {{ {IN_PROGRESS:'statusInProgress', SYNCHRONIZED:'statusDone', FAILED:'statusFailed'}[synchroStatus] }}">
+    <div class="titleExtra {{ {IN_PROGRESS:'statusInProgress', SYNCHRONIZED:'statusDone', FAILED:'statusFailed'}[synchroStatus] }}">
     {{
       {
           IN_PROGRESS:'[synchronisation en cours]',
           SYNCHRONIZED:'[synchronisée]',
-          FAILED:'[échec de la synchronisation]'
+          FAILED:'[échec de la synchronisation, vérifier l\'état de la connexion réseau]'
       }[synchroStatus]
     }}
-    </span>
+    </div>
   </h2>
   <button ng-click="goDonations()">Voir les dons de couvertures</button>
   <br/><br/>
