@@ -20,6 +20,5 @@ rsync $RSYNC_OPTIONS . $DEST \
     --exclude README.md \
     --exclude sqlscripts \
     --exclude extra \
-    --exclude launchdevenv.sh \
-    --exclude docker
+    --exclude launchdevenv.sh
 

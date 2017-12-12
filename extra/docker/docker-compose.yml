@@ -3,7 +3,7 @@ phpsite:
   ports :
    - "8080:80"
   volumes:
-   - ../:/var/www/html/
+   - ../../:/var/www/html/
   links:
    - database
 phpmyadmin:
