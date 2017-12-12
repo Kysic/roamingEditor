@@ -16,7 +16,7 @@
 
 ### Outils externes
 - angular js avec le module angular-route
-- maps.googleapis
+- maps.googleapis pour la recuperation d'une adresse à partir de la localisation GPS
 - PHPMailer avec le module smtp
 
 ### Informations techniques
@@ -24,9 +24,11 @@
 - Utilise un Web App manifest (https://w3c.github.io/manifest/) pour être installé en tant qu'application android via chrome
 
 ### Informations pour le développement
-- Pour lancer les tests d'intégrations, faire un lien symbolique de conf vers conf_it, modifier la conf de la base
-  de données puis accéder à la page "/api/tests".
-- Pour mettre en place les hooks git :
+- Pour lancer les tests d'intégrations :
+    - faire un lien symbolique de conf vers conf_it
+    - lancer le script "launchdevenv.sh" pour deployer le site dans un environnement docker
+    - accéder à la page "http://localhost/api/tests".
+- Pour mettre en place les hooks git sur le projet :
   ```bash
   ln -s -f ../../git-hooks/pre-commit .git/hooks/pre-commit
   ```

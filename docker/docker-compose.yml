@@ -1,0 +1,26 @@
+phpsite:
+  build: phpsite
+  ports :
+   - "8080:80"
+  volumes:
+   - ../:/var/www/html/
+  links:
+   - database
+phpmyadmin:
+   image: corbinu/docker-phpmyadmin
+   ports :
+    - "8082:80"
+   environment:
+    - MYSQL_USERNAME=vinciplanning
+    - MYSQL_PASSWORD=03Wtrx7j5Ztn
+   links:
+    - database:mysql
+database:
+  image: mysql:5.5
+  ports:
+   - "3306:3306"
+  environment:
+     - MYSQL_ROOT_PASSWORD=WSpPDr8ft8Ql
+     - MYSQL_DATABASE=pl12350-freeh_vinciplanning
+     - MYSQL_USER=vinciplanning
+     - MYSQL_PASSWORD=03Wtrx7j5Ztn

@@ -6,7 +6,7 @@ ini_set('display_errors', 1);
 
 define('ADMIN_EMAIL', 'it-test-admin@samu-social-grenoble.fr');
 define('DEFAULT_TIME_ZONE', 'Europe/Paris');
-define('APPLICATION_PATH', '/roamingEditor');
+define('APPLICATION_PATH', '/');
 define('PORTAL_APPLICATION_PATH', APPLICATION_PATH.'/portal');
 
 define('MIN_PASSWORD_LENGTH', 8);

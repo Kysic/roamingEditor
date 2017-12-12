@@ -9,7 +9,7 @@
   <pre>
 <?php
 
-define('END_POINT', 'http://localhost/roamingEditor');
+define('END_POINT', 'http://localhost/');
 define('TABLET_1_AUTOLOGIN_KEY', '8U8MPr6/ZNo4rIQHU7gvezB7lkU6aYI8LXkHH9Le7ZF2Xf8otJgmHgTiVnJnHr12');
 
 require_once('lib/Sql.php');
