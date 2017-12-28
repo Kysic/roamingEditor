@@ -52,7 +52,7 @@ try {
         $fromDate = DateTime::createFromFormat('Y-m-d', $_GET['from']);
     } else {
         $fromDate = new DateTime();
-        $fromDate->sub(new DateInterval('P'.REPORT_OLD_LIMIT_DAYS.'D'));
+        $fromDate->sub(new DateInterval('P10D'));
     }
     if ( !empty($_GET['to']) ) {
         $validator->validateRoamingDate(@$_GET['to']);
