@@ -49,6 +49,18 @@ class RoamingsStorage {
         return $report && $report->maxId > 0;
     }
 
+    public function getDocsIds($beginDate, $endDate) {
+        $query = 'SELECT roamingDate, docId FROM '.SQL_TABLE_ROAMINGS.' r1'.
+                 ' WHERE :beginDate <= r1.roamingDate AND r1.roamingDate <= :endDate AND docId IS NOT NULL'.
+                 ' AND r1.version = (select max(r2.version) from '.SQL_TABLE_ROAMINGS.' r2 where r1.roamingDate = r2.roamingDate)'.
+                 ' ORDER BY r1.roamingDate';
+        $request = $this->dbAccess->getPdo()->prepare($query);
+        $request->bindValue(':beginDate', $beginDate, PDO::PARAM_STR);
+        $request->bindValue(':endDate', $endDate, PDO::PARAM_STR);
+        $this->dbAccess->executeWithException($request);
+        return $request->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public function getDocId($roamingId) {
         $query = 'SELECT docId FROM '.SQL_TABLE_ROAMINGS.' WHERE roamingId = :roamingId';
         $request = $this->dbAccess->getPdo()->prepare($query);

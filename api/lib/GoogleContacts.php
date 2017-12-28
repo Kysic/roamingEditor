@@ -29,7 +29,7 @@ class GoogleContacts {
     }
     public function extractContacts() {
         $contacts = array();
-        $planningUrl = GOOGLE_DOC_URL . CONTACT_DOC_ID . GOOGLE_DOC_CMD_CSV . CONTACT_SHEET_ID;
+        $planningUrl = GOOGLE_DOC_URL . CONTACT_DOC_ID . GOOGLE_DOC_CMD_CSV_GID . CONTACT_SHEET_ID;
         if (($handle = fopen($planningUrl, 'r')) !== FALSE) {
             if (($data = fgetcsv($handle, 1000, ',')) === FALSE) {
                 return $contacts;

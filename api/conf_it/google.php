@@ -2,8 +2,10 @@
 
 # Google docs URL
 define('GOOGLE_DOC_URL', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/mock.php?docId=');
-define('GOOGLE_DOC_CMD_CSV', '&type=csv&sheetId=');
-define('GOOGLE_DOC_CMD_EDIT', '&type=edit&sheetId=');
+define('GOOGLE_DOC_CMD_CSV', '&type=csv');
+define('GOOGLE_DOC_CMD_CSV_GID', '&type=csv&sheetId=');
+define('GOOGLE_DOC_CMD_EDIT', '&type=edit');
+define('GOOGLE_DOC_CMD_EDIT_GID', '&type=edit&sheetId=');
 define('GOOGLE_DOC_CMD_PDF', '&type=pdf&sheetId=');
 
 # Google SpreadSheets Generator Script

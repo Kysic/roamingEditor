@@ -15,7 +15,7 @@ class GooglePlanning {
     public function getUrl($monthId) {
         $docId = GooglePlanningRef::getDocId($monthId);
         $sheetId = GooglePlanningRef::getSheetId($monthId);
-        $planningUrl = GOOGLE_DOC_URL . $docId . GOOGLE_DOC_CMD_EDIT . $sheetId;
+        $planningUrl = GOOGLE_DOC_URL . $docId . GOOGLE_DOC_CMD_EDIT_GID . $sheetId;
         return $planningUrl;
     }
 
@@ -46,7 +46,7 @@ class GooglePlanning {
     private function extractRoamingsOfMonth($monthId) {
         $docId = GooglePlanningRef::getDocId($monthId);
         $sheetId = GooglePlanningRef::getSheetId($monthId);
-        $planningUrl = GOOGLE_DOC_URL . $docId . GOOGLE_DOC_CMD_CSV . $sheetId;
+        $planningUrl = GOOGLE_DOC_URL . $docId . GOOGLE_DOC_CMD_CSV_GID . $sheetId;
         $roamingMonthData = array();
         if (($handle = fopen($planningUrl, 'r')) !== FALSE) {
             if (($data = fgetcsv($handle, 1000, ',')) === FALSE) {

@@ -2,8 +2,10 @@
 
 # Google docs URL
 define('GOOGLE_DOC_URL', 'https://docs.google.com/spreadsheets/d/');
-define('GOOGLE_DOC_CMD_CSV', '/export?format=csv&gid=');
-define('GOOGLE_DOC_CMD_EDIT', '/edit?pref=2&pli=1#gid=');
+define('GOOGLE_DOC_CMD_CSV', '/export?format=csv');
+define('GOOGLE_DOC_CMD_CSV_GID', '/export?format=csv&gid=');
+define('GOOGLE_DOC_CMD_EDIT', '/edit?pref=2&pli=1');
+define('GOOGLE_DOC_CMD_EDIT_GID', '/edit?pref=2&pli=1#gid=');
 define('GOOGLE_DOC_CMD_PDF', '/export?format=pdf');
 
 # Google SpreadSheets Generator Script
