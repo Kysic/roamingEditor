@@ -313,6 +313,7 @@ function assertIsBernard($user) {
                                         'P_EDIT_PLANNING',
                                         'P_SEE_LAST_REPORT',
                                         'P_EDIT_REPORT',
+                                        'P_SEE_USERS_LIST',
                                         'P_SEE_PLANNING',
                                         'P_SEE_NAMES',
                                         'P_LOG_OUT',

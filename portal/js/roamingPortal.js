@@ -659,13 +659,20 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
             var member = $scope.members[user.email.toLowerCase()];
             if (member === undefined) {
                 user.rightRole = user.role == 'appli' || user.role == 'former' || user.role == 'guest';
-            } else if (member.isBoard) {
-                user.rightRole = user.role == 'board' || user.role == 'admin' || user.role == 'root';
-            }else if (member.isTutor) {
-                user.rightRole = user.role == 'tutor' || user.role == 'admin' || user.role == 'root';
-            }  else {
-                user.rightRole = user.role == 'member' || user.role == 'admin' || user.role == 'root';
+            } else {
+                user.phoneNumber = member.phoneNumber;
+                user.address = member.address;
+                if (member.isBoard) {
+                    user.rightRole = user.role == 'board' || user.role == 'admin' || user.role == 'root';
+                }else if (member.isTutor) {
+                    user.rightRole = user.role == 'tutor' || user.role == 'admin' || user.role == 'root';
+                }  else {
+                    user.rightRole = user.role == 'member' || user.role == 'admin' || user.role == 'root';
+                }
             }
+        }
+        if (!hasP('P_ASSIGN_ROLE')) {
+            $scope.users = $scope.users.filter(user => user.role != 'former' && user.role != 'appli');
         }
         for (var email in $scope.members) {
             if (!hasUserWithMail(email)) {
@@ -674,6 +681,8 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
                     'firstname': member.firstname,
                     'lastname': member.lastname,
                     'email': email,
+                    'phoneNumber': member.phoneNumber,
+                    'address': member.address,
                     'role': 'unregistered',
                     'rightRole': true
                 });

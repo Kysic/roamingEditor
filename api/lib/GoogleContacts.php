@@ -13,8 +13,21 @@ class GoogleContacts {
     private function getContactLastname($data) {
         return strtoupper(trim($data[1]));
     }
+    private function getPhoneNumber($data) {
+        $phoneNumber = trim($data[3]);
+        if (preg_match('/[0-9]{9}/', $phoneNumber)) {
+            $phoneNumber = '0'.$phoneNumber;
+        }
+        return $phoneNumber;
+    }
+    private function getBirthDate($data) {
+        return trim($data[4]);
+    }
     private function getContactEmail($data) {
         return strtolower(trim($data[5]));
+    }
+    private function getAddress($data) {
+        return trim($data[6]);
     }
     private function isBoard($data) {
         $trimStr = trim($data[8]);
@@ -23,6 +36,9 @@ class GoogleContacts {
     private function isTutor($data) {
         $trimStr = trim($data[9]);
         return !empty($trimStr);
+    }
+    private function getRegisteringDate($data) {
+        return trim($data[10]);
     }
     private function checkContactEmail($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
@@ -42,6 +58,10 @@ class GoogleContacts {
                         $contacts[$email] = array(
                             'firstname' => $this->getContactFirstname($data), 
                             'lastname' => $this->getContactLastname($data),
+                            'phoneNumber' => $this->getPhoneNumber($data),
+                            'address' => $this->getAddress($data),
+                            'birthDate' => $this->getBirthDate($data),
+                            'registeringDate' => $this->getRegisteringDate($data),
                             'isTutor' => $this->isTutor($data),
                             'isBoard' => $this->isBoard($data)
                         );

@@ -6,14 +6,18 @@
       <th>Prénom</th>
       <th>Nom</th>
       <th>Email</th>
-      <th>Inscription finalisée</th>
+      <th>Téléphone</th>
+      <th>Adresse</th>
+      <th ng-if="hasP('P_REGISTER')">Inscription finalisée</th>
       <th>Rôle</th>
     </tr>
     <tr ng-repeat="user in users | orderBy:'firstname'">
       <td>{{user.firstname}}</td>
       <td>{{user.lastname}}</td>
       <td>{{user.email}}</td>
-      <td>{{user.registrationFinalised}}</td>
+      <td>{{user.phoneNumber}}</td>
+      <td>{{user.address}}</td>
+      <td ng-if="hasP('P_REGISTER')">{{user.registrationFinalised}}</td>
       <td ng-class="user.role == 'unregistered' ? 'unregistered' : user.rightRole ? 'rightRole' : 'wrongRole'">
         <span ng-if="!hasP('P_ASSIGN_ROLE') || user.userId == sessionInfo.user.userId">{{user.role}}</span>
         <span ng-if="hasP('P_ASSIGN_ROLE') && user.userId != sessionInfo.user.userId && user.role != 'unregistered'">
@@ -21,7 +25,7 @@
           </select>
         </span>
         <span ng-if="hasP('P_REGISTER') && user.role == 'unregistered'" class="invitation">
-          <button ng-click='sendInvitation(user)'>Envoyer invitation</button>
+          <button ng-click='sendInvitation(user)'>Inviter</button>
         </span>
       </td>
     </tr>
