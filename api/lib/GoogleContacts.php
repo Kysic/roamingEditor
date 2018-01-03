@@ -15,7 +15,7 @@ class GoogleContacts {
     }
     private function getPhoneNumber($data) {
         $phoneNumber = trim($data[3]);
-        if (preg_match('/[0-9]{9}/', $phoneNumber)) {
+        if (preg_match('/^[0-9]{9}$/', $phoneNumber)) {
             $phoneNumber = '0'.$phoneNumber;
         }
         return $phoneNumber;
