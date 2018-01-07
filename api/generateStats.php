@@ -75,7 +75,7 @@ try {
         'nbBlanket' => 'Nombre de couvertures',
         'nbTent' => 'Nombres de tentes'
     );
-
+    header('Content-Disposition: attachment; filename="stats-'.$_GET['from'].'-'.$_GET['to'].'.csv"');
     header('Content-type: text/csv');
     print_stat_csv($headers);
     array_map('print_stat_csv', $roamingsStats);
