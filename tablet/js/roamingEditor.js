@@ -42,16 +42,12 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
     var resynchroTimer;
 
     loadLocalStorage();
-    resynchro();
+    resynchro(true);
 
-    // Trigger a resynchro every hour between 4h and 16h
+    // Trigger a resynchro every minute
     var resynchroTimer = $interval(function(){
-        var n = new Date();
-        var h = n.getHours();
-        if (4 <= h && h <= 16) {
-            resynchro();
-        }
-    },3600000);
+        resynchro(false);
+    },60000);
 
     function loadLocalStorage() {
         synchronizeApiKeyWithAutoLogin();
@@ -111,11 +107,13 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         }
     }
 
-    function resynchro() {
+    function resynchro(force) {
         for (var roamingId in roamings) {
             var roaming = roamings[roamingId];
             if (roaming.synchroStatus != 'SYNCHRONIZED') {
-                sendRoamingToRemoteServer(roaming);
+                if (force || roaming.synchroStatus != 'IN_PROGRESS') {
+                    sendRoamingToRemoteServer(roaming);
+                }
             }
         }
     }
@@ -240,7 +238,7 @@ roamingEditor.controller('RoamingListController', function RoamingListController
     }
 
     $scope.resynchro = function () {
-        roamingService.resynchro();
+        roamingService.resynchro(false);
     }
 
     $scope.createRoaming = function () {
