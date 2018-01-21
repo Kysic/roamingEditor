@@ -15,7 +15,7 @@
         {{tabMonth | humanMonth | capitalize}}
         <img ng-click="editPlanning(tabMonth); $event.stopPropagation();"
             ng-show="hasP('P_EDIT_PLANNING') && isSelectedMonth(tabMonth)"
-            title="Editer le planning" alt="[E]" src="img/edit.png" class="editPlanning" />
+            title="Editer le planning" alt="[E]" src="img/edit.png" class="action" />
     </li>
   </ul>
   <table>
@@ -27,28 +27,53 @@
       <th ng-show="roamingByFour">Coéquipier</th>
       <th>Compte rendu</th>
     </tr>
-    <tr ng-repeat="day in calendar" class="{{ (roamings[day] || existsReportFile(day)) ? 'done' : planning[day]['status'] }} {{isToday(day) ? 'planningToday' : '' }}">
-      <td class="date">{{day | humanDate | capitalize}}</td>
-      <td class="tutor">{{roamings[day] ? roamings[day]['tutor'] : planning[day]['tutor']}}</td>
-      <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][0] : planning[day]['teammates'][0]}}</td>
-      <td class="teammates">{{roamings[day] ? roamings[day]['teammates'][1] : planning[day]['teammates'][1]}}</td>
-      <td class="teammates" ng-show="roamingByFour">{{roamings[day] ? roamings[day]['teammates'][2] : planning[day]['teammates'][2]}}</td>
+    <tr class="{{ (roaming.hasWebReport || roaming.hasFileReport) ? 'done' : roaming.status }} {{roaming.isToday ? 'planningToday' : '' }}"
+        ng-repeat="roaming in roamings">
+      <td class="date">{{roaming.date | humanDate | capitalize}}</td>
+      <td class="tutor">
+        {{roaming.tutor}}
+        <img ng-if="hasP('P_ENROL') && roaming.tutor == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
+            ng-click="enrol(roaming, 0)" />
+        <img ng-if="hasP('P_ENROL') && roaming.tutor == sessionInfo.user.username" src="img/cancel.svg" width="15px" height="15px" class="action"
+            ng-click="cancel(roaming, 0)" />
+      </td>
+      <td class="teammates">
+        {{roaming.teammates[0]}}
+        <img ng-if="hasP('P_ENROL') && roaming.teammates[0] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
+            ng-click="enrol(roaming, 1)" />
+        <img ng-if="hasP('P_ENROL') && roaming.teammates[0] == sessionInfo.user.username" src="img/cancel.svg" width="15px" height="15px" class="action"
+            ng-click="cancel(roaming, 1)" />
+      </td>
+      <td class="teammates">
+        {{roaming.teammates[1]}}
+        <img ng-if="hasP('P_ENROL') && roaming.teammates[1] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
+            ng-click="enrol(roaming, 2)" />
+        <img ng-if="hasP('P_ENROL') && roaming.teammates[1] == sessionInfo.user.username" src="img/cancel.svg" width="15px" height="15px" class="action"
+            ng-click="cancel(roaming, 2)" />
+      </td>
+      <td class="teammates" ng-show="roamingByFour">
+        {{roaming.teammates[2]}}
+        <img ng-if="hasP('P_ENROL') && roaming.teammates[2] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
+            ng-click="enrol(roaming, 3)" />
+        <img ng-if="hasP('P_ENROL') && roaming.teammates[2] == sessionInfo.user.username" src="img/cancel.svg" width="15px" height="15px" class="action"
+            ng-click="cancel(roaming, 3)" />
+      </td>
       <td class="reportsActions">
-        <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{day}}"
-            ng-if="existsReportFile(day)" target="_blank">{{day}}.pdf</a>
-        <img ng-click="deleteReport(day)" ng-if="existsReportFile(day) && hasP('P_DELETE_REPORT')" alt="[Supprimer]"
-             src="img/trash.gif" />
-        <a ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{roamings[day]['id']}}"
-            ng-if="roamings[day] && !isToday(day)" target="_blank">{{day}}.pdf</a>
-        <button ng-click="editRoaming(roamings[day]['id'])" ng-disabled="editRunning"
-            ng-if="roamings[day] && hasP('P_EDIT_REPORT') && isYesterday(day)">Editer</button>
-        <div ng-if="hasP('P_UPLOAD_REPORT') && isPast(day) && !(roamings[day] || existsReportFile(day))"
+        <a ng-if="roaming.hasFileReport" target="_blank"
+            ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{roaming.date}}">{{roaming.date}}.pdf</a>
+        <img ng-if="roaming.hasFileReport && hasP('P_DELETE_REPORT')" ng-click="deleteReport(roaming.date)" alt="[Supprimer]"
+             src="img/trash.gif" class="action" />
+        <a ng-if="roaming.hasWebReport && !roaming.isToday" target="_blank"
+            ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{roaming.id}}">{{roaming.date}}.pdf</a>
+        <button ng-if="roaming.hasWebReport && hasP('P_EDIT_REPORT') && roaming.isYesterday" ng-disabled="editRunning"
+            ng-click="editRoaming(roaming.id)" class="action">Editer</button>
+        <div ng-if="hasP('P_UPLOAD_REPORT') && roaming.isPast && !(roaming.hasWebReport || roaming.hasFileReport)"
             ng-show="!uploadRunning">
-          <label ng-attr-for="{{reportUploadId(day)}}" class="uploadReportLabel">
+          <label ng-attr-for="{{reportUploadId(roaming.date)}}" class="uploadReportLabel">
             <img src="img/upload.png"> Ajouter
           </label>
-          <input type="file" ng-attr-id="{{reportUploadId(day)}}" name="report" class="uploadReportField"
-              onChange="angular.element(this).scope().uploadReport(angular.element(this).scope().day)" />
+          <input type="file" ng-attr-id="{{reportUploadId(roaming.date)}}" name="report" class="uploadReportField"
+              onChange="angular.element(this).scope().uploadReport(angular.element(this).scope().roaming.date)" />
         </div>
       </td>
     </tr>

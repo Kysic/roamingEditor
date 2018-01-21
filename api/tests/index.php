@@ -240,7 +240,7 @@ try {
     login($browser, 'berni@gmail.com', 'Berni-Password');
     throw new AssertException('login should have raised an HttpStatusException');
 } catch (Exception $e) {
-    assertException($e, 'Trop de tentatives de connexion depuis cette IP, veillez réessayer dans un moment.', 403);
+    assertException($e, 'Trop de tentatives depuis cette IP, veuillez réessayer dans un moment.', 403);
 }
 
 
@@ -329,7 +329,8 @@ function assertIsTablet1($user) {
     assertEquals($user->permissions, array(
                                         'P_SEE_PLANNING',
                                         'P_SEE_LAST_REPORT',
-                                        'P_SAVE_ROAMINGS'
+                                        'P_SAVE_ROAMINGS',
+                                        'P_SEE_USERS_LIST'
                                      ));
 }
 

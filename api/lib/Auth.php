@@ -24,17 +24,23 @@ class Auth {
         $this->checkToken($pSessionToken);
         $email = strtolower($pEmail);
         $this->validator->validateEmail($email);
+        $bruteforceStorage = $this->lazyBruteforceStorage->get();
+        $this->checkNbFailedAttempts($bruteforceStorage);
         $contacts = $this->lazyGoogleContacts->get()->extractContacts();
         $isInVinciContacts = array_key_exists($email, $contacts);
         if ($isInVinciContacts) {
             $firstname = $contacts[$email]['firstname'];
             $lastname = $contacts[$email]['lastname'];
         } else {
+            $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
             throw new ForbiddenException('Cette adresse mail n\'est pas repertoriée dans la liste des contacts du VINCI.');
         }
         $usersStorage = $this->lazyUSersStorage->get();
-        $usersStorage->addUser($email, $firstname, $lastname);
         $user = $usersStorage->getUserWithEmail($email);
+        if ( ! $user ) {
+            $usersStorage->addUser($email, $firstname, $lastname);
+            $user = $usersStorage->getUserWithEmail($email);
+        }
         $mailToken = $usersStorage->generateUserMailToken($user->userId);
         $this->lazyMail->get()->sendRegisterToken($user->email, $user->firstname, $user->lastname, $user->userId, $mailToken);
     }
@@ -131,7 +137,7 @@ class Auth {
     }
     private function checkNbFailedAttempts($bruteforceStorage) {
         if ($bruteforceStorage->getNbFailedAttemptsInPeriod($_SERVER['REMOTE_ADDR']) >= BRUTEFORCE_MAX_NB_ATTEMPTS) {
-            throw new ForbiddenException('Trop de tentatives de connexion depuis cette IP, veillez réessayer dans un moment.');
+            throw new ForbiddenException('Trop de tentatives depuis cette IP, veuillez réessayer dans un moment.');
         }
     }
     private function checkToken($pSessionToken) {

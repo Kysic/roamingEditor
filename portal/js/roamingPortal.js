@@ -189,10 +189,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.monthList;
     $scope.month;
-    $scope.calendar;
     $scope.roamings;
-    $scope.planning;
-    $scope.reportsFiles;
     $scope.roamingByFour;
     $scope.editRunning;
     $scope.uploadRunning;
@@ -202,15 +199,13 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     $scope.editPlanning = editPlanning;
     $scope.uploadReport = uploadReport;
     $scope.deleteReport = deleteReport;
+    $scope.enrol = enrol;
+    $scope.cancel = cancel;
     $scope.setPassword = setPassword;
     $scope.logout = logout;
     $scope.hasP = hasP;
     $scope.reportUploadId = reportUploadId;
-    $scope.isToday = isToday;
-    $scope.isYesterday = isYesterday;
     $scope.isSelectedMonth = isSelectedMonth;
-    $scope.isPast = isPast;
-    $scope.existsReportFile = existsReportFile;
 
     $scope.$watch('sessionInfo', function () {
         if ($scope.sessionInfo.loggedIn === false) {
@@ -248,27 +243,35 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         }
     }
 
-    function populateCalendar() {
-        $scope.calendar = []
+    function initRoamings() {
+        $scope.roamings = [];
         var lastDayOfMonth = new Date($scope.month.getFullYear(), $scope.month.getMonth() + 1, 0);
         for (var d = $scope.month; d <= lastDayOfMonth;
                  d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
-            $scope.calendar.push(dateUtils.toLocalIsoDate(d));
+            var roaming = new Object();
+            roaming.date = dateUtils.toLocalIsoDate(d);
+            roaming.isToday = isToday(d);
+            roaming.isYesterday = isYesterday(d);
+            roaming.isPast = isPast(d);
+            roaming.hasWebReport = false;
+            roaming.hasFileReport = false;
+            roaming.status = 'unknown';
+            $scope.roamings.push(roaming);
         }
     }
 
     function retrieveRoamings() {
-        $scope.roamings = {};
         $http.get(roamingApiEndPoint + '/getRoamings.php?'+dateRangeQuerySelector()).then(function (response) {
             if (response.data.status == 'success' && response.data.roamings) {
                 var roamingsObject = response.data.roamings;
                 Object.keys(roamingsObject).forEach(function(roamingId) {
-                    var roaming = roamingsObject[roamingId];
+                    var roamingReceived = roamingsObject[roamingId];
+                    var roaming = findRoamingByDate(roamingReceived.date);
                     roaming.id = roamingId;
-                    $scope.roamings[roaming.date] = roaming;
-                    if (roaming.teammates.length >= 3 && roaming.teammates[2] != '') {
-                        $scope.roamingByFour = true;
-                    }
+                    roaming.tutor = roamingReceived.tutor;
+                    roaming.teammates = roamingReceived.teammates;
+                    roaming.hasWebReport = true;
+                    checkRoamingByFour(roaming);
                 });
             }
         }, function (response) {
@@ -282,7 +285,12 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         $scope.reportsFiles = {};
         $http.get(roamingApiEndPoint + '/getReportsFiles.php?'+dateRangeQuerySelector()).then(function (response) {
             if (response.data.status == 'success' && response.data.reports) {
-                $scope.reportsFiles = response.data.reports;
+                var reports = response.data.reports;
+                for (var i = 0; i < reports.length; i++) {
+                    var roamingDate = reports[i];
+                    var roaming = findRoamingByDate(roamingDate);
+                    roaming.hasFileReport = true;
+                }
             }
         }, function (response) {
             if (response.status == 401) {
@@ -292,15 +300,17 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     }
 
     function retrievePlanning() {
-        $scope.planning = {};
         $http.get(roamingApiEndPoint + '/getPlanning.php?'+dateRangeQuerySelector()).then(function (response) {
-            $scope.planning = response.data;
-            for (var i = 0; i < $scope.calendar.length; i++) {
-                var day = $scope.calendar[i];
-                var roamingTeammates = $scope.planning[day]['teammates'];
-                if (roamingTeammates.length >= 3 && roamingTeammates[2] != '') {
-                    $scope.roamingByFour = true;
+            var planning = response.data;
+            for (var i = 0; i < $scope.roamings.length; i++) {
+                var roaming = $scope.roamings[i];
+                var date = roaming.date;
+                if ( !roaming.tutor || !roaming.teammates ) {
+                    roaming.status = planning[date]['status'];
+                    roaming.tutor = planning[date]['tutor'];
+                    roaming.teammates = planning[date]['teammates'];
                 }
+                checkRoamingByFour(roaming);
             }
         }, function (response) {
             if (response.status == 401) {
@@ -315,7 +325,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
             $location.search('month', dateUtils.toLocalIsoDate(month));
         }
         $scope.roamingByFour = false;
-        populateCalendar();
+        initRoamings();
         retrieveRoamings();
         retrieveReportsFiles();
         retrievePlanning();
@@ -380,7 +390,8 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
                     headers: { 'Content-Type': undefined }
                 }).then(function successCallback(response) {
                     if (response.data.status == 'success') {
-                        $scope.reportsFiles.push(roamingDate);
+                        var roaming = findRoamingByDate(roamingDate);
+                        roaming.hasFileReport = true;
                     } else {
                         alert('Upload failed, see console log');
                         console.log(response);
@@ -410,16 +421,28 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
                 }
             ).then(function (response) {
                 if (response.data.status == 'success') {
-                    $scope.reportsFiles = $scope.reportsFiles.filter(
-                        function(item) { 
-                            return item !== roamingDate;
-                        }
-                    );
+                    var roaming = findRoamingByDate(roamingDate);
+                    roaming.hasFileReport = false;
                 }
             });
         }
     }
 
+    function enrol(roaming, position) {
+        _enrol(roaming, position, 'S\'inscrire', $scope.sessionInfo.user.username);
+    }
+    function cancel(roaming, position) {
+        _enrol(roaming, position, 'Annuler votre inscription', '');
+    }
+    function _enrol(roaming, position, msg, newUsername) {
+        if ( confirm(msg + ' pour la maraude du ' + dateUtils.humanDate(new Date(roaming.date)) + ' ?') ) {
+            if (position == 0) {
+                roaming.tutor = newUsername;
+            } else {
+                roaming.teammates[position-1] = newUsername;
+            }
+        }
+    }
     function setPassword() {
         $location.path('/setPassword');
     }
@@ -428,8 +451,8 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     }
 
     function dateRangeQuerySelector() {
-        var c = $scope.calendar;
-        return 'from=' + c[0] + '&to=' + c[c.length-1];
+        var c = $scope.roamings;
+        return 'from=' + c[0].date + '&to=' + c[c.length-1].date;
     }
 
     function isSelectedMonth(date) {
@@ -455,8 +478,21 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         return d < today;
     }
 
-    function existsReportFile(day) {
-        return $scope.reportsFiles.length > 0 && $scope.reportsFiles.indexOf(day) !== -1;
+    function findRoamingByDate(date) {
+        var roamings = $scope.roamings;
+        for (var i = 0; i < roamings.length; i++) {
+            var roaming = roamings[i];
+            if (roaming.date == date) {
+                return roaming;
+            }
+        }
+        return new Object();
+    }
+
+    function checkRoamingByFour(roaming) {
+        if (roaming.teammates.length >= 3 && roaming.teammates[2] != '') {
+            $scope.roamingByFour = true;
+        }
     }
 
 });

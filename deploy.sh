@@ -2,7 +2,7 @@
 
 DEST=ovh:/var/www/vinci/
 
-RSYNC_OPTIONS="--times --recursive --verbose --delete-after"
+RSYNC_OPTIONS="--checksum --recursive --verbose --delete-after"
 
 rsync $RSYNC_OPTIONS . $DEST \
     --exclude .git \
