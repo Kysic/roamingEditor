@@ -45,7 +45,7 @@ try {
     $spreadsheetsGenerator = $container->getSpreadsheetsGenerator();
 
     $session->checkLoggedIn();
-    $session->checkHasPermission(P_SEE_ALL_REPORT);
+    $session->checkHasPermission(P_GEN_STATS);
 
      if ( !empty($_GET['from']) ) {
         $validator->validateRoamingDate(@$_GET['from']);

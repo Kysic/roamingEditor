@@ -10,6 +10,8 @@ define('P_SEE_PLANNING', 'P_SEE_PLANNING');
 define('P_EDIT_PLANNING', 'P_EDIT_PLANNING');
 define('P_SAVE_ROAMINGS', 'P_SAVE_ROAMINGS');
 define('P_SEE_NAMES', 'P_SEE_NAMES');
+define('P_ENROL', 'P_ENROL');
+define('P_GEN_STATS', 'P_GEN_STATS');
 define('P_SEE_LAST_REPORT', 'P_SEE_LAST_REPORT');
 define('P_EDIT_REPORT', 'P_EDIT_REPORT');
 define('P_UPLOAD_REPORT', 'P_UPLOAD_REPORT');
@@ -46,8 +48,8 @@ class RolesPermissions {
         $this->guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES, P_SEE_USERS_LIST ), $this->former);
         $this->member = array_merge(array( P_EDIT_PLANNING, P_SEE_LAST_REPORT ), $this->guest);
         $this->tutor = array_merge(array( P_EDIT_REPORT ), $this->member);
-        $this->board = array_merge(array( P_SEE_ALL_REPORT ), $this->tutor);
-        $this->admin = array_merge(array( P_UPLOAD_REPORT, P_DELETE_REPORT ), $this->board);
+        $this->board = array_merge(array( P_GEN_STATS ), $this->tutor);
+        $this->admin = array_merge(array( P_SEE_ALL_REPORT, P_UPLOAD_REPORT, P_DELETE_REPORT ), $this->board);
         $this->root = array_merge(array( P_ASSIGN_ROLE, P_REGISTER ), $this->admin);
     }
 

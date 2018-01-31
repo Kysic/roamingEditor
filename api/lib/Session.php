@@ -33,6 +33,7 @@ class Session {
     }
 
     public function setUser($user) {
+        $user->username = $this->generateUsername($user);
         $user->permissions = $this->rolesPermissions->getPermissions($user->role);
         $_SESSION['USER'] = $user;
     }
@@ -107,6 +108,10 @@ class Session {
     }
     private function resetAutologinIdCookie() {
         setcookie(AUTOLOGIN_COOKIE_KEY, '', time() - AUTOLOGIN_COOKIE_EXPIRATION, '/');
+    }
+
+    private function generateUsername($user) {
+        return $user->firstname.' '.$user->lastname;
     }
 
 }

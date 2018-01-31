@@ -672,7 +672,13 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
             }
         }
         if (!hasP('P_ASSIGN_ROLE')) {
-            $scope.users = $scope.users.filter(user => user.role != 'former' && user.role != 'appli');
+            var users = $scope.users;
+            for(var i = users.length - 1; i >= 0; i--) {
+                var user = users[i];
+                if(user.role == 'former' || user.role == 'appli') {
+                   users.splice(i, 1);
+                }
+            }
         }
         for (var email in $scope.members) {
             if (!hasUserWithMail(email)) {
