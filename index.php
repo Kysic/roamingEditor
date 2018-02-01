@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="fr">
+<!-- Roaming Editor - License GNU GPL - https://github.com/Kysic/roamingEditor -->
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

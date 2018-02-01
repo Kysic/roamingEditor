@@ -1,3 +1,4 @@
+/* Roaming Editor - License GNU GPL - https://github.com/Kysic/roamingEditor */
 
 var roamingApiEndPoint = '../api';
 
