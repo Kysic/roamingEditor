@@ -19,6 +19,8 @@ if ($docId == 'planningDocId') {
     } else if ($type == 'edit') {
         header('Content-Type: application/json');
         include('../tmp/roamingReports-'.$docId.'.json');
+    } else if ($type == 'html') {
+        include('../tmp/roamingReports-'.$docId.'.html');
     } else {
         include('../tmp/roamingReports-'.$docId.'.pdf');
     }

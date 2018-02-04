@@ -4,6 +4,7 @@ $roaming = file_get_contents('php://input');
 
 $docId = uniqid();
 copy('roamingReports.pdf', '../tmp/roamingReports-'.$docId.'.pdf');
+copy('roamingReports.html', '../tmp/roamingReports-'.$docId.'.html');
 file_put_contents('../tmp/roamingReports-'.$docId.'.json', $roaming);
 
 header("Content-Type: application/json");

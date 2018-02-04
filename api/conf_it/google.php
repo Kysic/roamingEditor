@@ -7,6 +7,7 @@ define('GOOGLE_DOC_CMD_CSV_GID', '&type=csv&sheetId=');
 define('GOOGLE_DOC_CMD_EDIT', '&type=edit');
 define('GOOGLE_DOC_CMD_EDIT_GID', '&type=edit&sheetId=');
 define('GOOGLE_DOC_CMD_PDF', '&type=pdf&sheetId=');
+define('GOOGLE_DOC_CMD_HTML', '&type=html');
 
 # Google SpreadSheets Generator Script
 define('GOOGLE_SPREADSHEETS_GENERATOR', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/sprdshtsgen.php');

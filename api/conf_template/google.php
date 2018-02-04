@@ -7,6 +7,7 @@ define('GOOGLE_DOC_CMD_CSV_GID', '/export?format=csv&gid=');
 define('GOOGLE_DOC_CMD_EDIT', '/edit?pref=2&pli=1');
 define('GOOGLE_DOC_CMD_EDIT_GID', '/edit?pref=2&pli=1#gid=');
 define('GOOGLE_DOC_CMD_PDF', '/export?format=pdf');
+define('GOOGLE_DOC_CMD_HTML', '/htmlview');
 
 # Google SpreadSheets Generator Script
 define('GOOGLE_SPREADSHEETS_GENERATOR', '');

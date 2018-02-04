@@ -64,6 +64,10 @@ class SpreadsheetsGenerator {
         return GOOGLE_DOC_URL.$docId.GOOGLE_DOC_CMD_EDIT;
     }
 
+    public function docIdToReadUrl($docId) {
+        return GOOGLE_DOC_URL.$docId.GOOGLE_DOC_CMD_HTML;
+    }
+
     public function docIdToPrintUrl($docId) {
         return GOOGLE_DOC_URL.$docId.GOOGLE_DOC_CMD_PDF;
     }
