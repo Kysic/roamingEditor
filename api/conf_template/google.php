@@ -12,6 +12,9 @@ define('GOOGLE_DOC_CMD_HTML', '/htmlview');
 # Google SpreadSheets Generator Script
 define('GOOGLE_SPREADSHEETS_GENERATOR', '');
 
+# Google Planning Enrol/Cancel Script
+define('GOOGLE_ENROL_SCRIPT', '');
+
 # Google docs contacts liste
 define('CONTACT_DOC_ID', '');
 define('CONTACT_SHEET_ID', '');

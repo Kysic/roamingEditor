@@ -111,5 +111,19 @@ class GooglePlanning {
         }
     }
 
+    /** action can be 'enrol' or 'cancel' */
+    function enrol($roamingDate, $position, $user, $action) {
+        $monthId = date('Y-m', $roamingDate);
+        $docId = GooglePlanningRef::getDocId($monthId);
+        $sheetId = GooglePlanningRef::getSheetId($monthId);
+        $day = date('d', $roamingDate);
+        $username = $user->username;
+        $scriptUrl = GOOGLE_ENROL_SCRIPT .'?docId=' . urlencode($docId) . '&sheetId=' . urlencode($sheetId) .
+                     '&day=' . $day . '&position=' . $position . '&user=' . urlencode($username) . '&action=' . $action;
+        $opts = array('http' => array('method' => 'GET', 'ignore_errors' => '1'));
+        $responseContent = file_get_contents($scriptUrl, false, stream_context_create($opts));
+        return json_decode($responseContent);
+    }
+
 }
 

@@ -32,31 +32,39 @@
       <td class="date">{{roaming.date | humanDate | capitalize}}</td>
       <td class="tutor">
         {{roaming.tutor}}
-        <img ng-if="hasP('P_ENROL') && roaming.tutor == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
-            ng-click="enrol(roaming, 0)" />
-        <img ng-if="hasP('P_ENROL') && roaming.tutor == sessionInfo.user.username" src="img/cancel.svg" width="15px" height="15px" class="action"
-            ng-click="cancel(roaming, 0)" />
+        <div ng-if="hasP('P_ENROL_AS_TUTOR') && !roaming.isPast">
+          <img ng-if="roaming.tutor == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
+              ng-click="enrol(roaming, 0)" />
+          <img ng-if="isCurrentUser(roaming.tutor)" src="img/cancel.svg" width="15px" height="15px" class="action"
+              ng-click="cancel(roaming, 0)" />
+        </div>
       </td>
       <td class="teammates">
         {{roaming.teammates[0]}}
-        <img ng-if="hasP('P_ENROL') && roaming.teammates[0] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
-            ng-click="enrol(roaming, 1)" />
-        <img ng-if="hasP('P_ENROL') && roaming.teammates[0] == sessionInfo.user.username" src="img/cancel.svg" width="15px" height="15px" class="action"
-            ng-click="cancel(roaming, 1)" />
+        <div ng-if="hasP('P_ENROL') && !roaming.isPast">
+          <img ng-if="roaming.teammates[0] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
+              ng-click="enrol(roaming, 1)" />
+          <img ng-if="isCurrentUser(roaming.teammates[0])" src="img/cancel.svg" width="15px" height="15px" class="action"
+              ng-click="cancel(roaming, 1)" />
+        </div>
       </td>
       <td class="teammates">
         {{roaming.teammates[1]}}
-        <img ng-if="hasP('P_ENROL') && roaming.teammates[1] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
-            ng-click="enrol(roaming, 2)" />
-        <img ng-if="hasP('P_ENROL') && roaming.teammates[1] == sessionInfo.user.username" src="img/cancel.svg" width="15px" height="15px" class="action"
-            ng-click="cancel(roaming, 2)" />
+        <div ng-if="hasP('P_ENROL') && !roaming.isPast">
+          <img ng-if="roaming.teammates[1] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
+              ng-click="enrol(roaming, 2)" />
+          <img ng-if="isCurrentUser(roaming.teammates[1])" src="img/cancel.svg" width="15px" height="15px" class="action"
+              ng-click="cancel(roaming, 2)" />
+        </div>
       </td>
       <td class="teammates" ng-show="roamingByFour">
         {{roaming.teammates[2]}}
-        <img ng-if="hasP('P_ENROL') && roaming.teammates[2] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
-            ng-click="enrol(roaming, 3)" />
-        <img ng-if="hasP('P_ENROL') && roaming.teammates[2] == sessionInfo.user.username" src="img/cancel.svg" width="15px" height="15px" class="action"
-            ng-click="cancel(roaming, 3)" />
+        <div ng-if="hasP('P_ENROL') && !roaming.isPast">
+          <img ng-if="roaming.teammates[2] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
+              ng-click="enrol(roaming, 3)" />
+          <img ng-if="isCurrentUser(roaming.teammates[2])" src="img/cancel.svg" width="15px" height="15px" class="action"
+              ng-click="cancel(roaming, 3)" />
+        </div>
       </td>
       <td class="reportsActions">
         <a ng-if="roaming.hasFileReport" target="_blank"

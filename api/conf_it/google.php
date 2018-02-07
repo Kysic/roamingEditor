@@ -12,6 +12,9 @@ define('GOOGLE_DOC_CMD_HTML', '&type=html');
 # Google SpreadSheets Generator Script
 define('GOOGLE_SPREADSHEETS_GENERATOR', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/sprdshtsgen.php');
 
+# Google Planning Enrol/Cancel Script
+define('GOOGLE_ENROL_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/enrol.php');
+
 # Google docs contacts liste
 define('CONTACT_DOC_ID', 'contactDocId');
 define('CONTACT_SHEET_ID', 'contactSheetId');

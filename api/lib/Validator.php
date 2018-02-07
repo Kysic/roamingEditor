@@ -97,4 +97,16 @@ class Validator {
         }
     }
 
+    public function validateEnrolPosition($position) {
+        if ( !preg_match("/^[0-3]$/", $position) ) {
+            throw new BadRequestException('Position invalide, valeur attendue [0-3].');
+        }
+    }
+
+    public function validateEnrolAction($action) {
+        if ( !in_array($action, array('enrol', 'cancel')) ) {
+            throw new BadRequestException('Action invalide, valeur attendue "enrol" ou "cancel".');
+        }
+    }
+
 }

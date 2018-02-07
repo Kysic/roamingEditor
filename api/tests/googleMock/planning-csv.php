@@ -36,7 +36,7 @@ Lundi,26,Mario Z,H,Vincent B,H,Blandine DV,F,Patrick M (président accueil sdf),
 Mardi,27,Gérard N,H,Isabelle G,F,Melody D,F,,,,,,,,,,,,,,,,TRUE,TRUE,TRUE,2,Vert,FALSE
 Réunion mensuelle (ouverte à tous) : mercredi 28 juin - 19h,,,,,,,,,,,,,,,,,,,,,,,FALSE,FALSE,FALSE,0,Rouge,TRUE
 Mercredi,28,Henri,H,Olivia G,F,Lydie L,F,,,,,,,,,,,,,,,,TRUE,TRUE,TRUE,2,Vert,FALSE
-Jeudi,29,Mathias FD,H,Ludovic G,H,Emilie G,F,,,,,,,,,,,,,,,,TRUE,TRUE,TRUE,2,Vert,FALSE
+Jeudi,29,Laure Maitre,H,Ludovic G,H,Emilie G,F,,,,,,,,,,,,,,,,TRUE,TRUE,TRUE,2,Vert,FALSE
 Vendredi,30,,,valerie c,F,manuella m,F,véronique C,F,,,,,,,,,,,,,,FALSE,FALSE,TRUE,3,Rouge,FALSE
 Samedi,31,,,,,,,,,,,,,,,,,,,,,,FALSE,FALSE,FALSE,0,Rouge,FALSE
 "On peut avoir un empèchement de dernière minute et ne pouvoir être à 21h15 au local : appeler le XXXX pour prévenir : c'est le téléphone du véhicule, et le responsable le consultera obligatoirement ! Ainsi le bénévole absent ne sera pas attendu en vain, et la maraude pourra commencer à l'heure, c'est à dire 21h30 !",,,,,,,,,,,,,,,,,,,,,,,,,,,,

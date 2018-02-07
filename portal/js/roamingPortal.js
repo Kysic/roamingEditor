@@ -206,6 +206,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     $scope.hasP = hasP;
     $scope.reportUploadId = reportUploadId;
     $scope.isSelectedMonth = isSelectedMonth;
+    $scope.isCurrentUser = isCurrentUser;
 
     $scope.$watch('sessionInfo', function () {
         if ($scope.sessionInfo.loggedIn === false) {
@@ -388,20 +389,20 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
                     url: roamingApiEndPoint + '/uploadReport.php?roamingDate=' + roamingDate,
                     data: formData,
                     headers: { 'Content-Type': undefined }
-                }).then(function successCallback(response) {
+                }).then(function success(response) {
                     if (response.data.status == 'success') {
                         var roaming = findRoamingByDate(roamingDate);
                         roaming.hasFileReport = true;
                     } else {
-                        alert('Upload failed, see console log');
+                        alert('L\'ajout du fichier a échoué');
                         console.log(response);
                     }
                     $scope.uploadRunning = false;
-                }, function errorCallback(response) {
+                }, function error(response) {
                     if (response.data.errorMsg) {
                         alert(response.data.errorMsg);
                     } else {
-                        alert('Upload failed, see console log');
+                        alert('L\'ajout du fichier a échoué');
                         console.log(response);
                     }
                     $scope.uploadRunning = false;
@@ -429,18 +430,49 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     }
 
     function enrol(roaming, position) {
-        _enrol(roaming, position, 'S\'inscrire', $scope.sessionInfo.user.username);
+        _enrol(roaming, position, 'enrol', 'S\'inscrire', $scope.sessionInfo.user.username);
     }
     function cancel(roaming, position) {
-        _enrol(roaming, position, 'Annuler votre inscription', '');
+        _enrol(roaming, position, 'cancel', 'Annuler votre inscription', '');
     }
-    function _enrol(roaming, position, msg, newUsername) {
+    function _enrol(roaming, position, action, msg, newUsername) {
         if ( confirm(msg + ' pour la maraude du ' + dateUtils.humanDate(new Date(roaming.date)) + ' ?') ) {
-            if (position == 0) {
-                roaming.tutor = newUsername;
-            } else {
-                roaming.teammates[position-1] = newUsername;
-            }
+            var prevUsername = getTeammate(roaming, position);
+            setTeammate('[en cours]', roaming, position);
+            $http.post(
+                roamingApiEndPoint + '/enrol.php',
+                {
+                    action: action,
+                    roamingDate: roaming.date,
+                    position: position,
+                    sessionToken: $scope.sessionInfo.sessionToken
+                }
+            ).then(function success(response) {
+                if (response.data.status == 'success') {
+                    setTeammate(newUsername, roaming, position);
+                } else {
+                    alert(response.data.errorMsg);
+                    setTeammate(prevUsername, roaming, position);
+                }
+            }, function error(response) {
+                if (response.data.errorMsg) {
+                    alert(response.data.errorMsg);
+                } else {
+                    alert('Désolé, une erreur est survenue.');
+                    console.log(response);
+                }
+                setTeammate(prevUsername, roaming, position);
+            });
+        }
+    }
+    function getTeammate(roaming, position) {
+        return position == 0 ? roaming.tutor : roaming.teammates[position-1];
+    }
+    function setTeammate(teammate, roaming, position) {
+        if (position == 0) {
+            roaming.tutor = teammate;
+        } else {
+            roaming.teammates[position-1] = teammate;
         }
     }
     function setPassword() {
@@ -474,8 +506,13 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
 
     function isPast(dateStr) {
         var today = new Date();
+        var todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         var d = new Date(dateStr);
-        return d < today;
+        return d < todayMidnight;
+    }
+
+    function isCurrentUser(user) {
+        return user.toLowerCase() == $scope.sessionInfo.user.username.toLowerCase();
     }
 
     function findRoamingByDate(date) {
