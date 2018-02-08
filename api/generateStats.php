@@ -11,7 +11,7 @@ function extractStatsFromRoamingReport($docId) {
     $csv = array_map('str_getcsv', file($reportCsvUrl));
     return array(
         'date' => $csv[0][2],
-        'nbVolunteer' => substr_count($csv[2][2], ',') + 1,
+        'nbVolunteer' => preg_match_all('/([,;]\s*et)|[,;]|(\set)/i', $csv[2][2]) + 1,
         'nbIntervention' => $csv[5][2],
         'nbAdult' => $csv[7][2],
         'nbChild' => $csv[8][2],
