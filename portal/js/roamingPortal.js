@@ -2,7 +2,7 @@
 
 var roamingApiEndPoint = '../api';
 
-var roamingPortal = angular.module('roamingPortal', ['ngRoute']);
+var roamingPortal = angular.module('roamingPortal', ['ngRoute', 'angular-loading-bar']);
 
 roamingPortal.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList/', {
