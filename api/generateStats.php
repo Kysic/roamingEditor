@@ -6,12 +6,18 @@ function docIdToCsvUrl($docId) {
     return GOOGLE_DOC_URL.$docId.GOOGLE_DOC_CMD_CSV;
 }
 
+function getNbVolunteers($volunteers) {
+    $str = preg_replace('/;|([\s,;]et[\s,;])/', ',', $volunteers);
+    $str = preg_replace('/,[\s,]*/', ',', $str);
+    return substr_count($str, ',') + 1;
+}
+
 function extractStatsFromRoamingReport($docId) {
     $reportCsvUrl = docIdToCsvUrl($docId);
     $csv = array_map('str_getcsv', file($reportCsvUrl));
     return array(
         'date' => $csv[0][2],
-        'nbVolunteer' => preg_match_all('/([,;]\s*et)|[,;]|(\set)/i', $csv[2][2]) + 1,
+        'nbVolunteer' => getNbVolunteers($csv[2][2]),
         'nbIntervention' => $csv[5][2],
         'nbAdult' => $csv[7][2],
         'nbChild' => $csv[8][2],
