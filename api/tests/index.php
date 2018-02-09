@@ -196,21 +196,6 @@ $roamings = $result->roamings;
 assertEquals($roamings->{'1'}->date, $twentiethDayOfLastMonth);
 assertEquals($roamings->{'1'}->version, 5);
 
-printTestCase('GetDocUrl as member should generate docId and succeed');
-$result = getDocUrl($browser, 1);
-assertEquals($result->status, 'success');
-$docId = $result->docId;
-$editUrl = $result->editUrl;
-$roaming = $browser->get($editUrl);
-assertEquals($roaming->date, $twentiethDayOfLastMonth);
-assertEquals($roaming->version, 5);
-
-printTestCase('Second GetDocUrl as member should return the same docId');
-$result = getDocUrl($browser, 1);
-assertEquals($result->status, 'success');
-assertEquals($result->docId, $docId);
-assertEquals($result->editUrl, $editUrl);
-
 printTestCase('Get all users as root should succeed');
 $browserRoot = new Browser();
 login($browserRoot, 'Laure.Maitre@example.com', 'Laure.Maitre@example.com');
@@ -223,6 +208,21 @@ setUserRole($browserRoot, 15, 'tutor', $sessionToken = NULL);
 $browser = new Browser();
 login($browser, 'berni@gmail.com', 'Berni-Password');
 assertEquals(getSessionUser($browser)->role, 'tutor');
+
+printTestCase('GetDocUrl as tutor should generate docId and succeed');
+$result = getDocUrl($browser, 1);
+assertEquals($result->status, 'success');
+$docId = $result->docId;
+$editUrl = $result->editUrl;
+$roaming = $browser->get($editUrl);
+assertEquals($roaming->date, $twentiethDayOfLastMonth);
+assertEquals($roaming->version, 5);
+
+printTestCase('Second GetDocUrl as tutor should return the same docId');
+$result = getDocUrl($browser, 1);
+assertEquals($result->status, 'success');
+assertEquals($result->docId, $docId);
+assertEquals($result->editUrl, $editUrl);
 
 
 
@@ -310,9 +310,9 @@ function assertIsBernard($user) {
     assertEquals($user->firstname, 'Bernard');
     assertEquals($user->lastname, 'DUPONT');
     assertEquals($user->permissions, array(
+                                        'P_ENROL',
                                         'P_EDIT_PLANNING',
                                         'P_SEE_LAST_REPORT',
-                                        'P_EDIT_REPORT',
                                         'P_SEE_USERS_LIST',
                                         'P_SEE_PLANNING',
                                         'P_SEE_NAMES',

@@ -101,6 +101,9 @@ class Validator {
         if ( !preg_match("/^[0-3]$/", $position) ) {
             throw new BadRequestException('Position invalide, valeur attendue [0-3].');
         }
+        if ( intval($position) == 0 ) {
+            $this->session->checkHasPermission(P_ENROL_AS_TUTOR);
+        }
     }
 
     public function validateEnrolAction($action) {
