@@ -72,7 +72,7 @@
         <img ng-if="roaming.hasFileReport && hasP('P_DELETE_REPORT')" ng-click="deleteReport(roaming.date)" alt="[Supprimer]"
              src="img/trash.gif" class="action" />
         <a ng-if="roaming.hasWebReport && !roaming.isToday" target="_blank"
-            ng-href="{{roamingApiEndPoint}}/getPdf.php?roamingId={{roaming.id}}">{{roaming.date}}.pdf</a>
+            ng-href="{{roamingApiEndPoint}}/getHtml.php?roamingId={{roaming.id}}">{{roaming.date}}</a>
         <button ng-if="roaming.hasWebReport && hasP('P_EDIT_REPORT') && roaming.isYesterday" ng-disabled="editRunning"
             ng-click="editRoaming(roaming.id)" class="action">Editer</button>
         <div ng-if="hasP('P_UPLOAD_REPORT') && roaming.isPast && !(roaming.hasWebReport || roaming.hasFileReport)"

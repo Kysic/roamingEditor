@@ -47,6 +47,11 @@ function retrieveHtmlContent($readUrl) {
             #top-bar, .row-header, .column-headers-background, .row-header-wrapper { display: none; visibility: hidden }
         </style>",
         $htmlContent);
+    $htmlContent = preg_replace('/minimum-scale=[0-9\.]*,maximum-scale=[0-9\.]*,/',
+                            'minimum-scale="0.1",maximum-scale="1.5",', $htmlContent);
+    $htmlContent = preg_replace('/#sheets-viewport { overflow: auto; }/', '', $htmlContent);
+    $htmlContent = preg_replace('/resize\(\);/', '', $htmlContent);
+    $htmlContent = preg_replace('/window.onresize = resize;/', '', $htmlContent);
     return $htmlContent;
 }
 
