@@ -238,7 +238,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     function populateMonthList() {
         $scope.monthList = [];
         var d = new Date();
-        var histo = hasP('P_SEE_ALL_REPORT') ? -6 : -1;
+        var histo = hasP('P_SEE_ALL_REPORT') ? -3 : -1;
         for (i = histo; i <= 2; i++) {
             $scope.monthList.push(new Date(d.getFullYear(), d.getMonth() + i, 1));
         }

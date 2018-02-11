@@ -35,5 +35,27 @@ class ReportFiles {
         }
     }
 
+    public function deleteOldReports() {
+        $limitDateTime = new DateTime();
+        $limitDateTime->sub(new DateInterval('P125D'));
+        $this->deleteCRFolder(CR_DIR.$limitDateTime->format('Y/m'));
+        // Delete year directory when limit month is december
+        if ( $limitDateTime->format('m') == "12" )  {
+            deleteCRFolder(CR_DIR.$limitDateTime->format('Y'));
+        }
+    }
+
+    private function deleteCRFolder($dir) {
+        if (is_dir($dir)) {
+            $files = array_diff(scandir($dir), array('.','..'));
+            foreach ($files as $file) {
+                if ( substr($file, -strlen(CR_EXT)) === CR_EXT ) {
+                    unlink($dir.'/'.$file);
+                }
+            }
+            return rmdir($dir);
+        }
+    }
+
 }
 

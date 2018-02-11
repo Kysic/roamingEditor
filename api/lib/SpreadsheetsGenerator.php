@@ -54,7 +54,6 @@ class SpreadsheetsGenerator {
                 } finally {
                     $this->roamingsStorage->unlock();
                 }
-                $this->roamingsStorage->cleanOldRoamingsVersion();
             }
         }
         return $docId;
