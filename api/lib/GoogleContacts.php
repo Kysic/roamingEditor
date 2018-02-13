@@ -30,15 +30,15 @@ class GoogleContacts {
         return trim($data[6]);
     }
     private function isBoard($data) {
-        $trimStr = trim($data[8]);
+        $trimStr = trim($data[7]);
         return !empty($trimStr);
     }
     private function isTutor($data) {
-        $trimStr = trim($data[9]);
+        $trimStr = trim($data[8]);
         return !empty($trimStr);
     }
     private function getRegisteringDate($data) {
-        return trim($data[10]);
+        return trim($data[9]);
     }
     private function checkContactEmail($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
