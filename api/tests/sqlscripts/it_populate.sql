@@ -8,5 +8,5 @@ INSERT INTO `it_users` (`userId`, `email`, `lastname`, `firstname`, `role`, `pas
 (14, 'anaele781@orange.fr', 'CHIRAC', 'Anaële', 'member', 0x92145f8aa0f33461df2789ab70c2d7d6, 0xd4f45f24165464187a83b10a860296d9a29d456e36a092d12ba1868233db4574, NULL, '2016-11-01 22:21:30');
 
 INSERT INTO `it_autologin` (`userId`, `autologinId`, `connectionDate`) VALUES
-(1, 0xf14f0c3ebebf64da38ac840753b82f7b307b96453a69823c2d79071fd2deed91765dff28b498261e04e25672671ebd76, '2020-01-01 00:00:00');
+(1, 0xf14f0c3ebebf64da38ac840753b82f7b307b96453a69823c2d79071fd2deed91765dff28b498261e04e25672671ebd76, '2030-01-01 00:00:00');
 

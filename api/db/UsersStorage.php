@@ -189,7 +189,7 @@ class UsersStorage {
     }
     private function deleteExpiredAutologinId() {
         $query = 'DELETE FROM '.SQL_TABLE_AUTOLOGIN.
-                 ' WHERE connectionDate < (CURRENT_TIMESTAMP - INTERVAL '.AUTOLOGIN_COOKIE_EXPIRATION.' SECOND)';
+                 ' WHERE connectionDate < (CURRENT_TIMESTAMP - INTERVAL '.AUTOLOGIN_DB_EXPIRATION.' SECOND)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $this->dbAccess->executeWithException($request);
     }

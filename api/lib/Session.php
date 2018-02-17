@@ -80,7 +80,7 @@ class Session {
 
     public function generateAutologinId($userId) {
         $autologinId = $this->lazyUSersStorage->get()->createAutologinIdForUserId($userId);
-        setcookie(AUTOLOGIN_COOKIE_KEY, $autologinId, time() + AUTOLOGIN_COOKIE_EXPIRATION, '/');
+        $this->setAutologinIdCookie($autologinId);
     }
 
     private function doAutologin() {
@@ -99,12 +99,16 @@ class Session {
             }
         }
     }
-    private function connectWithAutologin($autologinId64) {
-        $user = $this->lazyUSersStorage->get()->getUserWithAutologinId($autologinId64);
+    private function connectWithAutologin($autologinId) {
+        $user = $this->lazyUSersStorage->get()->getUserWithAutologinId($autologinId);
         if (!$user) {
             throw new NotFoundException('Unrecognized autologin id');
         }
+        $this->setAutologinIdCookie($autologinId);
         $this->setUser($user);
+    }
+    private function setAutologinIdCookie($autologinId) {
+        setcookie(AUTOLOGIN_COOKIE_KEY, $autologinId, time() + AUTOLOGIN_COOKIE_EXPIRATION, '/');
     }
     private function resetAutologinIdCookie() {
         setcookie(AUTOLOGIN_COOKIE_KEY, '', time() - AUTOLOGIN_COOKIE_EXPIRATION, '/');
