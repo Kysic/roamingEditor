@@ -36,6 +36,9 @@ a:hover {
 <p>
 <a href="dokuwiki/doku.php?id=public:inscription">Comment m'inscrire et me connecter sur ce site ?</a>
 </p>
+<p>
+<a href="contactForm.php">Contact en cas de problème avec le site</a>
+</p>
 <br/>
 <p>
 <a href="https://www.samu-social-grenoble.fr/"><img src="img/logo-SamuSocialGrenoble-Negatif.svg" width="250px"/></a>
