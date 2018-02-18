@@ -35,6 +35,9 @@ a:hover {
 <p>
 <a href="portal/#!/users">Voir la liste des membres de l'association</a>
 </p>
+<p>
+<a href="redirectionPlanning.php">Consulter le planning sur Google Sheets</a>
+</p>
 <br/>
 <p>
 <a href="dokuwiki/doku.php?id=public:inscription">Comment m'inscrire et me connecter sur ce site ?</a>

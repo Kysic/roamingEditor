@@ -546,7 +546,11 @@ roamingPortal.controller('LoginController', function LoginController($scope, $ro
     $scope.$watch('sessionInfo', function () {
         if ($scope.sessionInfo.loggedIn === true) {
             if ($routeParams.referer) {
-                $location.path('/' + $routeParams.referer);
+                if ($routeParams.referer.indexOf('site:') === 0) {
+                    document.location = '/' + $routeParams.referer.substring(5);
+                } else {
+                    $location.path('/' + $routeParams.referer);
+                }
             } else {
                 $location.path('/roamingsList');
             }
