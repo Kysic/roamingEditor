@@ -115,7 +115,10 @@ class Session {
     }
 
     private function generateUsername($user) {
-        return $user->firstname.' '.$user->lastname;
+        return $this->toPascalCase($user->firstname).' '.$this->toPascalCase($user->lastname);
+    }
+    private function toPascalCase($txt) {
+        return implode('-', array_map('ucwords', explode('-', mb_strtolower(trim($txt)))));
     }
 
 }

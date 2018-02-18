@@ -100,8 +100,8 @@ ul.tabs>li.notselected:hover {
 .action {
     cursor: pointer;
 }
-.tutor, .teammates {
-    width: 170px;
+.tutorColumn, .teammateColumn {
+    width: 160px;
 }
 .reportsActions {
     width: 150px;
@@ -125,12 +125,25 @@ ul.tabs>li.notselected:hover {
 .canceled {
     background: #ffbbbb;
 }
-.wrongRole {
-    background: #ffbbbb;
+.usersList .roleAssigner.wrongRole {
+    background: #ffbbbb !important;
 }
-.unregistered {
+.usersList .former {
+    background: #aaaaaa;
+}
+.usersList .roleAssigner.unregistered {
     background: #ddddbb;
 }
+.usersList .appli {
+    background: #ddddff;
+}
+.usersList .tutor,.board,.root {
+    background: #ddffdd;
+}
+.usersList .roleAssigner.noPassword:not(.appli):not(.wrongRole) {
+    background: #ffddbb !important;
+}
+
 .uploadReportField {
     display: none;
 }

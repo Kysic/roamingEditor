@@ -16,11 +16,10 @@ body {
 a {
     color: #d9dadc;
     font-weight: bold;
-    text-decoration: none;
+    text-decoration: underline;
 }
 a:hover {
     color: #fff;
-    text-decoration: underline;
 }
 </style>
 </head>
@@ -28,10 +27,14 @@ a:hover {
 <h1>Bienvenue sur ce site dédié aux bénévoles du VINCI</h1>
 <br/>
 <p>
-<a href="dokuwiki">Pour accéder au WIKI contenant pleins d'infos, cliquez ici.</a>
+<a href="dokuwiki">Accéder à la base d'information (WIKI)</a>
 </p>
 <p>
-<a href="portal">Et pour consulter les comptes rendus de maraude, cliquez ici.</a>
+<a href="portal">Consulter les comptes rendus de maraude</a>
+</p>
+<br/>
+<p>
+<a href="dokuwiki/doku.php?id=public:inscription">Comment m'inscrire et me connecter sur ce site ?</a>
 </p>
 <br/>
 <p>

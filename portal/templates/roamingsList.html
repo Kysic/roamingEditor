@@ -4,7 +4,7 @@
   <button ng-click="logout()" ng-show="hasP('P_LOG_OUT')">Me déconnecter</button>
 </div>
 <div id="roamingList">
-  <div class='homeLink'><a href='../dokuwiki'><img src='img/home-32x32.png'></a></div>
+  <div class='homeLink'><a href='/'><img src='img/home-32x32.png'></a></div>
   <div class='warningCNIL'>
     Les informations contenues dans les comptes rendus de maraudes sont réservées à un usage interne à
     <a target='_blank' href='https://www.samu-social-grenoble.fr/'>l'association VINCI</a>.
@@ -30,7 +30,7 @@
     <tr class="{{ (roaming.hasWebReport || roaming.hasFileReport) ? 'done' : roaming.status }} {{roaming.isToday ? 'planningToday' : '' }}"
         ng-repeat="roaming in roamings">
       <td class="date">{{roaming.date | humanDate | capitalize}}</td>
-      <td class="tutor">
+      <td class="tutorColumn">
         {{roaming.tutor}}
         <div ng-if="hasP('P_ENROL_AS_TUTOR') && !roaming.isPast">
           <img ng-if="roaming.tutor == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
@@ -39,7 +39,7 @@
               ng-click="cancel(roaming, 0)" />
         </div>
       </td>
-      <td class="teammates">
+      <td class="teammateColumn">
         {{roaming.teammates[0]}}
         <div ng-if="hasP('P_ENROL') && !roaming.isPast">
           <img ng-if="roaming.teammates[0] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
@@ -48,7 +48,7 @@
               ng-click="cancel(roaming, 1)" />
         </div>
       </td>
-      <td class="teammates">
+      <td class="teammateColumn">
         {{roaming.teammates[1]}}
         <div ng-if="hasP('P_ENROL') && !roaming.isPast">
           <img ng-if="roaming.teammates[1] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
@@ -57,7 +57,7 @@
               ng-click="cancel(roaming, 2)" />
         </div>
       </td>
-      <td class="teammates" ng-show="roamingByFour">
+      <td class="teammateColumn" ng-show="roamingByFour">
         {{roaming.teammates[2]}}
         <div ng-if="hasP('P_ENROL') && !roaming.isPast">
           <img ng-if="roaming.teammates[2] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"

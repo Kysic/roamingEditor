@@ -1,4 +1,4 @@
-<div id="usersList">
+<div id="usersList" class="usersList">
   <h2>Liste des utilisateurs inscrits sur le site</h2>
   <div class='error' ng-show="errorMsg">{{errorMsg}}</div>
   <table>
@@ -8,17 +8,18 @@
       <th>Email</th>
       <th>Téléphone</th>
       <th>Adresse</th>
-      <th ng-if="hasP('P_REGISTER')">Inscription finalisée</th>
       <th>Rôle</th>
     </tr>
-    <tr ng-repeat="user in users | orderBy:'firstname'">
+    <tr ng-repeat="user in users | orderBy:'firstname'" ng-class="[ user.role,
+                    { 'noPassword': user.registrationFinalised == 0,
+                      'wrongRole': !user.rightRole,
+                      'roleAssigner': hasP('P_ASSIGN_ROLE') } ]">
       <td>{{user.firstname}}</td>
       <td>{{user.lastname}}</td>
       <td>{{user.email}}</td>
       <td>{{user.phoneNumber}}</td>
       <td>{{user.address}}</td>
-      <td ng-if="hasP('P_REGISTER')">{{user.registrationFinalised}}</td>
-      <td ng-class="user.role == 'unregistered' ? 'unregistered' : user.rightRole ? 'rightRole' : 'wrongRole'">
+      <td>
         <span ng-if="!hasP('P_ASSIGN_ROLE') || user.userId == sessionInfo.user.userId">{{user.role}}</span>
         <span ng-if="hasP('P_ASSIGN_ROLE') && user.userId != sessionInfo.user.userId && user.role != 'unregistered'">
           <select type='text' ng-model="user.role" ng-options="role as role for role in roles" ng-change="setRole(user)">
