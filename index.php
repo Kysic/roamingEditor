@@ -33,10 +33,10 @@ a:hover {
 <a href="portal">Consulter les comptes rendus de maraude</a>
 </p>
 <p>
-<a href="portal/#!/users">Voir la liste des membres de l'association</a>
+<a href="redirectionPlanning.php">Accéder au planning sur Google Sheets</a>
 </p>
 <p>
-<a href="redirectionPlanning.php">Consulter le planning sur Google Sheets</a>
+<a href="portal/#!/users">Voir la liste des membres de l'association</a>
 </p>
 <br/>
 <p>
