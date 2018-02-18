@@ -32,6 +32,9 @@ a:hover {
 <p>
 <a href="portal">Consulter les comptes rendus de maraude</a>
 </p>
+<p>
+<a href="portal/#!/users">Voir la liste des membres de l'association</a>
+</p>
 <br/>
 <p>
 <a href="dokuwiki/doku.php?id=public:inscription">Comment m'inscrire et me connecter sur ce site ?</a>

@@ -68,7 +68,7 @@ function readMail($email) {
     return json_decode(file_get_contents('tmp/mail-'.$email));
 }
 function extractMailTokenReceived($mail) {
-    if (preg_match('/http:\/\/\S*\?userId=([0-9]*)&mailToken=(\S*)/', $mail->body, $matches)) {
+    if (preg_match('/http:\/\/\S*\?userId=([0-9]*)&mailToken=(\S*)/', implode("\n", $mail->body), $matches)) {
         return array('setPasswordUrl'=>$matches[0], 'userId'=>$matches[1], 'mailToken'=>urldecode($matches[2]));
     } else {
         throw AssertException('Unable to extract mailToken from '.print_r($mail, true));

@@ -1,3 +1,30 @@
+<?php
+$formError = '';
+$mailSent = false;
+$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+$message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
+if (!empty($email) && !empty($message))  {
+  try {
+    require_once('api/lib/Container.php');
+    $container = new Container();
+    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Demande d\'assistance',
+      'Emetteur: '.$email."\r\n".
+      'IP: '.$_SERVER['REMOTE_ADDR']."\r\n".
+      'Navigateur: '.$_SERVER['HTTP_USER_AGENT']."\r\n".
+      'Javascript: '.($_POST['javascript'] === 'true' ? 'true' : 'false')."\r\n".
+      'Cookies: '.($_COOKIE['cookiesEnabled'] === 'true' ? 'true' : 'false')."\r\n".
+      'Message:'."\r\n".$message
+    );
+    $mailSent = true;
+  } catch (Exception $e) {
+    $formError = 'Une erreur est survenue lors de l\'envoi de votre message.\nMerci d\'envoyer un mail à '.ADMIN_EMAIL;
+  }
+} else if (isset($_POST['email']) || isset($_POST['message'])) {
+  $formError = 'Merci de renseigner votre adresse email et le message à envoyer.';
+} else {
+  setcookie('cookiesEnabled', 'true');
+}
+?>
 <!doctype html>
 <html lang="fr">
 <head>
@@ -50,27 +77,6 @@ a:hover {
   <h1>Formulaire de demande d'assistance sur l'utilisation du site</h1>
   <p>
 <?php
-$formError = '';
-$mailSent = false;
-$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-$message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
-if (!empty($email) && !empty($message))  {
-  try {
-    require_once('api/lib/Container.php');
-    $container = new Container();
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Demande d\'assistance',
-      'Emetteur: '.$email."\n".
-      'IP: '.$_SERVER['REMOTE_ADDR']."\n".
-      'Navigateur: '.$_SERVER['HTTP_USER_AGENT']."\n".
-      'Message:'."\n".$message
-    );
-    $mailSent = true;
-  } catch (Exception $e) {
-    $formError = 'Une erreur est survenue lors de l\'envoi de votre message.\nMerci d\'envoyer un mail à '.ADMIN_EMAIL;
-  }
-} else if (isset($_POST['email']) || isset($_POST['message'])) {
-  $formError = 'Merci de renseigner votre adresse email et le message à envoyer.';
-}
 if ($mailSent) {
 ?>
     <div class="success info">
@@ -84,6 +90,7 @@ if ($mailSent) {
       suivant pour nous contacter et que l'on puisse résoudre cela ensemble.
     </div>
     <form class="form" method="post">
+      <input id='checkJavascript' name='javascript' type='hidden' value='false' />
       <div class='error'><?php echo $formError; ?></div>
       <div class="fieldGroup">
         <label for='email'>Email</label>
@@ -100,6 +107,7 @@ if ($mailSent) {
         <input type="submit" value="Envoyer" />
       </div>
     </form>
+    <script type="text/javascript">document.getElementById('checkJavascript').value = 'true';</script>
 <?php
 }
 ?>

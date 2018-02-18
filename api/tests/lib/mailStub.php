@@ -6,8 +6,8 @@ function sendMailStub($to, $subject, $body, $from) {
             'to'=>$to,
             'from'=>$from,
             'subject'=>$subject,
-            'body'=>$body
-        ))
+            'body'=> explode("\n", $body)
+        ), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
     );
 }
 
