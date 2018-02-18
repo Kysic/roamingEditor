@@ -8,46 +8,55 @@
 <title>Accueil bénévoles VINCI</title>
 <style>
 body {
-    text-align: center;
-    color: #d9dadc;
-    background: #3d4045;
-    padding: 20px;
+  text-align: center;
+  color: #d9dadc;
+  background: #3d4045;
+  padding: 10px;
 }
 a {
-    color: #d9dadc;
-    font-weight: bold;
-    text-decoration: underline;
+  color: #eee;
+  font-weight: bold;
+  text-decoration: none;
 }
 a:hover {
-    color: #fff;
+  color: #fff;
+  text-decoration: underline;
+}
+ul {
+  margin: 20px 0px;
+  padding: 0px
+}
+li {
+  margin: auto;
+  max-width: 500px;
+  text-align: left;
+  list-style-type: none;
+  padding: 10px 0px;
 }
 </style>
 </head>
 <body>
 <h1>Bienvenue sur ce site dédié aux bénévoles du VINCI</h1>
-<br/>
 <p>
-<a href="dokuwiki">Accéder à la base d'information (WIKI)</a>
-</p>
-<p>
-<a href="portal">Consulter les comptes rendus de maraude</a>
-</p>
-<p>
-<a href="redirectionPlanning.php">Accéder au planning sur Google Sheets</a>
-</p>
-<p>
-<a href="portal/#!/users">Voir la liste des membres de l'association</a>
-</p>
-<br/>
-<p>
-<a href="dokuwiki/doku.php?id=public:inscription">Comment m'inscrire et me connecter sur ce site ?</a>
-</p>
-<p>
-<a href="contactForm.php">Contact en cas de problème avec le site</a>
+<ul>
+<li>
+<a href="dokuwiki"><img src="img/books.png" width="25px" height="25px" /> Accéder à la base d'information (WIKI)</a>
+</li><li>
+<a href="portal"><img src="img/report.png" width="25px" height="25px" /> Consulter les comptes rendus de maraude</a>
+</li><li>
+<a href="redirectionPlanning.php"><img src="img/calendar.png" width="25px" height="25px" /> Accéder au planning sur Google Sheets</a>
+</li><li>
+<a href="portal/#!/users"><img src="img/contact.png" width="25px" height="25px" /> Voir la liste des membres de l'association</a>
+</li></ul>
+<ul><li>
+<a href="dokuwiki/doku.php?id=public:inscription"><img src="img/info.png" width="25px" height="25px" /> Comment m'inscrire et me connecter sur ce site ?</a>
+</li><li>
+<a href="contactForm.php"><img src="img/help.png" width="25px" height="25px" /> Contact en cas de problème avec le site</a>
+</li></ul>
 </p>
 <br/>
 <p>
-<a href="https://www.samu-social-grenoble.fr/"><img src="img/logo-SamuSocialGrenoble-Negatif.svg" width="250px"/></a>
+<a href="https://www.samu-social-grenoble.fr/"><img src="img/logo-SamuSocialGrenoble-Negatif.svg" height="146px" width="250px"/></a>
 </p>
 </body>
 </html>

@@ -40,12 +40,13 @@ body {
   padding: 20px;
 }
 a {
-  color: #d9dadc;
+  color: #eee;
   font-weight: bold;
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:hover {
   color: #fff;
+  text-decoration: underline;
 }
 .error {
   color: #f44;
