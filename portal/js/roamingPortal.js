@@ -770,8 +770,11 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
             var users = $scope.users;
             for(var i = users.length - 1; i >= 0; i--) {
                 var user = users[i];
-                if(user.role == 'former' || user.role == 'appli') {
+                if (user.role == 'former' || user.role == 'appli') {
                    users.splice(i, 1);
+                }
+                if (user.role == 'admin' || user.role == 'root') {
+                    user.role = 'board';
                 }
             }
         }

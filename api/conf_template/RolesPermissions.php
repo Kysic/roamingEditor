@@ -48,8 +48,8 @@ class RolesPermissions {
         $this->former = array( P_LOG_OUT, P_CHANGE_PASSWORD );
         $this->guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES ), $this->former);
         $this->member = array_merge(array( P_ENROL, P_EDIT_PLANNING, P_SEE_LAST_REPORT, P_SEE_USERS_LIST ), $this->guest);
-        $this->tutor = array_merge(array( P_EDIT_REPORT, P_ENROL_AS_TUTOR ), $this->member);
-        $this->board = array_merge(array( P_GEN_STATS ), $this->tutor);
+        $this->tutor = array_merge(array( P_EDIT_REPORT, P_ENROL_AS_TUTOR, P_GEN_STATS ), $this->member);
+        $this->board = array_merge(array(  ), $this->tutor);
         $this->admin = array_merge(array( P_UPLOAD_REPORT, P_DELETE_REPORT ), $this->board);
         $this->root = array_merge(array( P_SEE_ALL_REPORT, P_ASSIGN_ROLE, P_REGISTER ), $this->admin);
     }
