@@ -40,7 +40,7 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
 }]);
 
 /* Services */
-roamingPortal.factory('authService', function ($rootScope, $http) {
+roamingPortal.factory('authService', function ($rootScope, $http, $interval) {
 
     var sessionInfo = { loggedIn: 'unknown', user: {}, sessionToken: '', lastError: '' };
 
@@ -130,6 +130,23 @@ roamingPortal.factory('authService', function ($rootScope, $http) {
         querySessionInfo(); // The session info is updated asynchronously
         return sessionInfo;
     }
+
+    function refreshSession() {
+        $http.get(roamingApiEndPoint + '/auth.php').then(function (response) {
+            if (response.data.status == 'success') {
+                updateSessionInfo(response.data);
+            } else {
+                $location.path('/login');
+            }
+        }, function (response) {
+            $location.path('/login');
+        });
+    }
+
+    // Avoid session expiration
+    $interval(function(){
+        refreshSession();
+    }, 15*60*1000);
 
     return {
         getSessionInfo: getSessionInfo,
