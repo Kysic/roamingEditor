@@ -18,7 +18,7 @@ define('REPORT_OLD_LIMIT_DAYS', 62);
 define('SESSION_COOKIE_KEY', 'vinciSession');
 define('AUTOLOGIN_COOKIE_KEY', 'vinciPersistentLogin');
 define('AUTOLOGIN_COOKIE_EXPIRATION', '2678400'); // 31 jours
-define('AUTOLOGIN_DB_EXPIRATION', '5356800'); // 62 jours
+define('AUTOLOGIN_DB_EXPIRATION', '8035200'); // 93 jours
 
 # Set TimeZone
 date_default_timezone_set(DEFAULT_TIME_ZONE);

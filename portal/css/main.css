@@ -70,6 +70,12 @@ ul.tabs>li.notselected:hover {
     background: #eeeeee;
     padding: 10px;
 }
+.stayConnectCookieWarning {
+    background: #ee9;
+    max-width: 800px;
+    margin: auto;
+    padding: 10px 20px;
+}
 .info {
     background: #bbffbb;
     font-weight: bold;

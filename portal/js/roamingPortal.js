@@ -553,7 +553,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
 
 roamingPortal.controller('LoginController', function LoginController($scope, $routeParams, $location, authService) {
 
-    $scope.stayLogged = true;
+    $scope.stayLogged = false;
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.email = $routeParams.email;
     $scope.login = login;
