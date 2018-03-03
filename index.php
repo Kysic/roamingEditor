@@ -51,6 +51,8 @@ li {
 <ul><li>
 <a href="dokuwiki/doku.php?id=public:inscription"><img src="img/info.png" width="25px" height="25px" /> Comment m'inscrire et me connecter sur ce site ?</a>
 </li><li>
+<a href="dokuwiki/doku.php?id=public:donneespersonnelles"><img src="img/info.png" width="25px" height="25px" /> Comment sont gérées mes données personnelles ?</a>
+</li><li>
 <a href="contactForm.php"><img src="img/help.png" width="25px" height="25px" /> Contact en cas de problème avec le site</a>
 </li></ul>
 </p>
