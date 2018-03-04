@@ -16,5 +16,9 @@ Si vous avez eu accès à ce document sans être membre de l'association, merci 
 ,,,,,,,,,
 Identité,,lieu,heure,source,Personnes,,Dons,,Commentaires
 ,,,(xx:xx),,adulte,enfant,couverture,tente,
-Monsieur X,,Emplacement du monsieur,21:05,Particulier,1,0,0,0,Diaca
+Madame A,,Emplacement A,21:05,Particulier,1,0,0,0,Diaca
+Famille B,,Emplacement B,22:10,115,2,3,0,1,Diaca
+Monsieur C,,Emplacement C,23:05,Maraude,1,0,1,0,Diaca
+Groupe D,,Emplacement D,00:15,115,5,1,0,0,Diaca
+,,,01:20,Autre,0,0,0,0,Fin de maraude
 
