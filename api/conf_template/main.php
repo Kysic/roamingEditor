@@ -20,6 +20,10 @@ define('AUTOLOGIN_COOKIE_KEY', 'vinciPersistentLogin');
 define('AUTOLOGIN_COOKIE_EXPIRATION', '2678400'); // 31 jours
 define('AUTOLOGIN_DB_EXPIRATION', '8035200'); // 93 jours
 
+define('TEAMUP_URL', 'https://teamup.com');
+define('TEAMUP_SEE_MEETING_ID', '');
+define('TEAMUP_EDIT_MEETING_ID', '');
+
 # Set TimeZone
 date_default_timezone_set(DEFAULT_TIME_ZONE);
 
