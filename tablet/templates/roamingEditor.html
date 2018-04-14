@@ -38,6 +38,7 @@
       <th>Enfant</th>
       <th>Couverture</th>
       <th>Tente</th>
+      <th>BAI</th>
       <th>Commentaire</th>
       <th ng-show="isEditable()">Action</th>
     </tr>
@@ -50,6 +51,7 @@
       <td>{{intervention.nbChildren}}</td>
       <td>{{intervention.blankets}}</td>
       <td>{{intervention.tents}}</td>
+      <td>{{intervention.bai ? 'X' : ''}}</td>
       <td>{{intervention.comments}}</td>
       <td ng-show="isEditable()">
         <button ng-click="editIntervention(interventionIndex)">Editer</button>

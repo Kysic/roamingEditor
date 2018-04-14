@@ -29,6 +29,7 @@ function extractStatsFromRoamingReport($docId) {
         'nbEncounter' => $csv[6][2],
         'nbBlanket' => $csv[9][2],
         'nbTent' => $csv[10][2],
+        'bai' => $csv[11][2],
         'src115' => $srcInterventions['115'],
         'srcRoaming' => $srcInterventions['Maraude']
     );
@@ -36,7 +37,8 @@ function extractStatsFromRoamingReport($docId) {
 
 function extractSrcIntervention($csv) {
     $srcInterventions = array();
-    for ($i = 18; $i < count($csv); $i++) {
+    $startLine = 18; // 19 in new CR format but keep 18 for compatibility
+    for ($i = $startLine; $i < count($csv); $i++) {
         if (count($csv[$i]) > 6) {
             if ($csv[$i][IDX_NB_ADULTS] > 0 || $csv[$i][IDX_NB_CHILDREN] > 0) {
                 $srcIntervention = $csv[$i][IDX_SRC_INTERVENTION];
@@ -64,7 +66,7 @@ function extractStatsFromRoamingsReports($roamingsDocs) {
 function print_stat_csv($stats) {
     echo $stats['date'].';'.$stats['nbVolunteer'].';'.$stats['nbIntervention'].';'.$stats['nbAdult'].';'
          .$stats['nbChild'].';'.$stats['nbEncounter'].';'.$stats['nbBlanket'].';'.$stats['nbTent'].';'
-         .$stats['src115'].';'.$stats['srcRoaming'].';'."\n";
+         .$stats['bai'].';'.$stats['src115'].';'.$stats['srcRoaming'].';'."\n";
 }
 
 try {
@@ -98,13 +100,14 @@ try {
 
     $headers = array(
         'date' => 'Jour',
-        'nbVolunteer' =>'Nombre de bénévoles',
-        'nbIntervention' => 'Nombre d\'interventions',
-        'nbAdult' => 'Nombres d\'adultes',
-        'nbChild' => 'Nombres d\'enfants',
-        'nbEncounter' => 'Total personnes rencontrées',
-        'nbBlanket' => 'Nombre de couvertures',
-        'nbTent' => 'Nombres de tentes',
+        'nbVolunteer' =>'bénévoles',
+        'nbIntervention' => 'interventions',
+        'nbAdult' => 'adultes',
+        'nbChild' => 'enfants',
+        'nbEncounter' => 'Total personnes',
+        'nbBlanket' => 'couvertures',
+        'nbTent' => 'tentes',
+        'bai' => 'BAI',
         'src115' => 'Signalement 115',
         'srcRoaming' => 'Rencontre Maraude'
     );

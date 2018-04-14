@@ -60,6 +60,10 @@
           <button ng-click="intervention.tents=intervention.tents-1" ng-attr-title="Décrémenter le nombre de tente" ng-disabled="intervention.tents &lt;= 0">-</button>
           <button ng-click="intervention.tents=intervention.tents+1" ng-attr-title="Incrémenter le nombre de tente" ng-disabled="intervention.tents >= 100">+</button>
         </li>
+        <li>
+          <label for="baiField">Don nourriture BAI</label>
+          <input type="checkbox" name="bai" id="baiField" ng-model="intervention.bai" />
+        </li>
       </ul>
     </fieldset>
     <fieldset>

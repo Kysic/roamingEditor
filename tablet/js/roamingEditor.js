@@ -424,6 +424,7 @@ roamingEditor.controller('InterventionController',
             nbChildren: 0,
             blankets: 0,
             tents: 0,
+            bai: false,
             comments: ''
         };
     }
