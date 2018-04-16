@@ -16,6 +16,7 @@ define('GOOGLE_CONTACTS_LIB', ROAMING_API_DIR.'/lib/GoogleContacts.php');
 define('GOOGLE_PLANNING_LIB', ROAMING_API_DIR.'/lib/GooglePlanning.php');
 define('SPREADSHEETS_GENERATOR_LIB', ROAMING_API_DIR.'/lib/SpreadsheetsGenerator.php');
 define('REPORT_FILES_LIB', ROAMING_API_DIR.'/lib/ReportFiles.php');
+define('STATS_LIB', ROAMING_API_DIR.'/lib/Stats.php');
 
 define('DB_ACCESS_LIB', ROAMING_API_DIR.'/db/DbAccess.php');
 define('USERS_STORAGE_LIB', ROAMING_API_DIR.'/db/UsersStorage.php');
@@ -38,6 +39,7 @@ class Container {
     private $usersStorage = NULL;
     private $roamingsStorage = NULL;
     private $bruteforceStorage = NULL;
+    private $stats = NULL;
 
     public function getRolesPermissions() {
         if (!$this->rolesPermissions) {
@@ -184,6 +186,14 @@ class Container {
             $this->reportFiles = new ReportFiles();
         }
         return $this->reportFiles;
+    }
+
+    public function getStats() {
+        if (!$this->stats) {
+            require_once(STATS_LIB);
+            $this->stats = new Stats();
+        }
+        return $this->stats;
     }
 
 }
