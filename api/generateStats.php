@@ -8,7 +8,6 @@ try {
     $session = $container->getSession();
     $validator = $container->getValidator();
     $roamingsStorage = $container->getRoamingsStorage();
-    $spreadsheetsGenerator = $container->getSpreadsheetsGenerator();
     $stats = $container->getStats();
 
     $session->checkLoggedIn();

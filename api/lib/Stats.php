@@ -1,5 +1,7 @@
 <?php
 
+require_once(ROAMING_API_DIR.'/conf/google.php');
+
 define('IDX_SRC_INTERVENTION', 4);
 define('IDX_NB_ADULTS', 5);
 define('IDX_NB_CHILDREN', 6);
@@ -30,8 +32,8 @@ class Stats {
             'nbBlanket' => $csv[9][2],
             'nbTent' => $csv[10][2],
             'bai' => $csv[11][2],
-            'src115' => $srcInterventions['115'],
-            'srcRoaming' => $srcInterventions['Maraude']
+            'src115' => @$srcInterventions['115'],
+            'srcRoaming' => @$srcInterventions['Maraude']
         );
     }
 
@@ -63,13 +65,26 @@ class Stats {
         return substr_count($str, ',') + 1;
     }
 
-    public function csv_stats($roamingsStats) {
-        return $this->render_stats($roamingsStats, array($this, 'row_renderer_csv'));
+    public function csv_stats($roamingsStats, $humanReadable = false) {
+        return $this->render_stats(
+            $roamingsStats,
+            function ($output, $stats) use ($humanReadable) {
+                return $output.$this->row_renderer($stats, ';', $humanReadable ? 15 : 0)."\n";
+            }
+        );
     }
 
     public function html_stats($roamingsStats) {
         return '<table>'.
-            $this->render_stats($roamingsStats, array($this, 'content_renderer_html'), array($this, 'header_renderer_html')).
+            $this->render_stats(
+                $roamingsStats,
+                function ($output, $stats) {
+                    return $output.'<tr><th>'.$this->row_renderer($stats, '</th><th>').'</th></tr>';
+                },
+                function ($output, $stats) {
+                    return $output.'<tr><td>'.$this->row_renderer($stats, '</td><td>').'</td></tr>';
+                }
+            ).
             '</table>';
     }
 
@@ -79,7 +94,7 @@ class Stats {
         }
         $headers = array(
             'date' => 'Jour',
-            'nbVolunteer' =>'bénévoles',
+            'nbVolunteer' =>'benevoles',
             'nbIntervention' => 'interventions',
             'nbAdult' => 'adultes',
             'nbChild' => 'enfants',
@@ -96,22 +111,18 @@ class Stats {
         return $output;
     }
 
-    public function row_renderer_csv($output, $stats) {
-        return $output.$this->row_renderer($stats, ';')."\n";
-    }
-
-    public function header_renderer_html($output, $stats) {
-        return $output.'<tr><th>'.$this->row_renderer($stats, '</th><th>').'</th></tr>';
-    }
-
-    public function content_renderer_html($output, $stats) {
-        return $output.'<tr><td>'.$this->row_renderer($stats, '</td><td>').'</td></tr>';
-    }
-
-    private function row_renderer($stats, $sep) {
-        return $stats['date'].$sep.$stats['nbVolunteer'].$sep.$stats['nbIntervention'].$sep.$stats['nbAdult'].
-             $sep.$stats['nbChild'].$sep.$stats['nbEncounter'].$sep.$stats['nbBlanket'].$sep.$stats['nbTent'].
-             $sep.$stats['bai'].$sep.$stats['src115'].$sep.$stats['srcRoaming'];
+    private function row_renderer($stats, $sep, $minWidth = 0) {
+        return implode($sep,
+                array_map(
+                    function ($column) use ($stats, $minWidth) {
+                        return str_pad($stats[$column], $minWidth, ' ', STR_PAD_BOTH);
+                    },
+                    array(
+                        'date', 'nbVolunteer', 'nbIntervention', 'nbAdult', 'nbChild', 'nbEncounter',
+                        'nbBlanket', 'nbTent', 'bai', 'src115', 'srcRoaming'
+                    )
+                )
+            );
     }
 
     private function getTotal($roamingsStats) {
