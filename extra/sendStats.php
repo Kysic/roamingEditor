@@ -17,10 +17,28 @@ try {
 
     $roamingsStats = $stats->extractStatsFromRoamingsReports($roamingsDocs);
 
+    $body = '
+        <style type="text/css">
+            table {
+                border-collapse: collapse;
+            }
+            table, th, td {
+                border: 1px solid #808080;
+            }
+            th, td {
+                text-align: center;
+                padding: 2px 5px;
+            }
+        </style>
+        ';
+    $body .= $stats->html_stats($roamingsStats);
+
     $container->getMail()->sendMail(
         ADMIN_EMAIL,
         '[VINCI] Statistiques du '.$fromDate->format('d-m-Y').' au '.$toDate->format('d-m-Y'),
-        $stats->csv_stats($roamingsStats, true)
+        $body,
+        false,
+        true
     );
 
     echo 'done'."\n";

@@ -79,10 +79,10 @@ class Stats {
             $this->render_stats(
                 $roamingsStats,
                 function ($output, $stats) {
-                    return $output.'<tr><th>'.$this->row_renderer($stats, '</th><th>').'</th></tr>';
+                    return $output.'<tr><td>'.$this->row_renderer($stats, '</td><td>').'</td></tr>';
                 },
                 function ($output, $stats) {
-                    return $output.'<tr><td>'.$this->row_renderer($stats, '</td><td>').'</td></tr>';
+                    return $output.'<tr><th>'.$this->row_renderer($stats, '</th><th>').'</th></tr>';
                 }
             ).
             '</table>';
@@ -94,13 +94,13 @@ class Stats {
         }
         $headers = array(
             'date' => 'Jour',
-            'nbVolunteer' =>'benevoles',
-            'nbIntervention' => 'interventions',
-            'nbAdult' => 'adultes',
-            'nbChild' => 'enfants',
+            'nbVolunteer' =>'Benevoles',
+            'nbIntervention' => 'Interventions',
+            'nbAdult' => 'Adultes',
+            'nbChild' => 'Enfants',
             'nbEncounter' => 'Total personnes',
-            'nbBlanket' => 'couvertures',
-            'nbTent' => 'tentes',
+            'nbBlanket' => 'Couvertures',
+            'nbTent' => 'Tentes',
             'bai' => 'BAI',
             'src115' => 'Signalement 115',
             'srcRoaming' => 'Rencontre Maraude'

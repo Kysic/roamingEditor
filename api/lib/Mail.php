@@ -48,25 +48,26 @@ class Mail {
         return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
     }
 
-    public function sendMail($to, $subject, $body, $from=false) {
+    public function sendMail($to, $subject, $body, $from=false, $isHTML=false) {
         if (!$from) {
             $from = ADMIN_EMAIL;
         }
         if (MAIL_MODE == 'STUB') {
             require_once(ROAMING_API_DIR.'/tests/lib/mailStub.php');
-            sendMailStub($to, $subject, $body, $from);
+            sendMailStub($to, $subject, $body, $from, $isHTML);
         } else {
-            $this->sendMailSMTP($to, $subject, $body, $from);
+            $this->sendMailSMTP($to, $subject, $body, $from, $isHTML);
         }
     }
 
-    private function sendMailSMTP($to, $subject, $body, $from) {
+    private function sendMailSMTP($to, $subject, $body, $from, $isHTML) {
 
         $mail = new PHPMailer;
 
         // $mail->SMTPDebug = 3;
 
         $mail->isSMTP();
+        $mail->IsHTML($isHTML);
         $mail->CharSet = 'UTF-8';
         $mail->Timeout = 10;
         $mail->Host = SMTP_HOST;
