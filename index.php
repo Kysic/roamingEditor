@@ -45,9 +45,9 @@ li {
 <a href="portal"><img src="img/report.png" width="25px" height="25px" /> Consulter les comptes rendus de maraude</a>
 </li><li>
 <a href="redirectionPlanning.php"><img src="img/calendar.png" width="25px" height="25px" /> Accéder au planning des maraudes (Google Sheets)</a>
-</li><li>
+</li><!--<li>
 <a href="redirectionReunion.php"><img src="img/calendar.png" width="25px" height="25px" /> Accéder au planning des réunions (Teamup)</a>
-</li><li>
+</li>--><li>
 <a href="portal/#!/users"><img src="img/contact.png" width="25px" height="25px" /> Voir la liste des membres de l'association</a>
 </li></ul>
 <ul><li>
