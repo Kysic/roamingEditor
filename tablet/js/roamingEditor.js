@@ -53,13 +53,13 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
     function loadLocalStorage() {
         synchronizeApiKeyWithAutoLogin();
         roamings = { };
-        Object.keys(localStorage).forEach(function(key) {
-            if (key.match(/^roaming_[0-9-]*$/)) {
+        Object.keys(localStorage).forEach(function(storageId) {
+            if (storageId.match(/^roaming_[0-9-]*$/)) {
                 try {
-                    var roaming = JSON.parse(localStorage.getItem(key));
+                    var roaming = loadRoamingFromLocalStorage(storageId);
                     roamings[roaming.date] = roaming;
                 } catch (e) {
-                    console.log('Unable to restore ' + key + ' from local storage', e);
+                    console.log('Unable to restore ' + storageId + ' from local storage', e);
                 }
             }
         });
@@ -77,7 +77,16 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
 
     function updateRoamingInLocalStorage(roaming) {
         var roamingJson = JSON.stringify(roaming);
-        localStorage.setItem('roaming_' + roaming.date, roamingJson);
+        localStorage.setItem(getLocalStorageId(roaming.date), roamingJson);
+    }
+
+    function loadRoamingFromLocalStorage(storageId) {
+        var roamingJson = localStorage.getItem(storageId);
+        return roamingJson === null ? null : JSON.parse(roamingJson);
+    }
+
+    function getLocalStorageId(roamingDate) {
+        return 'roaming_' + roamingDate;
     }
 
     function getAllRoamings() {
@@ -91,7 +100,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
     function deleteRoaming(roamingDate) {
         try {
             delete roamings[roamingDate];
-            localStorage.removeItem('roaming_' + roamingDate);
+            localStorage.removeItem(getLocalStorageId(roamingDate));
             console.log('Roaming ' + roamingDate + ' deleted');
         } catch (e) {
             console.log('Unable to delete roaming ' + roamingDate);
@@ -121,10 +130,18 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
 
     function updateRoaming(roaming) {
         roaming.version = roaming.version ? roaming.version + 1 : 1;
-        roamings[roaming.date] = roaming;
-        filterOldRoamings();
-        updateRoamingInLocalStorage(roaming);
-        sendRoamingToRemoteServer(roaming);
+        var lastRoamingInLocalStorage = loadRoamingFromLocalStorage(getLocalStorageId(roaming.date));
+        if (lastRoamingInLocalStorage && lastRoamingInLocalStorage.version >= roaming.version) {
+            alert('Conflit de modification avec un autre onglet du navigateur.');
+            roaming = lastRoamingInLocalStorage;
+            roamings[roaming.date] = roaming;
+            notifyRoamingUpdate(roaming);
+        } else {
+            roamings[roaming.date] = roaming;
+            filterOldRoamings();
+            updateRoamingInLocalStorage(roaming);
+            sendRoamingToRemoteServer(roaming);
+        }
     }
 
     function sendRoamingToRemoteServer(roaming) {

@@ -24,8 +24,10 @@ class GooglePlanning {
         $monthId = date('Y-m', $roamingDate);
         if ( !array_key_exists($monthId, $this->roamingMonthData) ) {
             $this->extractRoamingsOfMonth($monthId);
+            //print_r($this->roamingMonthData);
         }
         $roamingMonthData = $this->roamingMonthData[$monthId];
+        //print_r($this->roamingMonthData[$monthId]);
         if ( array_key_exists($dateId, $roamingMonthData) ) {
             return $roamingMonthData[$dateId];
         } else {
@@ -57,6 +59,7 @@ class GooglePlanning {
             $roamingDay = 1;
             while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
                 //echo '<!--'.implode(';',$data).'-->'."\n";
+                //echo '<!--'.$roamingYear.'-'.$roamingMonth.'-'.$roamingDay.'-->'."\n";
                 if (count($data) >= 2 && $data[DAY_INDEX] == $roamingDay
                                 && checkDate($roamingMonth, $roamingDay, $roamingYear)) {
                     $dateId = date('Y-m-d', mktime(0, 0, 0, $roamingMonth, $roamingDay, $roamingYear));
