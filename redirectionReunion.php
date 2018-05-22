@@ -6,7 +6,7 @@ $session = $container->getSession();
 $validator = $container->getValidator();
 try {
     if (!$session->isLoggedIn()) {
-        $newLocation = '/portal/#!/login//site:redirectionReunion.php';
+        $newLocation = '/portal/#!/login//site:'.basename(__FILE__);
     } else if ($session->hasPermission(P_EDIT_MEETING)) {
         $newLocation = TEAMUP_URL.'/'.TEAMUP_EDIT_MEETING_ID.'?'.$_SERVER['QUERY_STRING'];
     } else {

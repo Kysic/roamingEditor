@@ -7,7 +7,7 @@ $validator = $container->getValidator();
 $googlePlanning = $container->getGooglePlanning();
 try {
     if (!$session->isLoggedIn()) {
-        $newLocation = '/portal/#!/login//site:redirectionPlanning.php';
+        $newLocation = '/portal/#!/login//site:'.basename(__FILE__);
     } else {
         $session->checkHasPermission(P_EDIT_PLANNING);
         if ( !empty($_GET['monthId']) ) {

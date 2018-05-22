@@ -33,13 +33,17 @@ try {
         ';
     $body .= $stats->html_stats($roamingsStats);
 
-    $container->getMail()->sendMail(
-        ADMIN_EMAIL,
-        '[VINCI] Statistiques du '.$fromDate->format('d-m-Y').' au '.$toDate->format('d-m-Y'),
-        $body,
-        false,
-        true
-    );
+    $emails = array(ADMIN_EMAIL, PRESIDENT_EMAIL);
+
+    foreach ($emails as $email) {
+        $container->getMail()->sendMail(
+            $email,
+            '[VINCI] Statistiques du '.$fromDate->format('d-m-Y').' au '.$toDate->format('d-m-Y'),
+            $body,
+            false,
+            true
+        );
+    }
 
     echo 'done'."\n";
 

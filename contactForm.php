@@ -31,27 +31,9 @@ if (!empty($email) && !empty($message))  {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" href="img/favicon.png" />
+<link rel="stylesheet" href="css/main.css"/>
 <title>Demande d'assistance</title>
 <style>
-body {
-  text-align: center;
-  color: #d9dadc;
-  background: #3d4045;
-  padding: 20px;
-}
-a {
-  color: #eee;
-  font-weight: bold;
-  text-decoration: none;
-}
-a:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-.error {
-  color: #f44;
-  font-weight: bold;
-}
 .info {
   text-align: center;
   max-width: 800px;
@@ -67,10 +49,6 @@ a:hover {
   max-width: 800px;
   width: 90%;
   height: 300px;
-}
-.success {
-  color: #5d5;
-  font-weight: bold;
 }
 </style>
 </head>
