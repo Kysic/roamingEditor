@@ -54,6 +54,7 @@
       <td>{{intervention.bai ? 'X' : ''}}</td>
       <td>{{intervention.comments}}</td>
       <td ng-show="isEditable()">
+        <button ng-click="reportIntervention(interventionIndex)">Faire signalement</button>
         <button ng-click="editIntervention(interventionIndex)">Editer</button>
         <button ng-click="deleteIntervention(interventionIndex)">Supprimer</button>
       </td>

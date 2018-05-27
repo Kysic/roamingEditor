@@ -2,14 +2,23 @@
 
 $formError = '';
 $mailSent = false;
-$names = filter_var(@$_POST['names'], FILTER_SANITIZE_STRING);
-$date = filter_var(@$_POST['date'], FILTER_SANITIZE_STRING);
-$place = filter_var(@$_POST['place'], FILTER_SANITIZE_STRING);
-$phoneNumber = filter_var(@$_POST['phoneNumber'], FILTER_SANITIZE_STRING);
-$language = filter_var(@$_POST['language'], FILTER_SANITIZE_STRING);
-$constitution = filter_var(@$_POST['constitution'], FILTER_SANITIZE_STRING);
-$observations = filter_var(@$_POST['observations'], FILTER_SANITIZE_STRING);
-$author = filter_var(@$_POST['author'], FILTER_SANITIZE_STRING);
+function retrieveAndCleanParam($paramName) {
+    if (isset($_POST[$paramName])) {
+        return filter_var(@$_POST[$paramName], FILTER_SANITIZE_STRING);
+    } else if ($_GET[$paramName]) {
+        return filter_var(@$_GET[$paramName], FILTER_SANITIZE_STRING);
+    } else {
+        return '';
+    }
+}
+$names = retrieveAndCleanParam('names');
+$date = retrieveAndCleanParam('date');
+$place = retrieveAndCleanParam('place');
+$phoneNumber = retrieveAndCleanParam('phoneNumber');
+$language = retrieveAndCleanParam('language');
+$constitution = retrieveAndCleanParam('constitution');
+$observations = retrieveAndCleanParam('observations');
+$author = retrieveAndCleanParam('author');
 try {
     require_once('api/lib/Container.php');
     $container = new Container();
@@ -113,6 +122,9 @@ if ($mailSent) {
   <p>
     <a href="">Faire un autre signalement</a>
   </p>
+  <p>
+    <a href="javascript:history.go(-2)">Retour</a>
+  </p>
 <?php
 } else {
 ?>
@@ -120,7 +132,7 @@ if ($mailSent) {
     <div class="info">
       Formulaire de signalement de personnes en difficultées à destination du secrétariat de l'association.
     </div>
-    <form class="reportForm" method="post">
+    <form class="reportForm" method="post" action="<?php echo basename(__FILE__); ?>">
       <input id='checkJavascript' name='javascript' type='hidden' value='false' />
       <div class='error'><?php echo $formError; ?></div>
       <div class="fieldGroup">
@@ -182,11 +194,11 @@ if ($mailSent) {
       </div>
     </form>
   </p>
+  <p>
+    <a href="javascript:history.back()">Retour</a>
+  </p>
 <?php
 }
 ?>
-  <p>
-    <a href="/">Retour à l'accueil</a>
-  </p>
 </body>
 </html>

@@ -274,11 +274,12 @@ roamingEditor.controller('RoamingListController', function RoamingListController
 });
 
 roamingEditor.controller('RoamingController',
-  function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, roamingService) {
+  function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, $window, roamingService) {
 
     $scope.synchroStatus;
     $scope.roaming;
     $scope.addIntervention = addIntervention;
+    $scope.reportIntervention = reportIntervention;
     $scope.editIntervention = editIntervention;
     $scope.deleteIntervention = deleteIntervention;
     $scope.addTeammate = addTeammate;
@@ -351,6 +352,15 @@ roamingEditor.controller('RoamingController',
 
     function addIntervention() {
         $scope.editIntervention(-1);
+    }
+
+    function reportIntervention(interventionIndex) {
+        var intervention = $scope.roaming.interventions[interventionIndex];
+        $window.location.href = '/reportForm.php?names=' + intervention.people.join(', ')
+            + '&date=' + $scope.roaming.date
+            + '&place=' + intervention.location
+            + '&observations=' + intervention.comments
+            + '&author=' + $scope.roaming.tutor;
     }
 
     function editIntervention(interventionIndex) {
