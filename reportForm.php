@@ -4,9 +4,9 @@ $formError = '';
 $mailSent = false;
 function retrieveAndCleanParam($paramName) {
     if (isset($_POST[$paramName])) {
-        return filter_var(@$_POST[$paramName], FILTER_SANITIZE_STRING);
+        return html_entity_decode(filter_var(@$_POST[$paramName], FILTER_SANITIZE_STRING), ENT_QUOTES | ENT_XML1, 'UTF-8');
     } else if ($_GET[$paramName]) {
-        return filter_var(@$_GET[$paramName], FILTER_SANITIZE_STRING);
+        return html_entity_decode(filter_var(@$_GET[$paramName], FILTER_SANITIZE_STRING), ENT_QUOTES | ENT_XML1, 'UTF-8');
     } else {
         return '';
     }
@@ -43,7 +43,7 @@ try {
                   '       Lieu de la recontre : '.$place."\r\n".
                   '       Numéro de téléphone : '.$phoneNumber."\r\n".
                   '             Langue parlée : '.$language."\r\n".
-                  'Constitution de la famille : '.$constitution."\r\n".
+                  'Constitution de la famille : '.$constitution."\r\n\r\n".
                   'Observations complémentaires :'."\r\n".$observations
                 );
             }
@@ -132,7 +132,7 @@ if ($mailSent) {
     <div class="info">
       Formulaire de signalement de personnes en difficultées à destination du secrétariat de l'association.
     </div>
-    <form class="reportForm" method="post" action="<?php echo basename(__FILE__); ?>">
+    <form class='reportForm' method='post' action='<?php echo basename(__FILE__); ?>'>
       <input id='checkJavascript' name='javascript' type='hidden' value='false' />
       <div class='error'><?php echo $formError; ?></div>
       <div class="fieldGroup">

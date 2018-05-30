@@ -68,7 +68,7 @@ if ($mailSent) {
       Si vous rencontrez un problème dans l'utilisation du site, n'hésitez pas à utiliser le formulaire
       suivant pour nous contacter et que l'on puisse résoudre cela ensemble.
     </div>
-    <form class="form" method="post">
+    <form class='form' method='post'>
       <input id='checkJavascript' name='javascript' type='hidden' value='false' />
       <div class='error'><?php echo $formError; ?></div>
       <div class="fieldGroup">
