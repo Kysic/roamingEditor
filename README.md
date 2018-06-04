@@ -16,13 +16,14 @@
 - Interdire l'accès au dossier cr dans la configuration du serveur web (see extra/apache.conf)
 
 ### Outils externes
-- angular js avec le module angular-route
+- [angular js](https://angularjs.org/) avec les modules angular-route et [angular-loading-bar](https://github.com/chieffancypants/angular-loading-bar).
+- La librairie [mcx-dialog-mobile](https://github.com/code-mcx/mcx-dialog-mobile)
 - maps.googleapis pour la recuperation d'une adresse à partir de la localisation GPS
-- PHPMailer avec le module smtp
+- [PHPMailer](https://github.com/PHPMailer/PHPMailer) avec le module smtp
 
 ### Informations techniques
 - Utilise le local storage pour éviter de perdre un CR en cas de plantage de la tablette
-- Utilise un Web App manifest (https://w3c.github.io/manifest/) pour être installé en tant qu'application android via chrome
+- Utilise un [Web App manifest](https://w3c.github.io/manifest/) pour être installé en tant qu'application android via chrome
 
 ### Informations pour le développement
 - Pour lancer les tests d'intégrations :

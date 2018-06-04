@@ -72,6 +72,9 @@ roamingPortal.factory('authService', function ($rootScope, $http, $interval) {
         sessionInfo.lastError = '';
         $http.post(roamingApiEndPoint + '/auth.php', params).then(function (response) {
             if (response.data.status == 'success') {
+                if (params.action == 'login') {
+                    mcxDialog.toast('Connexion réussie');
+                }
                 updateSessionInfo(response.data);
                 $rootScope.$broadcast(params.action);
             } else {
@@ -154,7 +157,8 @@ roamingPortal.factory('authService', function ($rootScope, $http, $interval) {
         logout: logout,
         register: register,
         resetPassword: resetPassword,
-        setPassword: setPassword
+        setPassword: setPassword,
+        refreshSession: refreshSession
     };
 });
 roamingPortal.factory('dateUtils', function () {
@@ -201,7 +205,7 @@ roamingPortal.filter('capitalize', function() {
 
 /* Controllers */
 roamingPortal.controller('RoamingListController', function RoamingListController(
-$scope, $http, $window, $routeParams, $location, authService, dateUtils) {
+        $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
 
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.monthList;
@@ -430,20 +434,22 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     }
 
     function deleteReport(roamingDate) {
-        if ( confirm('Supprimer le compte-rendu du ' + dateUtils.humanDate(new Date(roamingDate)) + ' ?') ) {
-            $http.post(
-                roamingApiEndPoint + '/rmReport.php',
-                {
-                    roamingDate: roamingDate,
-                    sessionToken: $scope.sessionInfo.sessionToken
-                }
-            ).then(function (response) {
-                if (response.data.status == 'success') {
-                    var roaming = findRoamingByDate(roamingDate);
-                    roaming.hasFileReport = false;
-                }
-            });
-        }
+        mcxDialog.confirm('Supprimer le compte-rendu du ' + dateUtils.humanDate(new Date(roamingDate)) + ' ?', {
+            sureBtnClick: function(){
+                $http.post(
+                    roamingApiEndPoint + '/rmReport.php',
+                    {
+                        roamingDate: roamingDate,
+                        sessionToken: $scope.sessionInfo.sessionToken
+                    }
+                ).then(function (response) {
+                    if (response.data.status == 'success') {
+                        var roaming = findRoamingByDate(roamingDate);
+                        roaming.hasFileReport = false;
+                    }
+                });
+            }
+        });
     }
 
     function enrol(roaming, position) {
@@ -453,34 +459,37 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
         _enrol(roaming, position, 'cancel', 'Annuler votre inscription', '');
     }
     function _enrol(roaming, position, action, msg, newUsername) {
-        if ( confirm(msg + ' pour la maraude du ' + dateUtils.humanDate(new Date(roaming.date)) + ' ?') ) {
-            var prevUsername = getTeammate(roaming, position);
-            setTeammate('[en cours]', roaming, position);
-            $http.post(
-                roamingApiEndPoint + '/enrol.php',
-                {
-                    action: action,
-                    roamingDate: roaming.date,
-                    position: position,
-                    sessionToken: $scope.sessionInfo.sessionToken
-                }
-            ).then(function success(response) {
-                if (response.data.status == 'success') {
-                    setTeammate(newUsername, roaming, position);
-                } else {
-                    alert(response.data.errorMsg);
+        authService.refreshSession(); // avoid possible bad session token
+        mcxDialog.confirm(msg + ' pour la maraude du ' + dateUtils.humanDate(new Date(roaming.date)) + ' ?', {
+            sureBtnClick: function(){
+                var prevUsername = getTeammate(roaming, position);
+                setTeammate('[en cours]', roaming, position);
+                $http.post(
+                    roamingApiEndPoint + '/enrol.php',
+                    {
+                        action: action,
+                        roamingDate: roaming.date,
+                        position: position,
+                        sessionToken: $scope.sessionInfo.sessionToken
+                    }
+                ).then(function success(response) {
+                    if (response.data.status == 'success') {
+                        setTeammate(newUsername, roaming, position);
+                    } else {
+                        alert(response.data.errorMsg);
+                        setTeammate(prevUsername, roaming, position);
+                    }
+                }, function error(response) {
+                    if (response.data.errorMsg) {
+                        alert(response.data.errorMsg);
+                    } else {
+                        alert('Désolé, une erreur est survenue.');
+                        console.log(response);
+                    }
                     setTeammate(prevUsername, roaming, position);
-                }
-            }, function error(response) {
-                if (response.data.errorMsg) {
-                    alert(response.data.errorMsg);
-                } else {
-                    alert('Désolé, une erreur est survenue.');
-                    console.log(response);
-                }
-                setTeammate(prevUsername, roaming, position);
-            });
-        }
+                });
+            }
+        });
     }
     function getTeammate(roaming, position) {
         return position == 0 ? roaming.tutor : roaming.teammates[position-1];
