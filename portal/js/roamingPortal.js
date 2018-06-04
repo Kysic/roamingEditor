@@ -529,7 +529,7 @@ $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
     }
 
     function isCurrentUser(user) {
-        return user.toLowerCase() == $scope.sessionInfo.user.username.toLowerCase();
+        return user && user.toLowerCase() == $scope.sessionInfo.user.username.toLowerCase();
     }
 
     function findRoamingByDate(date) {
