@@ -74,6 +74,10 @@ roamingPortal.factory('authService', function ($rootScope, $http, $interval) {
             if (response.data.status == 'success') {
                 if (params.action == 'login') {
                     mcxDialog.toast('Connexion réussie');
+                } else if (params.action == 'logout') {
+                    mcxDialog.toast('Déconnexion réussie');
+                } else if (params.action == 'setPassword') {
+                    mcxDialog.toast('Modification du mot de passe réussie');
                 }
                 updateSessionInfo(response.data);
                 $rootScope.$broadcast(params.action);
