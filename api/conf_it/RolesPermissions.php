@@ -46,7 +46,7 @@ class RolesPermissions {
 
     public function __construct() {
         $this->visitor = array( P_REGISTER, P_LOG_IN, P_RESET_PASSWORD );
-        $this->appli = array ( P_SEE_PLANNING, P_SEE_LAST_REPORT, P_SAVE_ROAMINGS, P_SEE_USERS_LIST );
+        $this->appli = array ( P_SEE_PLANNING, P_EDIT_PLANNING, P_SEE_LAST_REPORT, P_SAVE_ROAMINGS, P_SEE_USERS_LIST );
         $this->former = array( P_LOG_OUT, P_CHANGE_PASSWORD );
         $this->guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES ), $this->former);
         $this->member = array_merge(array( P_ENROL, P_EDIT_PLANNING, P_SEE_LAST_REPORT, P_SEE_USERS_LIST, P_SEE_MEETING ), $this->guest);

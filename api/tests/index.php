@@ -329,6 +329,7 @@ function assertIsTablet1($user) {
     assertEquals($user->lastname, '1');
     assertEquals($user->permissions, array(
                                         'P_SEE_PLANNING',
+                                        'P_EDIT_PLANNING',
                                         'P_SEE_LAST_REPORT',
                                         'P_SAVE_ROAMINGS',
                                         'P_SEE_USERS_LIST'
