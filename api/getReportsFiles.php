@@ -10,6 +10,7 @@ try {
     $reportFiles = $container->getReportFiles();
     $json = $container->getJson();
 
+    $session->closeWrite();
     $session->checkLoggedIn();
     $session->checkHasPermission(P_SEE_LAST_REPORT);
 

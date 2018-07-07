@@ -10,6 +10,7 @@ try {
     $json = $container->getJson();
     $roamingsStorage = $container->getRoamingsStorage();
 
+    $session->closeWrite();
     $session->checkLoggedIn();
     $session->checkHasPermission(P_SEE_LAST_REPORT);
 

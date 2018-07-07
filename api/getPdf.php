@@ -12,6 +12,7 @@ try {
     $spreadsheetsGenerator = $container->getSpreadsheetsGenerator();
     $reportFiles = $container->getReportFiles();
 
+    $session->closeWrite();
     $session->checkLoggedIn();
     $session->checkHasPermission(P_SEE_LAST_REPORT);
 

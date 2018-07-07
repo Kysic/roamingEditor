@@ -463,7 +463,6 @@ roamingPortal.controller('RoamingListController', function RoamingListController
         _enrol(roaming, position, 'cancel', 'Annuler votre inscription', '');
     }
     function _enrol(roaming, position, action, msg, newUsername) {
-        authService.refreshSession(); // avoid possible bad session token
         mcxDialog.confirm(msg + ' pour la maraude du ' + dateUtils.humanDate(new Date(roaming.date)) + ' ?', {
             sureBtnClick: function(){
                 var prevUsername = getTeammate(roaming, position);
@@ -829,8 +828,6 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
     function setRole(user) {
         $scope.setRoleRunning = true;
         $scope.errorMsg = '';
-
-        authService.refreshSession(); // avoid possible bad session token
         mcxDialog.confirm('Donner le rôle "' + user.role + '" à ' + user.firstname + ' ' + user.lastname + ' ?', {
             sureBtnClick: function(){
                 $http.post(roamingApiEndPoint + '/setUserRole.php',{
@@ -851,7 +848,6 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
             },
             cancelBtnClick: retrieveDbUsers
         });
-
     }
 
     function sendInvitation(user) {

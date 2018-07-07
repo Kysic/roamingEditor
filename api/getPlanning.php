@@ -10,6 +10,7 @@ try {
     $googlePlanning = $container->getGooglePlanning();
     $json = $container->getJson();
 
+    $session->closeWrite();
     $session->checkLoggedIn();
     $session->checkHasPermission(P_SEE_PLANNING);
 

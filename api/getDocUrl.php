@@ -11,6 +11,7 @@ try {
     $roamingsStorage = $container->getRoamingsStorage();
     $spreadsheetsGenerator = $container->getSpreadsheetsGenerator();
 
+    $session->closeWrite();
     $session->checkLoggedIn();
     $session->checkHasPermission(P_EDIT_REPORT);
 

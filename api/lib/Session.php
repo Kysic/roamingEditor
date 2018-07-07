@@ -17,6 +17,10 @@ class Session {
         }
     }
 
+    public function closeWrite() {
+        session_write_close();
+    }
+
     public function isLoggedIn() {
         return isset($_SESSION['USER']);
     }

@@ -1,4 +1,4 @@
 api/conf_it/sql.php filter=sqlitpassword
-tablet/index.html filter=googleapikey
+tablet/index.php filter=googleapikey
 extra/apache.conf filter=website
 

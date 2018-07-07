@@ -9,6 +9,7 @@ try {
     $usersStorage = $container->getUsersStorage();
     $json = $container->getJson();
 
+    $session->closeWrite();
     $session->checkLoggedIn();
     $session->checkHasPermission(P_SEE_USERS_LIST);
 
