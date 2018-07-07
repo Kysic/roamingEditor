@@ -479,6 +479,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
                 ).then(function success(response) {
                     if (response.data.status == 'success') {
                         setTeammate(newUsername, roaming, position);
+                        mcxDialog.toast('Modification enregistrée');
                     } else {
                         alert(response.data.errorMsg);
                         setTeammate(prevUsername, roaming, position);
@@ -828,20 +829,29 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
     function setRole(user) {
         $scope.setRoleRunning = true;
         $scope.errorMsg = '';
-        $http.post(roamingApiEndPoint + '/setUserRole.php',{
-            sessionToken: $scope.sessionInfo.sessionToken,
-            userId: user.userId,
-            role: user.role
-        }).then(function (response) {
-            if (response.data.status == 'success') {
-                $scope.setRoleRunning = false;
-                mergeUsersList();
-            } else {
-                setErrorMsg(response.data);
-            }
-        }, function (response) {
-            setErrorMsg(response.data);
+
+        authService.refreshSession(); // avoid possible bad session token
+        mcxDialog.confirm('Donner le rôle "' + user.role + '" à ' + user.firstname + ' ' + user.lastname + ' ?', {
+            sureBtnClick: function(){
+                $http.post(roamingApiEndPoint + '/setUserRole.php',{
+                    sessionToken: $scope.sessionInfo.sessionToken,
+                    userId: user.userId,
+                    role: user.role
+                }).then(function (response) {
+                    if (response.data.status == 'success') {
+                        $scope.setRoleRunning = false;
+                        mergeUsersList();
+                        mcxDialog.toast('Rôle modifié');
+                    } else {
+                        setErrorMsg(response.data);
+                    }
+                }, function (response) {
+                    setErrorMsg(response.data);
+                });
+            },
+            cancelBtnClick: retrieveDbUsers
         });
+
     }
 
     function sendInvitation(user) {

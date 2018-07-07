@@ -77,7 +77,12 @@ var layer = {
 
 		//set button click event
 		options.btns.forEach(function (btn, i) {
-			if (i != 0 && i <= options.btns.length - 1) {
+			if (btn.isCancel) {
+				btn.addEventListener("click", function() {
+					handleClose();
+					if (options.cancelBtnClick) options.cancelBtnClick();
+				});
+			} else {
 				if (!options.bottom) {
 					btn.addEventListener("click", function () {
 						handleClose();
@@ -89,8 +94,6 @@ var layer = {
 						options.btnClick(this.getAttribute("i"));
 					});
 				}
-			} else {
-				btn.addEventListener("click", handleClose);
 			}
 		});
 
@@ -123,13 +126,15 @@ var mcxDialog = {
 		var opts = {
 			sureBtnText: "Confirmer",
 			cancelBtnText: "Annuler",
-			sureBtnClick: function sureBtnClick() {}
+			sureBtnClick: function sureBtnClick() {},
+			cancelBtnClick: function cancelBtnClick() {}
 		};
 		opts = extend(opts, options);
 
 		var cancelBtn = document.createElement("div");
 		cancelBtn.innerText = opts.cancelBtnText;
 		addClass(cancelBtn, "dialog-cancel-button");
+		cancelBtn.isCancel = true;
 
 		var sureBtn = document.createElement("div");
 		sureBtn.innerText = opts.sureBtnText;
