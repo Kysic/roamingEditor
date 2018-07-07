@@ -19,7 +19,7 @@ $session = $container->getSession();
   <script type="text/javascript" src="js/angular-route.min.js"></script>
   <script type="text/javascript" src="js/angular-loading-bar.min.js"></script>
   <script type="text/javascript" src="js/roamingPortal.js"></script>
-  <title>Comptes rendus de maraudes</title>
+  <title>VINCI - Samu Social de Grenoble</title>
 </head>
 <body>
   <script type="text/javascript" src="js/mcx-dialog.js"></script>

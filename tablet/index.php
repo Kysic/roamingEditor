@@ -24,7 +24,7 @@ $session = $container->getSession();
   <script src="js/angular-cookies.min.js"></script>
   <script src="js/roamingEditor.js"></script>
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=GOOGLE_API_KEY&ver=3.exp"></script>
-  <title>Editeur de compte rendu de maraudes</title>
+  <title>VINCI - Edition compte rendu</title>
 </head>
 <body>
   <div id="roamingEditorApp">

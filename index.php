@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/png" href="img/favicon.png" />
 <link rel="stylesheet" href="css/main.css"/>
-<title>Accueil bénévoles VINCI</title>
+<title>VINCI - Samu Social de Grenoble</title>
 <style>
 ul {
   margin: 20px 0px;
