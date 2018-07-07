@@ -7,6 +7,7 @@ require_once('/var/www/vinci/api/lib/Container.php');
  * Should be in <dokuwiki>/lib/plugins/vinciSSO/auth.php
  * and <dokuwiki>/conf/local.php should contains:
  *  $conf['authtype'] = 'vinciSSO';
+ *  $conf['superuser'] = '@root';
  */
 class auth_plugin_vinciSSO extends DokuWiki_Auth_Plugin {
 
@@ -55,11 +56,7 @@ class auth_plugin_vinciSSO extends DokuWiki_Auth_Plugin {
         // set the globals if authed
         $USERINFO['name'] = $user->firstname.' '.$user->lastname;
         $USERINFO['mail'] = $user->email;
-        if ($user->role == 'root') {
-            $USERINFO['grps'] = array('admin', 'user');
-        } else {
-            $USERINFO['grps'] = array('user');
-        }
+        $USERINFO['grps'] = array($user->role);
         $_SERVER['REMOTE_USER'] = $user->email;
         $_SESSION[DOKU_COOKIE]['auth']['user'] = $user->email;
         $_SESSION[DOKU_COOKIE]['auth']['pass'] = $pass;

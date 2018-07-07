@@ -214,7 +214,9 @@ roamingEditor.controller('RoamingListController', function RoamingListController
     retrieveRoamings();
 
     function retrieveRoamings() {
-        $scope.roamings = $filter('orderBy')(Object.values(roamingService.getAllRoamings()), '-date');
+        var roamingsMap = roamingService.getAllRoamings();
+        var roamingsArray = Object.keys(roamingsMap).map(function(key) { return roamingsMap[key] });
+        $scope.roamings = $filter('orderBy')(roamingsArray, '-date');
     }
 
     $scope.editRoaming = function (roaming) {
