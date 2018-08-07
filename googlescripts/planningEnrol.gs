@@ -5,6 +5,7 @@
 * day: 12
 * position: 0=tutor, [1;3]=volunteer
 * user: 'Paul Garnier'
+* gender: 'M'
 */
 function doGet(request) {
   try {
@@ -15,10 +16,11 @@ function doGet(request) {
     var day = parseInt(param['day']);
     var position = parseInt(param['position']);
     var user = param['user'];
+    var gender = param['gender'];
     if (action == 'enrol') {
-      enrol(docId, sheetId, day, position, user);
+      enrol(docId, sheetId, day, position, user, gender);
     } else if (action == 'cancel') {
-      cancel(docId, sheetId, day, position, user);
+      cancel(docId, sheetId, day, position, user, gender);
     }
     return jsonTextoutput({ status: 'success' });
   } catch (e) {
@@ -26,20 +28,35 @@ function doGet(request) {
   }
 }
 
-function enrol(docId, sheetId, day, position, user) {
+function enrol(docId, sheetId, day, position, user, gender) {
   var range = getUserRange(docId, sheetId, day, position);
   if (range.getValue() != "") {
       throw 'The user ' + range.getValue() + ' is already enroled for this day';
   }
   range.setValue(user);
+  setGenderValue(docId, sheetId, day, position, gender);
 }
 
-function cancel(docId, sheetId, day, position, user) {
+function cancel(docId, sheetId, day, position, user, gender) {
   var range = getUserRange(docId, sheetId, day, position);
   if (range.getValue() != user) {
       throw 'The user ' + user + ' is not enroled for this day (' + range.getValue() + ')';
   }
   range.setValue('');
+  setGenderValue(docId, sheetId, day, position, '');
+}
+
+function setGenderValue(docId, sheetId, day, position, gender) {
+  var range = getGenderRange(docId, sheetId, day, position);
+  if (range.getValue() == '' || range.getValue() == 'H' || range.getValue() == 'F') {
+    if (gender == 'M') {
+      range.setValue('H');
+    } else if (gender == 'F') {
+      range.setValue('F');
+    } else {
+      range.setValue('');
+    }
+  }
 }
 
 function jsonTextoutput(object) {
@@ -52,6 +69,14 @@ function getUserRange(docId, sheetId, day, position) {
   var dayRow = findRowOfDay(sheet, day);
   var userColumn = getColumnFor(position);
   return sheet.getRange(dayRow, userColumn);
+}
+
+function getGenderRange(docId, sheetId, day, position) {
+  var spreadsheet = SpreadsheetApp.openById(docId);
+  var sheet = getSheetById(spreadsheet, sheetId);
+  var dayRow = findRowOfDay(sheet, day);
+  var genderColumn = getColumnFor(position) + 1;
+  return sheet.getRange(dayRow, genderColumn);
 }
 
 function getSheetById(spreadsheet, sheetId) {
