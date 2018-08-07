@@ -800,6 +800,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
                     'email': email,
                     'phoneNumber': member.phoneNumber,
                     'address': member.address,
+                    'gender': member.gender,
                     'role': 'unregistered',
                     'rightRole': true
                 });

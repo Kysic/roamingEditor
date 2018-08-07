@@ -29,6 +29,16 @@ class GoogleContacts {
     private function getAddress($data) {
         return trim($data[6]);
     }
+    private function getGender($data) {
+        $gender = strtoupper(trim($data[0]));
+        if ($gender == 'H') {
+            return 'M';
+        } else if ($gender == 'F') {
+            return 'F';
+        } else {
+            return null;
+        }
+    }
     private function isBoard($data) {
         $trimStr = trim($data[7]);
         return !empty($trimStr);
@@ -61,6 +71,7 @@ class GoogleContacts {
                             'phoneNumber' => $this->getPhoneNumber($data),
                             'address' => $this->getAddress($data),
                             'birthDate' => $this->getBirthDate($data),
+                            'gender' => $this->getGender($data),
                             'registeringDate' => $this->getRegisteringDate($data),
                             'isTutor' => $this->isTutor($data),
                             'isBoard' => $this->isBoard($data)

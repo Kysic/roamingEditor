@@ -21,7 +21,7 @@ class UsersStorage {
     }
 
     public function getAllUsers() {
-        $query = 'SELECT userId, email, firstname, lastname, role, registrationDate,'.
+        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate,'.
                  '  NOT(ISNULL(passwordHash)) as registrationFinalised'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' ORDER BY firstname, lastname';
@@ -31,7 +31,7 @@ class UsersStorage {
     }
 
     public function getUserWithId($userId) {
-        $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
+        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' WHERE userId = :userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -41,7 +41,7 @@ class UsersStorage {
     }
 
     public function getUserWithEmail($email) {
-        $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
+        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' WHERE email = :email';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -50,20 +50,22 @@ class UsersStorage {
         return $request->fetch(PDO::FETCH_OBJ);
     }
 
-    public function addUser($email, $firstname, $lastname) {
+    public function addUser($email, $firstname, $lastname, $gender) {
         if ($this->getUserWithEmail($email)) {
             throw new BadRequestException('Un compte existe déjà pour cette adresse email, utilisez la procédure de mot de passe perdu si vous avez oublié votre mot de passe.');
         }
-        $query = 'INSERT INTO '.SQL_TABLE_USERS.' (email, firstname, lastname) VALUES (:email, :firstname, :lastname)';
+        $query = 'INSERT INTO '.SQL_TABLE_USERS.' (email, firstname, lastname, gender)'.
+                 ' VALUES (:email, :firstname, :lastname, :gender)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':email', $email, PDO::PARAM_STR);
         $request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
         $request->bindValue(':lastname', $lastname, PDO::PARAM_STR);
+        $request->bindValue(':gender', $gender, PDO::PARAM_STR);
         $this->dbAccess->executeWithException($request);
     }
 
     public function checkAndGetUser($email, $password) {
-        $query = 'SELECT userId, email, firstname, lastname, role, registrationDate, passwordSalt, passwordHash'.
+        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate, passwordSalt, passwordHash'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' WHERE email = :email';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -83,15 +85,16 @@ class UsersStorage {
         }
     }
 
-    public function updateUser($userId, $email, $firstname, $lastname) {
+    public function updateUser($userId, $email, $firstname, $lastname, $gender) {
         $query = 'UPDATE '.SQL_TABLE_USERS.
-                 ' SET email=:email, firstname=:firstname, lastname=:lastname'.
+                 ' SET email=:email, firstname=:firstname, lastname=:lastname, gender=:gender'.
                  ' WHERE userId=:userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':userId', $userId, PDO::PARAM_INT);
         $request->bindValue(':email', $email, PDO::PARAM_STR);
         $request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
         $request->bindValue(':lastname', $email, PDO::PARAM_STR);
+        $request->bindValue(':gender', $gender, PDO::PARAM_STR);
         $this->dbAccess->executeWithException($request);
         return $request->errorCode();
     }
@@ -168,7 +171,7 @@ class UsersStorage {
             throw new BadRequestException('Autologin id invalide');
         }
         $this->deleteExpiredAutologinId();
-        $query = 'SELECT userId, email, firstname, lastname, role, registrationDate'.
+        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate'.
                  ' FROM '.SQL_TABLE_USERS.' JOIN '.SQL_TABLE_AUTOLOGIN.' USING(userId)'.
                  ' WHERE autologinId = :autologinId';
         $request = $this->dbAccess->getPdo()->prepare($query);

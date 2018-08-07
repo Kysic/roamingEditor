@@ -4,6 +4,7 @@ CREATE TABLE `vcr_users` (
   `email` varchar(100) NOT NULL,
   `lastname` varchar(50),
   `firstname` varchar(50),
+  `gender` enum('M', 'F'),
   `role` enum('former', 'guest', 'member', 'tutor', 'board', 'admin', 'root', 'appli') NOT NULL DEFAULT 'member',
   `passwordSalt` binary(16),
   `passwordHash` binary(32),

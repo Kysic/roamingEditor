@@ -11,6 +11,7 @@
       <th>Email</th>
       <th>Téléphone</th>
       <th>Adresse</th>
+      <th>H/F</th>
       <th>Rôle</th>
     </tr>
     <tr ng-repeat="user in users | orderBy:'firstname'" ng-class="[ user.role,
@@ -22,6 +23,7 @@
       <td>{{user.email}}</td>
       <td>{{user.phoneNumber}}</td>
       <td>{{user.address}}</td>
+      <td>{{user.gender == 'M' ? 'H' : user.gender}}</td>
       <td>
         <span ng-if="!hasP('P_ASSIGN_ROLE') || user.userId == sessionInfo.user.userId">{{user.role}}</span>
         <span ng-if="hasP('P_ASSIGN_ROLE') && user.userId != sessionInfo.user.userId && user.role != 'unregistered'">

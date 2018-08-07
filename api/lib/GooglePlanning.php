@@ -121,8 +121,10 @@ class GooglePlanning {
         $sheetId = GooglePlanningRef::getSheetId($monthId);
         $day = date('d', $roamingDate);
         $username = $user->username;
+        $gender = $user->gender;
         $scriptUrl = GOOGLE_ENROL_SCRIPT .'?docId=' . urlencode($docId) . '&sheetId=' . urlencode($sheetId) .
-                     '&day=' . $day . '&position=' . $position . '&user=' . urlencode($username) . '&action=' . $action;
+                     '&day=' . $day . '&position=' . $position . '&user=' . urlencode($username) .
+                     '&gender=' . $gender . '&action=' . $action;
         $opts = array('http' => array('method' => 'GET', 'ignore_errors' => '1'));
         $responseContent = file_get_contents($scriptUrl, false, stream_context_create($opts));
         return json_decode($responseContent);

@@ -31,6 +31,7 @@ class Auth {
         if ($isInVinciContacts) {
             $firstname = $contacts[$email]['firstname'];
             $lastname = $contacts[$email]['lastname'];
+            $gender = $contacts[$email]['gender'];
         } else {
             $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
             throw new ForbiddenException('Cette adresse mail n\'est pas repertoriée dans la liste des contacts du VINCI.');
@@ -38,7 +39,7 @@ class Auth {
         $usersStorage = $this->lazyUSersStorage->get();
         $user = $usersStorage->getUserWithEmail($email);
         if ( ! $user ) {
-            $usersStorage->addUser($email, $firstname, $lastname);
+            $usersStorage->addUser($email, $firstname, $lastname, $gender);
             $user = $usersStorage->getUserWithEmail($email);
         }
         $mailToken = $usersStorage->generateUserMailToken($user->userId);
