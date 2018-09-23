@@ -71,15 +71,15 @@ class Browser {
                 echo '[TRACE] '.$currentLine;
             }
             if ($headerEnd) $content .= $currentLine;
-            else if (ereg('^HTTP',$currentLine)) {
+            else if (preg_match('/^HTTP/', $currentLine)) {
                 $headerStart = true;
                 if (preg_match('/^HTTP\/[0-9\.]* ([0-9]+) ([^\r\n]*)[\r\n]*$/i', $currentLine, $matches)) {
                     $httpStatus = $matches[1];
                     $httpMsg = $matches[2];
                 }
-            } else if ($headerStart && ereg("^[\n\r\t ]*$",$currentLine)) $headerEnd = true;
+            } else if ($headerStart && preg_match("/^[\n\r\t ]*$/", $currentLine)) $headerEnd = true;
             else {
-                if (ereg('^Content-Type: application/json'."\r\n", $currentLine)) {
+                if (preg_match('/^Content-Type: application\/json'."\r\n".'/', $currentLine)) {
                     $isJson = true;
                 }
                 $this->parseCookies($currentLine);
