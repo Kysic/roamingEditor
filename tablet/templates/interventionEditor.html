@@ -16,8 +16,11 @@
         <textarea name="location" id="locationField" ng-model="intervention.location"
           placeholder="Merci de préciser le lieu de la rencontre">
         </textarea>
-        <button ng-click="resetLocation()" ng-attr-title="Réinitialiser" ng-show="intervention.location != ''">Réinitialiser</button>
-        <button ng-click="localizeMe()" ng-attr-title="Me localiser" ng-show="intervention.location == ''" ng-disabled="localisationInProgress">Me localiser</button>
+        <div class='locationActions'>
+          <button ng-click="resetLocation()" ng-attr-title="Réinitialiser" ng-show="intervention.location != ''">Réinitialiser</button>
+          <button ng-click="goMap()" ng-attr-title="Afficher sur une carte" ng-show="intervention.location != ''">Carte</button>
+          <button ng-click="localizeMe()" ng-attr-title="Me localiser" ng-show="intervention.location == ''" ng-disabled="localisationInProgress">Me localiser</button>
+        </div>
       </div>
     </fieldset>
     <fieldset>

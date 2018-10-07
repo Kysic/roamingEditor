@@ -212,6 +212,36 @@ roamingEditor.factory('dateUtils', function () {
         humanMonth: humanMonth
     };
 });
+roamingEditor.factory('mapService', function () {
+    function showInterventionsOnMap(interventions, newWindow) {
+        var places = [];
+        for (var i in interventions) {
+            var int = interventions[i];
+            if (int.location) {
+                var place = {
+                    title: int.people.join(','),
+                    address: int.location,
+                    color: (int.nbAdults+int.nbChildren)>0?'green':'red'
+                };
+                places.push(place);
+            }
+        }
+        showPlacesOnMap(places)
+    }
+    function showPlacesOnMap(places, newWindow) {
+        sessionStorage.setItem('mapPlaces', JSON.stringify(places));
+        var location = '/map/';
+        if (newWindow) {
+            window.open(location, 'map');
+        } else {
+            document.location = location;
+        }
+    }
+    return {
+        showInterventionsOnMap: showInterventionsOnMap,
+        showPlacesOnMap: showPlacesOnMap
+    };
+});
 
 /* Directives */
 roamingEditor.directive('ngEnter', function() {
@@ -274,7 +304,8 @@ roamingEditor.controller('RoamingListController', function RoamingListController
 });
 
 roamingEditor.controller('RoamingController',
-  function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, $window, roamingService) {
+  function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, $window, roamingService,
+                             mapService) {
 
     $scope.synchroStatus;
     $scope.roaming;
@@ -286,6 +317,8 @@ roamingEditor.controller('RoamingController',
     $scope.removeTeammate = removeTeammate;
     $scope.updateRoaming = updateRoaming;
     $scope.goRoamingList = goRoamingList;
+    $scope.goMap = goMap;
+    $scope.goMapLocation = goMapLocation;
     $scope.goDonations = goDonations;
     $scope.isEditable = isEditable;
 
@@ -407,6 +440,14 @@ roamingEditor.controller('RoamingController',
         $location.path('/roamingsList');
     }
 
+    function goMap() {
+        mapService.showInterventionsOnMap($scope.roaming.interventions);
+    }
+
+    function goMapLocation(intervention) {
+        mapService.showInterventionsOnMap([intervention]);
+    }
+
     function goDonations() {
         $location.path('/donations/' + $scope.roaming.date);
     }
@@ -418,9 +459,17 @@ roamingEditor.controller('RoamingController',
 });
 
 roamingEditor.controller('InterventionController',
-  function InterventionController($scope, $routeParams, $location, $filter, $timeout, roamingService) {
+  function InterventionController($scope, $routeParams, $location, $filter, $timeout, roamingService, mapService) {
 
     $scope.sources = ['115', 'Maraude', 'Particulier', 'Direct', 'CHU', 'SemiTag', 'Pompier', 'Police', 'Autre'];
+    $scope.localizeMe = localizeMe;
+    $scope.resetLocation = resetLocation;
+    $scope.goMap = goMap;
+    $scope.range = range;
+    $scope.addPerson = addPerson;
+    $scope.removePerson = removePerson;
+    $scope.cancelInterventionEdit = cancelInterventionEdit;
+    $scope.saveInterventionEdit = saveInterventionEdit;
 
     var roaming;
     var interventionIndex = $routeParams.interventionId;
@@ -474,7 +523,7 @@ roamingEditor.controller('InterventionController',
         });
     }
 
-    $scope.localizeMe = function () {
+    function localizeMe() {
         if (navigator.geolocation) {
             $scope.localisationInProgress = true;
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -516,13 +565,18 @@ roamingEditor.controller('InterventionController',
         }
     }
 
-    $scope.resetLocation = function () {
+    function resetLocation() {
         if ($scope.intervention.location != '' && confirm('Etes vous sûr de vouloir réinitialiser le lieu de la rencontre ?')) {
             $scope.intervention.location = '';
         }
     }
 
-    $scope.range = function(min, max, step) {
+    function goMap() {
+        var address = $scope.intervention.location;
+        mapService.showPlacesOnMap([{ title: address, address: address }], true);
+    }
+
+    function range(min, max, step) {
         step = step || 1;
         var input = [];
         for (var i = min; i <= max; i += step) {
@@ -545,7 +599,7 @@ roamingEditor.controller('InterventionController',
             && $scope.intervention.comments.trim() == '';
     }
 
-    $scope.addPerson = function () {
+    function addPerson() {
         filterBlankPeople();
         $scope.intervention.people.push('');
         // A timeout is required because the field doesn't exist yet
@@ -556,7 +610,7 @@ roamingEditor.controller('InterventionController',
             }
         });
     }
-    $scope.removePerson = function (personIndex) {
+    function removePerson(personIndex) {
         if (personIndex < $scope.intervention.people.length
             && ($scope.intervention.people[personIndex] == ''
                     || confirm('Etes vous sûr de vouloir enlever ' + $scope.intervention.people[personIndex] + ' ?')
@@ -569,7 +623,7 @@ roamingEditor.controller('InterventionController',
         }
     }
 
-    $scope.cancelInterventionEdit = function () {
+    function cancelInterventionEdit() {
         if ( formAlmostUntouchedByUser() || confirm('Etes vous sûr de vouloir annuler cette intervention ?') ) {
             $location.path('/roaming/' + $routeParams.roamingId);
         }
@@ -586,7 +640,7 @@ roamingEditor.controller('InterventionController',
         }
     }
 
-    $scope.saveInterventionEdit = function () {
+    function saveInterventionEdit() {
         filterBlankPeople();
         $scope.intervention.time = $scope.hour + ':' + $scope.minute;
         if (interventionIndex == -1) {

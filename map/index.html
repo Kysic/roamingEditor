@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Roaming Interventions Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #back {
+        position: absolute;
+        bottom: 0px;
+        margin: 10px;
+        padding: 5px 15px;
+        background: #444;
+        color: #fff;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="back" onclick="window.history.back();">Retour</div>
+    <script>
+      var map;
+      var geocoder;
+      var places = getPlacesFromSessionStorage();
+      function geocodeAddress(title, address, color) {
+        if (color == null) {
+            color = 'blue';
+        }
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            var marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location,
+              title: title,
+              icon: 'https://maps.google.com/mapfiles/ms/icons/' + color + '.png'
+            });
+          } else {
+            console.log('Geocode of ' + address + ' was not successful for the following reason: ' + status);
+          }
+        });
+      }
+      function initMap() {
+        if (history.length <= 1) {
+            document.getElementById('back').style.display = 'none';
+        }
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 45.1752078, lng: 5.743195},
+          zoom: 13
+        });
+        geocoder = new google.maps.Geocoder();
+        if (places != null) {
+          for (var i in places) {
+            var place = places[i];
+            geocodeAddress(place.title, place.address, place.color);
+          }
+        }
+      }
+      function getPlacesFromSessionStorage() {
+        return JSON.parse(sessionStorage.getItem('mapPlaces'));
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_API_KEY&callback=initMap"
+    async defer></script>
+  </body>
+</html>

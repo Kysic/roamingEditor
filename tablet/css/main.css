@@ -72,6 +72,10 @@ fieldset {
     justify-content: space-around;
     align-items: center;
 }
+.locationActions {
+    display: flex;
+    flex-direction: column;
+}
 #locationField {
     height: 50px;
     width: 450px;
@@ -79,5 +83,10 @@ fieldset {
 #commentsField {
     height: 100px;
     width: 500px;
+}
+.mapLink {
+    cursor: pointer;
+    height: 16px;
+    width: 16px;
 }
 

@@ -44,7 +44,7 @@
     </tr>
     <tr ng-repeat="(interventionIndex, intervention) in roaming.interventions">
       <td><ul class="roamingEditorPeopleList"><li ng-repeat="person in intervention.people track by $index">{{person}}</li></ul></td>
-      <td>{{intervention.location}}</td>
+      <td>{{intervention.location}} <img class="mapLink" ng-click="goMapLocation(intervention)" src="img/earth.png"></td>
       <td>{{intervention.time}}</td>
       <td>{{intervention.source}}</td>
       <td>{{intervention.nbAdults}}</td>
@@ -62,6 +62,8 @@
   </table>
   <br/>
   <button ng-click="addIntervention()" ng-show="roaming.interventions.length > 0 &amp;&amp; isEditable()">Ajouter une intervention</button>
+  <br/><br/>
+  <button ng-click="goMap()">Voir les interventions sur une carte</button>
   <br/><br/>
   <button ng-click="goRoamingList()">Revenir à la liste des maraudes</button>
   <br/><br/>
