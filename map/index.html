@@ -30,42 +30,47 @@
     <script>
       var map;
       var geocoder;
-      var places = getPlacesFromSessionStorage();
-      function geocodeAddress(title, address, color) {
-        if (color == null) {
-            color = 'blue';
-        }
-        geocoder.geocode({'address': address}, function(results, status) {
-          if (status === 'OK') {
-            var marker = new google.maps.Marker({
-              map: map,
-              position: results[0].geometry.location,
-              title: title,
-              icon: 'https://maps.google.com/mapfiles/ms/icons/' + color + '.png'
-            });
-          } else {
-            console.log('Geocode of ' + address + ' was not successful for the following reason: ' + status);
-          }
-        });
+      var placesToLocate = getPlacesFromSessionStorage();
+      var addressResolutionLimit = 100;
+      function getPlacesFromSessionStorage() {
+        return JSON.parse(sessionStorage.getItem('mapPlaces'));
       }
       function initMap() {
         if (history.length <= 1) {
             document.getElementById('back').style.display = 'none';
         }
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 45.1752078, lng: 5.743195},
-          zoom: 13
+          center: { lat: 45.1752078, lng: 5.743195 },
+          zoom: 12
         });
         geocoder = new google.maps.Geocoder();
-        if (places != null) {
-          for (var i in places) {
-            var place = places[i];
-            geocodeAddress(place.title, place.address, place.color);
-          }
-        }
+        locatesNextPlace();
       }
-      function getPlacesFromSessionStorage() {
-        return JSON.parse(sessionStorage.getItem('mapPlaces'));
+      function locatesNextPlace() {
+          if (placesToLocate != null && placesToLocate.length > 0 && addressResolutionLimit-- > 0) {
+            addMarkerFor(placesToLocate.shift());
+          }
+      }
+      function addMarkerFor(place) {
+        var color = place.color != null ? place.color : 'blue';
+        geocoder.geocode({'address': place.address}, function(results, status) {
+          if (status === 'OK') {
+            var marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location,
+              title: place.title,
+              icon: 'https://maps.google.com/mapfiles/ms/icons/' + color + '.png'
+            });
+          } else {
+            console.log('Geocode of ' + place.address + ' was not successful for the following reason: ' + status);
+          }
+          if (status == 'OVER_QUERY_LIMIT') {
+              placesToLocate.push(place);
+              setTimeout(locatesNextPlace, 1500);
+          } else {
+            locatesNextPlace();
+          }
+        });
       }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=GOOGLE_API_KEY&callback=initMap"

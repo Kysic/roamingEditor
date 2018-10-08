@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Populating some places for the map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <script>
+      sessionStorage.setItem('mapPlaces',
+          JSON.stringify([
+              { title: '1 Gare Grenoble', address: 'Gare Grenoble', color: 'green' },
+              { title: '2 Gare Saint Égrève', address: 'Gare Saint Égrève', color: 'green' },
+              { title: '3 Gare Echirolles', address: 'Gare Echirolles', color: 'green' },
+              { title: '4 Gare de Gières', address: 'Gare de Gières', color: 'green' },
+              { title: '5 MC2 Grenoble', address: 'MC2 Grenoble', color: 'red' },
+              { title: '6 Parc Paul Mistral', address: 'Parc Paul Mistral', color: 'red' },
+              { title: '7 Grand\'Place Grenoble', address: 'Grand\'Place Grenoble', color: 'red' },
+              { title: '8 CHU de Grenoble', address: 'CHU de Grenoble', color: 'red' },
+              { title: '9 Mairie Gières', address: 'Mairie Gières', color: 'blue' },
+              { title: '10 Mairie de Saint-Martin-D\'Hères', address: 'Mairie de Saint-Martin-D\'Hères', color: 'blue' },
+              { title: '11 Hôtel de Ville de Grenoble', address: 'Hôtel de Ville de Grenoble', color: 'blue' },
+              { title: '12 Mairie de Seyssins', address: 'Mairie de Seyssins', color: 'blue' },
+              { title: '13 Local Vinci', address: '27 rue Nicolas Chorier', color: 'purple' }
+        ])
+      );
+    </script>
+  </body>
+</html>
