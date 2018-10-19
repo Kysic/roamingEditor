@@ -34,6 +34,10 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
         templateUrl: 'templates/users.html',
         controller: 'UsersController'
     })
+    .when('/roamingView/:roamingDate', {
+        templateUrl: 'templates/roamingView.html',
+        controller: 'RoamingViewController'
+    })
     .otherwise({
         redirectTo: '/roamingsList'
     });
@@ -860,4 +864,52 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
     });
 
 });
+
+
+roamingPortal.controller('RoamingViewController', function RoamingListController(
+        $scope, $http, $routeParams, $location, authService, dateUtils) {
+
+    $scope.sessionInfo = authService.getSessionInfo();
+    $scope.roamingDate = $routeParams.roamingDate;
+    $scope.roaming;
+    $scope.hasP = hasP;
+    $scope.logout = logout;
+
+    $scope.$watch('sessionInfo', function () {
+        if ($scope.sessionInfo.loggedIn === false) {
+            $location.path('/login');
+        }
+    }, true);
+
+    retrieveRoaming();
+
+    function retrieveRoaming() {
+        $http.get(roamingApiEndPoint + '/getRoamings.php?'+dateRangeQuerySelector($scope.roamingDate)).then(function (response) {
+            if (response.data.status == 'success' && response.data.roamings) {
+                var roamingsObject = response.data.roamings;
+                Object.keys(roamingsObject).forEach(function(roamingId) {
+                    $scope.roaming = roamingsObject[roamingId];
+                });
+            }
+        }, function (response) {
+            if (response.status == 401) {
+                $location.path('/login');
+            }
+        });
+    }
+
+    function dateRangeQuerySelector(roamingDate) {
+        return 'from=' + roamingDate + '&to=' + roamingDate;
+    }
+
+    function hasP(permission) {
+        return $scope.sessionInfo && $scope.sessionInfo.user
+                && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.indexOf(permission) !== -1;
+    }
+    function logout() {
+        authService.logout();
+    }
+
+});
+
 

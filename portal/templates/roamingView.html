@@ -1,0 +1,40 @@
+<div class="login">
+  Connecté en tant que {{sessionInfo.user.firstname}} {{sessionInfo.user.lastname}}
+  <button ng-click="logout()" ng-show="hasP('P_LOG_OUT')">Me déconnecter</button>
+</div>
+<div id="roamingView">
+    <div class='homeLink'><a href='/'><img src='img/home-32x32.png'></a></div>
+    <div class='warningCNIL'>
+        Les informations contenues dans les comptes rendus de maraudes sont réservées à un usage interne à
+        <a target='_blank' href='https://www.samu-social-grenoble.fr/'>l'association VINCI</a>.
+    </div>
+    <h2>Maraude du {{roamingDate | humanDate | capitalize}}</h2>
+    <div ng-if="roaming == null">Pas de maraude accessible pour ce jour là.</div>
+    <table ng-show="roaming.interventions.length > 0">
+        <tr>
+            <th>Personnes rencontrées</th>
+            <th>Lieu</th>
+            <th>Heure</th>
+            <th>Source</th>
+            <th>Adulte</th>
+            <th>Enfant</th>
+            <th>Couverture</th>
+            <th>Tente</th>
+            <th>BAI</th>
+            <th>Commentaire</th>
+        </tr>
+        <tr ng-repeat="(interventionIndex, intervention) in roaming.interventions">
+            <td><ul class="roamingEditorPeopleList"><li ng-repeat="person in intervention.people track by $index">{{person}}</li></ul></td>
+            <td>{{intervention.location}}</td>
+            <td>{{intervention.time}}</td>
+            <td>{{intervention.source}}</td>
+            <td>{{intervention.nbAdults}}</td>
+            <td>{{intervention.nbChildren}}</td>
+            <td>{{intervention.blankets}}</td>
+            <td>{{intervention.tents}}</td>
+            <td>{{intervention.bai ? 'X' : ''}}</td>
+            <td>{{intervention.comments}}</td>
+        </tr>
+    </table>
+</div>
+
