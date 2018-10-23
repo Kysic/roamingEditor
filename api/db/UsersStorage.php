@@ -158,44 +158,5 @@ class UsersStorage {
         return openssl_random_pseudo_bytes(32);
     }
 
-    /// Persitent login ///
-    public function deleteUserAutologinId($userId) {
-        $query = 'DELETE FROM '.SQL_TABLE_AUTOLOGIN.' WHERE userId=:userId';
-        $request = $this->dbAccess->getPdo()->prepare($query);
-        $request->bindValue(':userId', $userId, PDO::PARAM_INT);
-        $this->dbAccess->executeWithException($request);
-    }
-    public function getUserWithAutologinId($autologinId64) {
-        $autologinId = @base64_decode($autologinId64);
-        if (!$autologinId) {
-            throw new BadRequestException('Autologin id invalide');
-        }
-        $this->deleteExpiredAutologinId();
-        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate'.
-                 ' FROM '.SQL_TABLE_USERS.' JOIN '.SQL_TABLE_AUTOLOGIN.' USING(userId)'.
-                 ' WHERE autologinId = :autologinId';
-        $request = $this->dbAccess->getPdo()->prepare($query);
-        $request->bindValue(':autologinId', $autologinId, PDO::PARAM_STR);
-        $this->dbAccess->executeWithException($request);
-        return $request->fetch(PDO::FETCH_OBJ);
-    }
-    public function createAutologinIdForUserId($userId) {
-        $this->deleteExpiredAutologinId();
-        // Create the new one
-        $autologinId = openssl_random_pseudo_bytes(48);
-        $query = 'INSERT INTO '.SQL_TABLE_AUTOLOGIN.' (autologinId, userId) VALUES (:autologinId, :userId)';
-        $request = $this->dbAccess->getPdo()->prepare($query);
-        $request->bindValue(':autologinId', $autologinId, PDO::PARAM_STR);
-        $request->bindValue(':userId', $userId, PDO::PARAM_STR);
-        $this->dbAccess->executeWithException($request);
-        return base64_encode($autologinId);
-    }
-    private function deleteExpiredAutologinId() {
-        $query = 'DELETE FROM '.SQL_TABLE_AUTOLOGIN.
-                 ' WHERE connectionDate < (CURRENT_TIMESTAMP - INTERVAL '.AUTOLOGIN_DB_EXPIRATION.' SECOND)';
-        $request = $this->dbAccess->getPdo()->prepare($query);
-        $this->dbAccess->executeWithException($request);
-    }
-
 }
 

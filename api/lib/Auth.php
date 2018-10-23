@@ -52,10 +52,9 @@ class Auth {
             throw new BadRequestException('Le mot de passe et sa confirmation doivent être identiques.');
         }
         $this->session->checkHasPermission(P_CHANGE_PASSWORD, 'Vous n\'êtes pas autorisé à modifier votre mot de passe.');
-        $usersStorage = $this->lazyUSersStorage->get();
         $userId = $this->session->getUser()->userId;
-        $usersStorage->changePassword($userId, $pPassword);
-        $usersStorage->deleteUserAutologinId($userId);
+        $this->lazyUSersStorage->get()->changePassword($userId, $pPassword);
+        $this->session->deleteAllUserAutologins($userId);
     }
     public function setPassword($pPassword, $pPasswordConfirm, $pUserId, $pMailToken, $pSessionToken = false) {
         $this->checkToken($pSessionToken);
@@ -77,7 +76,7 @@ class Auth {
         }
         $usersStorage->changePassword($pUserId, $pPassword);
         $usersStorage->resetUserMailToken($pUserId);
-        $usersStorage->deleteUserAutologinId($pUserId);
+        $this->session->deleteAllUserAutologins($pUserId);
         $user = $usersStorage->getUserWithId($pUserId);
         $this->session->setUser($user);
     }
@@ -109,6 +108,9 @@ class Auth {
             $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
             throw $e;
         }
+        if ($user->role === APPLI) {
+            throw new SecurityException('Login attempt with application '.$user->userId.' credentials on standard login form.');
+        }
         $this->session->setUser($user);
         $usersStorage->resetUserMailToken($user->userId);
         if ($pStayLogged) {
@@ -118,8 +120,6 @@ class Auth {
     public function logout($pSessionToken = false) {
         $this->session->checkHasPermission(P_LOG_OUT, 'Vous n\'êtes pas autorisé à vous déconnecter du site.');
         $this->checkToken($pSessionToken);
-        $usersStorage = $this->lazyUSersStorage->get();
-        $usersStorage->deleteUserAutologinId($this->session->getUser()->userId);
         $this->session->unsetUser();
     }
     public function emulateRole($role) {
@@ -138,7 +138,7 @@ class Auth {
     }
     private function checkNbFailedAttempts($bruteforceStorage) {
         if ($bruteforceStorage->getNbFailedAttemptsInPeriod($_SERVER['REMOTE_ADDR']) >= BRUTEFORCE_MAX_NB_ATTEMPTS) {
-            throw new ForbiddenException('Trop de tentatives depuis cette IP, veuillez réessayer dans un moment.');
+            throw new SecurityException('Trop de tentatives depuis cette IP, veuillez réessayer dans un moment.');
         }
     }
     private function checkToken($pSessionToken) {

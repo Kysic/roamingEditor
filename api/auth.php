@@ -5,9 +5,9 @@ require_once('lib/Container.php');
 try {
 
     $container = new Container();
+    $json = $container->getJson();
     $session = $container->getSession();
     $auth = $container->getAuth();
-    $json = $container->getJson();
 
     $json->mergeJsonParameterToPost();
 

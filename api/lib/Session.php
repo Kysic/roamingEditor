@@ -4,15 +4,18 @@ class Session {
 
     private $rolesPermissions;
     private $lazyUSersStorage;
+    private $lazyAutologinStorage;
     private $lazyBruteforceStorage;
 
-    public function __construct($rolesPermissions, $lazyUSersStorage, $lazyBruteforceStorage, $autologin = true) {
+    public function __construct($rolesPermissions, $lazyUSersStorage, $lazyAutologinStorage, $lazyBruteforceStorage, $autologin = true) {
         $this->rolesPermissions = $rolesPermissions;
         $this->lazyUSersStorage = $lazyUSersStorage;
+        $this->lazyAutologinStorage = $lazyAutologinStorage;
         $this->lazyBruteforceStorage = $lazyBruteforceStorage;
         session_name(SESSION_COOKIE_KEY);
         session_start();
         if ($autologin) {
+            $this->doApplicationlogin();
             $this->doAutologin();
         }
     }
@@ -44,7 +47,7 @@ class Session {
 
     public function unsetUser() {
         unset($_SESSION['USER']);
-        $this->resetAutologinIdCookie();
+        $this->deleteAutologin();
     }
 
     public function hasPermission($permission) {
@@ -83,39 +86,87 @@ class Session {
     }
 
     public function generateAutologinId($userId) {
-        $autologinId = $this->lazyUSersStorage->get()->createAutologinIdForUserId($userId);
-        $this->setAutologinIdCookie($autologinId);
+        list($autologinId, $autologinToken) = $this->lazyAutologinStorage->get()->createAutologinFor($userId);
+        $this->setAutologinCookies($autologinId, $autologinToken);
     }
 
+    public function deleteAllUserAutologins($userId) {
+        $this->lazyAutologinStorage->get()->deleteAllUserAutologins($userId);
+        $this->resetAutologinCookies();
+    }
+
+    private function doApplicationLogin() {
+        if ( !$this->isLoggedIn() ) {
+            $applicationId = @$_COOKIE[APPLICATION_ID_COOKIE_KEY];
+            $applicationToken = @$_COOKIE[APPLICATION_TOKEN_COOKIE_KEY];
+            if ( !empty($applicationId) && !empty($applicationToken) ) {
+                $usersStorage = $this->lazyUSersStorage->get();
+                try {
+                    $user = $usersStorage->checkAndGetUser($applicationId, $applicationToken);
+                } catch (Exception $e) {
+                    setcookie(APPLICATION_ID_COOKIE_KEY, '', time() - 3000000, '/');
+                    setcookie(APPLICATION_TOKEN_COOKIE_KEY, '', time() - 3000000, '/');
+                    throw new SecurityException('Failed login attempt with applicationId '.$applicationId.
+                                                " : ".$e->getMessage());
+                }
+                if ($user->role !== APPLI) {
+                    throw new SecurityException('Login attempt with applicationId on non application user '.
+                                                $user->userId);
+                }
+                $this->setUser($user);
+            }
+        }
+    }
     private function doAutologin() {
         if ( !$this->isLoggedIn() ) {
-            $autologin = @$_COOKIE[AUTOLOGIN_COOKIE_KEY];
-            if ( !empty($autologin) ) {
+            $autologinId = @$_COOKIE[AUTOLOGIN_ID_COOKIE_KEY];
+            $autologinToken = @$_COOKIE[AUTOLOGIN_TOKEN_COOKIE_KEY];
+            if ( !empty($autologinId) && !empty($autologinToken) ) {
                 $bruteforceStorage = $this->lazyBruteforceStorage->get();
                 if ($bruteforceStorage->getNbFailedAttemptsInPeriod($_SERVER['REMOTE_ADDR']) < BRUTEFORCE_MAX_NB_ATTEMPTS) {
                     try {
-                        $this->connectWithAutologin($autologin);
+                        $this->connectWithAutologin($autologinId, $autologinToken);
                     } catch (Exception $e) {
                         $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
-                        $this->resetAutologinIdCookie();
+                        $this->resetAutologinCookies();
+                        if ($e instanceof SecurityException) {
+                            throw $e;
+                        }
                     }
                 }
             }
         }
     }
-    private function connectWithAutologin($autologinId) {
-        $user = $this->lazyUSersStorage->get()->getUserWithAutologinId($autologinId);
-        if (!$user) {
-            throw new NotFoundException('Unrecognized autologin id');
+    private function connectWithAutologin($autologinId, $autologinToken) {
+        $autologinStorage = $this->lazyAutologinStorage->get();
+        $userId = $autologinStorage->getUserIdFromAutologin($autologinId, $autologinToken);
+        if (!$userId) {
+            throw new ForbiddenException('Autologin id invalide ou obsolète');
         }
-        $this->setAutologinIdCookie($autologinId);
+        $user = $this->lazyUSersStorage->get()->getUserWithId($userId);
+        if (!$user) {
+            throw new ForbiddenException('Utilisateur '.$userId.' introuvable');
+        }
+        $autologinToken = $autologinStorage->updateAutologin($autologinId);
+        $this->setAutologinCookies($autologinId, $autologinToken);
         $this->setUser($user);
     }
-    private function setAutologinIdCookie($autologinId) {
-        setcookie(AUTOLOGIN_COOKIE_KEY, $autologinId, time() + AUTOLOGIN_COOKIE_EXPIRATION, '/');
+    private function deleteAutologin() {
+        $autologinId = @$_COOKIE[AUTOLOGIN_ID_COOKIE_KEY];
+        if ( !empty($autologinId) ) {
+            $this->lazyAutologinStorage->get()->deleteAutologin($autologinId);
+        }
+        $this->resetAutologinCookies();
     }
-    private function resetAutologinIdCookie() {
-        setcookie(AUTOLOGIN_COOKIE_KEY, '', time() - AUTOLOGIN_COOKIE_EXPIRATION, '/');
+    private function setAutologinCookies($autologinId, $autologinToken) {
+        $expTime = time() + AUTOLOGIN_COOKIE_EXPIRATION;
+        setcookie(AUTOLOGIN_ID_COOKIE_KEY, $autologinId, $expTime, '/');
+        setcookie(AUTOLOGIN_TOKEN_COOKIE_KEY, $autologinToken, $expTime, '/');
+    }
+    private function resetAutologinCookies() {
+        $expTime = time() - AUTOLOGIN_COOKIE_EXPIRATION;
+        setcookie(AUTOLOGIN_ID_COOKIE_KEY, '', $expTime, '/');
+        setcookie(AUTOLOGIN_TOKEN_COOKIE_KEY, '', $expTime, '/');
     }
 
     private function generateUsername($user) {

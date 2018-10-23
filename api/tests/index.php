@@ -80,36 +80,76 @@ assertIsVisitor(getSessionUser($browser));
 printTestCase('Login as member on three browsers with new password should succeed');
 $browser1 = new Browser();
 login($browser1, 'berni@gmail.com', 'berni-password-2', true);
-$autologin1 = $browser1->cookies['vinciPersistentLogin'];
+$autologinId1 = $browser1->cookies['vinciPersistentLoginId'];
+$autologinToken1 = $browser1->cookies['vinciPersistentLoginToken'];
 $browser2 = new Browser();
 login($browser2, 'berni@gmail.com', 'berni-password-2', false);
-$autologin2 = $browser2->cookies['vinciPersistentLogin'];
+$autologinId2 = $browser2->cookies['vinciPersistentLoginId'];
+$autologinToken2 = $browser2->cookies['vinciPersistentLoginToken'];
 $browser3 = new Browser();
 login($browser3, 'berni@gmail.com', 'berni-password-2', true);
-$autologin3 = $browser3->cookies['vinciPersistentLogin'];
+$autologinId3 = $browser3->cookies['vinciPersistentLoginId'];
+$autologinToken3 = $browser3->cookies['vinciPersistentLoginToken'];
 assertIsBernard(getSessionUser($browser1));
 assertIsBernard(getSessionUser($browser2));
 assertIsBernard(getSessionUser($browser3));
-assertNonEquals($autologin1, '');
-assertEquals($autologin2, '');
-assertNonEquals($autologin3, '');
-assertNonEquals($autologin1, $autologin3);
+assertNonEquals($autologinId1, '');
+assertNonEquals($autologinToken1, '');
+assertEquals($autologinId2, '');
+assertEquals($autologinToken2, '');
+assertNonEquals($autologinId3, '');
+assertNonEquals($autologinToken3, '');
+assertNonEquals($autologinId1, $autologinId3);
+assertNonEquals($autologinToken1, $autologinToken3);
+
+printTestCase('Bad autologin as appli should unset cookies');
+$appliBrowser = new Browser();
+$appliBrowser->cookies['vinciApplicationId'] = 'tablet@example.com';
+$appliBrowser->cookies['vinciApplicationToken'] = 'XXblet1@example.com';
+try {
+    getSessionUser($appliBrowser);
+    throw new AssertException('getSessionUser should have raised an HttpStatusException');
+} catch (Exception $e) {
+    assertException($e, 'Failed login attempt with applicationId tablet@example.com : Identifiants invalides.', 403);
+}
+assertEquals($appliBrowser->cookies['vinciApplicationId'], '');
+assertEquals($appliBrowser->cookies['vinciApplicationToken'], '');
+assertIsVisitor(getSessionUser($appliBrowser));
+
+printTestCase('Login with appli credentials should failed');
+$appliBrowser = new Browser();
+try {
+    login($appliBrowser, 'tablet@example.com', 'tablet1@example.com', false);
+    throw new AssertException('login should have raised an HttpStatusException');
+} catch (Exception $e) {
+    assertException($e, 'Login attempt with application 1 credentials on standard login form.', 403);
+}
+assertIsVisitor(getSessionUser($appliBrowser));
 
 printTestCase('Autologin as appli should succeed');
 $appliBrowser = new Browser();
-$appliBrowser->cookies['vinciPersistentLogin'] = TABLET_1_AUTOLOGIN_KEY;
+$appliBrowser->cookies['vinciApplicationId'] = 'tablet@example.com';
+$appliBrowser->cookies['vinciApplicationToken'] = 'tablet1@example.com';
 assertIsTablet1(getSessionUser($appliBrowser));
+assertEquals($appliBrowser->cookies['vinciApplicationId'], 'tablet@example.com');
+assertEquals($appliBrowser->cookies['vinciApplicationToken'], 'tablet1@example.com');
 
 printTestCase('Autologin as member should succeed');
-$browser1 = new Browser();
-$browser1->cookies['vinciPersistentLogin'] = $autologin1;
-$browser2 = new Browser();
-$browser2->cookies['vinciPersistentLogin'] = $autologin2;
-$browser3 = new Browser();
-$browser3->cookies['vinciPersistentLogin'] = $autologin3;
+$browser1 = createAutologinBrowser($autologinId1, $autologinToken1);
+$browser2 = createAutologinBrowser($autologinId2, $autologinToken2);
+$browser3 = createAutologinBrowser($autologinId3, $autologinToken3);
 assertIsBernard(getSessionUser($browser1));
 assertIsVisitor(getSessionUser($browser2));
 assertIsBernard(getSessionUser($browser3));
+assertEquals($autologinId1, $browser1->cookies['vinciPersistentLoginId']);
+assertNonEquals($autologinToken1, $browser1->cookies['vinciPersistentLoginToken']);
+$autologinId1 = $browser1->cookies['vinciPersistentLoginId'];
+$autologinToken1 = $browser1->cookies['vinciPersistentLoginToken'];
+assertEquals($autologinId3, $browser3->cookies['vinciPersistentLoginId']);
+assertNonEquals($autologinToken3, $browser3->cookies['vinciPersistentLoginToken']);
+$autologinId3 = $browser3->cookies['vinciPersistentLoginId'];
+$autologinToken3 = $browser3->cookies['vinciPersistentLoginToken'];
+
 
 printTestCase('Logout as appli should be forbidden');
 try {
@@ -123,18 +163,38 @@ assertIsTablet1(getSessionUser($appliBrowser));
 printTestCase('Logout as member should unset autologin');
 assertIsBernard(getSessionUser($browser1));
 logout($browser1);
+assertEquals($browser1->cookies['vinciPersistentLoginId'], '');
 assertIsVisitor(getSessionUser($browser1));
-assertEquals($browser1->cookies['vinciPersistentLogin'], '');
 
-printTestCase('Autologin should not succeed after logout');
-$browser1 = new Browser();
-$browser1->cookies['vinciPersistentLogin'] = $autologin1;
+printTestCase('Autologin should not succeed after logout on same browser');
+$browser1 = createAutologinBrowser($autologinId1, $autologinToken1);
 assertIsVisitor(getSessionUser($browser1));
-assertEquals($browser1->cookies['vinciPersistentLogin'], '');
-$browser3 = new Browser();
-$browser3->cookies['vinciPersistentLogin'] = $autologin3;
+assertEquals($browser1->cookies['vinciPersistentLoginId'], '');
+
+printTestCase('Autologin should succeed after logout on another browser');
+$browser3 = createAutologinBrowser($autologinId3, $autologinToken3);
+assertIsBernard(getSessionUser($browser3));
+assertEquals($autologinId3, $browser3->cookies['vinciPersistentLoginId']);
+assertNonEquals($autologinToken3, $browser3->cookies['vinciPersistentLoginToken']);
+$autologinId3_old= $autologinId3;
+$autologinToken3_old= $autologinToken3;
+$autologinId3 = $browser3->cookies['vinciPersistentLoginId'];
+$autologinToken3 = $browser3->cookies['vinciPersistentLoginToken'];
+
+printTestCase('Autologin with old autologin should failed');
+$browser3 = createAutologinBrowser($autologinId3_old, $autologinToken3_old);
+try {
+    getSessionUser($browser3);
+    throw new AssertException('getSessionUser should have raised an HttpStatusException');
+} catch (Exception $e) {
+    assertException($e, 'Incorrect autologin token detected', 403);
+}
+assertEquals($browser3->cookies['vinciPersistentLoginId'], '');
+
+printTestCase('Autologin with new autologin should failed after bad autlogin attempt');
+$browser3 = createAutologinBrowser($autologinId3, $autologinToken3);
 assertIsVisitor(getSessionUser($browser3));
-assertEquals($browser3->cookies['vinciPersistentLogin'], '');
+assertEquals($browser3->cookies['vinciPersistentLoginId'], '');
 
 printTestCase('Reset password as member should succeed');
 $browser = new Browser();
@@ -228,7 +288,7 @@ assertEquals($result->editUrl, $editUrl);
 
 
 printTestCase('Bruteforce system should forbid to much connexion attempts');
-for ($i=0 ; $i<5; $i++) {
+for ($i=0 ; $i<10; $i++) {
     try {
         $browser = new Browser();
         login($browser, 'berni@gmail.com', 'Berni-Password-bad');
@@ -259,6 +319,9 @@ function assertNonEquals($actual, $expected, $errorMsg = NULL) {
 }
 
 function assertException($exception, $errorMsg, $errorCode) {
+    if ($exception instanceof AssertException) {
+        throw $exception;
+    }
     assertEquals($exception->content->errorMsg, $errorMsg);
     assertEquals($exception->content->status, 'error');
     assertEquals($exception->statusCode, $errorCode);
@@ -324,7 +387,7 @@ function assertIsBernard($user) {
 
 function assertIsTablet1($user) {
     assertEquals($user->role, 'appli');
-    assertEquals($user->email, 'tablet1@example.com');
+    assertEquals($user->email, 'tablet@example.com');
     assertEquals($user->firstname, 'tablette');
     assertEquals($user->lastname, '1');
     assertEquals($user->permissions, array(

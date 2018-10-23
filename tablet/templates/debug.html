@@ -1,11 +1,11 @@
 <div>
   <button ng-click="goRoamingsList()">Accueil</button>
   <hr/>
-  {{autoLogin}}<br/>
-  <input type="text" ng-model="apiKey" style="width: 550px" />
-  <button ng-click="updateApiKey()">Modifier l'apiKey</button>
+  <input type="text" ng-model="apiId" style="width: 200px" />
+  <input type="text" ng-model="apiToken" style="width: 350px" />
+  <button ng-click="updateApiCreds()">Modifier les identifiants de l'API</button>
   <hr/>
   <button ng-click="roamingsJSON='{}'">Réinitialiser</button>
   <button ng-click="updateRoamings()">Sauvegarder</button><br/>
-  <textarea ng-model="roamingsJSON" style="width: 700px; height: 700px"></textarea>
+  <textarea ng-model="roamingsJSON" style="width: 700px; height: 650px"></textarea>
 </div>

@@ -51,6 +51,12 @@ if (!function_exists('http_response_code')) {
 
 class Json {
 
+    private $lazyMail;
+
+    public function __construct($lazyMail) {
+        $this->lazyMail = $lazyMail;
+    }
+
     public function mergeJsonParameterToPost() {
         if ( isset($_SERVER['CONTENT_TYPE']) && strpos($_SERVER['CONTENT_TYPE'], "application/json") !== false ) {
             $_POST = array_merge($_POST, (array) json_decode(trim(file_get_contents('php://input')), true));
@@ -69,9 +75,12 @@ class Json {
             $errorCode = 401; // 401 Unauthorized (Unauthenticated)
         } else if ($exception instanceof ForbiddenException) {
             $errorCode = 403; // 403 Forbidden
-        } else if ($exception instanceof NotFoundException) {
+        } else if ($exception instanceof SecurityException) {
+            $this->handleSecurityException($exception);
+            $errorCode = 403; // 403 Forbidden
+        }else if ($exception instanceof NotFoundException) {
             $errorCode = 404; // 404 Not Found
-        } else {
+        }  else {
             $errorCode = 500; // 500 Internal Server Error
         }
         http_response_code($errorCode);
@@ -81,6 +90,16 @@ class Json {
             'errorCode' => $errorCode,
             'errorMsg' => $exception->getMessage()
         ));
+    }
+
+    private function handleSecurityException($exception) {
+        $this->lazyMail->get()->sendMail(
+            ADMIN_EMAIL,
+            '[VINCI] Security alert',
+            'IP: '.$_SERVER['REMOTE_ADDR']."\r\n".
+            'Navigateur: '.$_SERVER['HTTP_USER_AGENT']."\r\n".
+            'Message:'."\r\n".$exception->getMessage()
+        );
     }
 
 }

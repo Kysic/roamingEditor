@@ -16,8 +16,18 @@ class DbAccess {
 
     public function executeWithException($request) {
         if (!$request->execute()) {
-            throw new Exception('Erreur sql lors de l\exécution de la requete ['.implode(', ', $request->errorInfo()).']' );
+            $this->raiseException($request);
         }
+    }
+
+    public function raiseExceptionIfHasFailed($request) {
+        if ($request->errorCode() !== '00000') {
+            $this->raiseException($request);
+        }
+    }
+
+    private function raiseException($request) {
+        throw new Exception('Erreur sql lors de l\exécution de la requete ['.implode(', ', $request->errorInfo()).']' );
     }
 
 }

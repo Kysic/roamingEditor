@@ -9,6 +9,12 @@ function getSessionUser($browser) {
     assertSuccess($response, 'getSessionUser failed : '.print_r($response, true));
     return $response->user;
 }
+function createAutologinBrowser($autologinId, $autologinToken) {
+    $browser = new Browser();
+    $browser->cookies['vinciPersistentLoginId'] = $autologinId;
+    $browser->cookies['vinciPersistentLoginToken'] = $autologinToken;
+    return $browser;
+}
 function registerAndSetPassword($browser, $email, $password, $sessionToken = NULL) {
     if ( !$sessionToken ) $sessionToken = getSessionToken($browser);
     register($browser, $email, $sessionToken);

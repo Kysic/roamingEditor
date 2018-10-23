@@ -51,7 +51,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
     },60000);
 
     function loadLocalStorage() {
-        synchronizeApiKeyWithAutoLogin();
+        synchronizeApiCredCookies();
         roamings = { };
         Object.keys(localStorage).forEach(function(storageId) {
             if (storageId.match(/^roaming_[0-9-]*$/)) {
@@ -66,12 +66,14 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
         filterOldRoamings();
     }
 
-    function synchronizeApiKeyWithAutoLogin() {
-        var apiKey = localStorage.getItem('apiKey');
-        if ( apiKey ) {
+    function synchronizeApiCredCookies() {
+        var apiId = localStorage.getItem('apiId');
+        var apiToken = localStorage.getItem('apiToken');
+        if ( apiId && apiToken ) {
             var expireDate = new Date();
-            expireDate.setDate(expireDate.getDate() + 365);
-            $cookies.put('vinciPersistentLogin', apiKey, {'expires':expireDate});
+            expireDate.setDate(expireDate.getDate() + 10 * 365);
+            $cookies.put('vinciApplicationId', apiId, {'expires':expireDate});
+            $cookies.put('vinciApplicationToken', apiToken, {'expires':expireDate});
         }
     }
 
@@ -695,10 +697,14 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
         $location.path('/roamingsList');
     }
 
-    $scope.updateApiKey = function () {
-        localStorage.setItem('apiKey', $scope.apiKey);
+    $scope.updateApiCreds = function () {
+        localStorage.setItem('apiId', $scope.apiId);
+        localStorage.setItem('apiToken', $scope.apiToken);
         $cookies.remove('vinciSession');
-        $cookies.put('vinciPersistentLogin', $scope.apiKey);
+        var expireDate = new Date();
+        expireDate.setDate(expireDate.getDate() + 10 * 365);
+        $cookies.put('vinciApplicationId', $scope.apiId, {'expires':expireDate});
+        $cookies.put('vinciApplicationToken', $scope.apiToken, {'expires':expireDate});
         roamingService.loadLocalStorage();
         loadCurrentConf();
     }
@@ -715,8 +721,7 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
 
     function loadCurrentConf() {
         $scope.roamingsJSON = $filter('json')(roamingService.getAllRoamings());
-        $scope.autoLogin = $cookies.get('vinciPersistentLogin');
-        $scope.apiKey = localStorage.getItem('apiKey');
+        $scope.apiId = localStorage.getItem('apiId');
     }
 
 });

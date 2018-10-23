@@ -18,9 +18,12 @@ define('BRUTEFORCE_MAX_NB_ATTEMPTS', 5);
 define('REPORT_OLD_LIMIT_DAYS', 62);
 
 define('SESSION_COOKIE_KEY', 'vinciSession');
-define('AUTOLOGIN_COOKIE_KEY', 'vinciPersistentLogin');
-define('AUTOLOGIN_COOKIE_EXPIRATION', '2678400'); // 31 jours
-define('AUTOLOGIN_DB_EXPIRATION', '8035200'); // 93 jours
+define('AUTOLOGIN_ID_COOKIE_KEY', 'vinciPersistentLoginId');
+define('AUTOLOGIN_TOKEN_COOKIE_KEY', 'vinciPersistentLoginToken');
+define('AUTOLOGIN_COOKIE_EXPIRATION', '5356800'); // 62 jours
+define('AUTOLOGIN_DB_EXPIRATION', '5443200'); // 63 jours
+define('APPLICATION_ID_COOKIE_KEY', 'vinciApplicationId');
+define('APPLICATION_TOKEN_COOKIE_KEY', 'vinciApplicationToken');
 
 define('TEAMUP_URL', 'https://teamup.com');
 define('TEAMUP_SEE_MEETING_ID', '');
@@ -34,4 +37,5 @@ class UnauthenticatedException extends Exception { }
 class ForbiddenException extends Exception { }
 class BadRequestException extends Exception { }
 class NotFoundException extends Exception { }
+class SecurityException extends Exception { }
 

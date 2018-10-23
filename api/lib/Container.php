@@ -21,6 +21,7 @@ define('STATS_LIB', ROAMING_API_DIR.'/lib/Stats.php');
 define('DB_ACCESS_LIB', ROAMING_API_DIR.'/db/DbAccess.php');
 define('USERS_STORAGE_LIB', ROAMING_API_DIR.'/db/UsersStorage.php');
 define('ROAMINGS_STORAGE_LIB', ROAMING_API_DIR.'/db/RoamingsStorage.php');
+define('AUTOLOGIN_STORAGE_LIB', ROAMING_API_DIR.'/db/AutologinStorage.php');
 define('BRUTEFORCE_STORAGE_LIB', ROAMING_API_DIR.'/db/BruteforceStorage.php');
 
 class Container {
@@ -38,6 +39,7 @@ class Container {
     private $dbAcces = NULL;
     private $usersStorage = NULL;
     private $roamingsStorage = NULL;
+    private $autologinStorage = NULL;
     private $bruteforceStorage = NULL;
     private $stats = NULL;
 
@@ -55,6 +57,7 @@ class Container {
             $this->session = new Session(
                 $this->getRolesPermissions(),
                 $this->lazyUsersStorage(),
+                $this->lazyAutologinStorage(),
                 $this->lazyBruteforceStorage()
             );
         }
@@ -98,7 +101,7 @@ class Container {
     public function getJson() {
         if (!$this->json) {
             require_once(JSON_LIB);
-            $this->json = new Json();
+            $this->json = new Json($this->lazyMail());
         }
         return $this->json;
     }
@@ -167,6 +170,17 @@ class Container {
     }
     public function lazyRoamingsStorage() {
         return new LazyLoader($this, 'getRoamingsStorage');
+    }
+
+    public function getAutologinStorage() {
+        if (!$this->autologinStorage) {
+            require_once(AUTOLOGIN_STORAGE_LIB);
+            $this->autologinStorage = new AutologinStorage($this->getDbAccess());
+        }
+        return $this->autologinStorage;
+    }
+    public function lazyAutologinStorage() {
+        return new LazyLoader($this, 'getAutologinStorage');
     }
 
     public function getBruteforceStorage() {
