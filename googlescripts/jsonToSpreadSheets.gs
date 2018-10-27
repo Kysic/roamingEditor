@@ -101,23 +101,35 @@ function createNewCRFromTemplate(roamingDate) {
 }
 
 function fillRoamingSheet(roaming, sheet) {
-  tryToSetInCell(sheet, 'c1', roaming.date);
-  tryToSetInCell(sheet, 'c2', roaming.vehicle);
-  tryToSetInCell(sheet, 'c3', roaming.teammates.join(', ') + ' et ' + roaming.tutor);
+  tryToSetInCell(sheet, 'c1', undefToEmpty(roaming.date));
+  tryToSetInCell(sheet, 'c2', undefToEmpty(roaming.vehicle));
+  tryToSetInCell(sheet, 'c3', joinList(roaming.teammates) + ' et ' + undefToEmpty(roaming.tutor));
   for (var i = 0; i < roaming.interventions.length; i++) {
     var intervention = roaming.interventions[i];
     var line = i + 18;
-    tryToSetInCell(sheet, 'a' + line, intervention.people.join(', '));
-    tryToSetInCell(sheet, 'c' + line, intervention.location);
-    tryToSetInCell(sheet, 'd' + line, intervention.time);
-    tryToSetInCell(sheet, 'e' + line, intervention.source);
-    tryToSetInCell(sheet, 'f' + line, intervention.nbAdults);
-    tryToSetInCell(sheet, 'g' + line, intervention.nbChildren);
-    tryToSetInCell(sheet, 'h' + line, intervention.blankets);
-    tryToSetInCell(sheet, 'i' + line, intervention.tents);
+    tryToSetInCell(sheet, 'a' + line, joinList(intervention.people));
+    tryToSetInCell(sheet, 'c' + line, undefToEmpty(intervention.location));
+    tryToSetInCell(sheet, 'd' + line, undefToEmpty(intervention.time));
+    tryToSetInCell(sheet, 'e' + line, undefToEmpty(intervention.source));
+    tryToSetInCell(sheet, 'f' + line, undefToZero(intervention.nbAdults));
+    tryToSetInCell(sheet, 'g' + line, undefToZero(intervention.nbChildren));
+    tryToSetInCell(sheet, 'h' + line, undefToZero(intervention.blankets));
+    tryToSetInCell(sheet, 'i' + line, undefToZero(intervention.tents));
     if (intervention.bai) { tryToSetInCell(sheet, 'j' + line, 'X'); };
-    tryToSetInCell(sheet, 'k' + line, intervention.comments);
+    tryToSetInCell(sheet, 'k' + line, undefToEmpty(intervention.comments));
   }
+}
+
+function joinList(list) {
+  return list ? list.join(', ') : '';
+}
+
+function undefToEmpty(value) {
+  return value ? value : '';
+}
+
+function undefToZero(value) {
+  return value ? value : 0;
 }
 
 function tryToSetInCell(sheet, range, value) {
@@ -165,6 +177,9 @@ function testGenerationCR() {
         "tents": 0,
         "bai": true,
         "comments": "DIACA"
+      },
+      {
+        "undefIntervention": "withoutFields"
       },
       {
         "time": "22:30",
