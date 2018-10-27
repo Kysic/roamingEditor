@@ -34,7 +34,7 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
         templateUrl: 'templates/users.html',
         controller: 'UsersController'
     })
-    .when('/roamingView/:roamingDate', {
+    .when('/roaming/:roamingDate', {
         templateUrl: 'templates/roamingView.html',
         controller: 'RoamingViewController'
     })
