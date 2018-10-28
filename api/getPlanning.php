@@ -36,8 +36,9 @@ try {
         $toDate->add($periodInterval);
         $period = new DatePeriod( $fromDate, $periodInterval, $toDate );
         foreach($period as $date) {
-            $response[$date->format("Y-m-d")] = $googlePlanning->getRoamingOfDate($date->getTimestamp());
+            $response[$date->format('Y-m-d')] = $googlePlanning->getRoamingOfDate($date->getTimestamp());
         }
+        $response['infos'] = $googlePlanning->getInfos();
     }
     $json->returnResult($response);
 

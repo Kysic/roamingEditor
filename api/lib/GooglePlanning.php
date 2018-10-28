@@ -20,14 +20,8 @@ class GooglePlanning {
     }
 
     public function getRoamingOfDate($roamingDate) {
+        $roamingMonthData = $this->getRoamingsOfMonth($roamingDate);
         $dateId = date('Y-m-d', $roamingDate);
-        $monthId = date('Y-m', $roamingDate);
-        if ( !array_key_exists($monthId, $this->roamingMonthData) ) {
-            $this->extractRoamingsOfMonth($monthId);
-            //print_r($this->roamingMonthData);
-        }
-        $roamingMonthData = $this->roamingMonthData[$monthId];
-        //print_r($this->roamingMonthData[$monthId]);
         if ( array_key_exists($dateId, $roamingMonthData) ) {
             return $roamingMonthData[$dateId];
         } else {
@@ -35,7 +29,24 @@ class GooglePlanning {
         }
     }
 
+    public function getInfos() {
+        $infos = array();
+        foreach($this->roamingMonthData as $monthData){
+            $infos = array_merge($infos, $monthData['infos']);
+        }
+        return array_unique($infos);
+    }
+
     private $roamingMonthData = array();
+
+    private function getRoamingsOfMonth($roamingDate) {
+        $monthId = date('Y-m', $roamingDate);
+        if ( !array_key_exists($monthId, $this->roamingMonthData) ) {
+            $this->extractRoamingsOfMonth($monthId);
+            //print_r($this->roamingMonthData);
+        }
+        return $this->roamingMonthData[$monthId];
+    }
 
     private function getTeammateName($data, $teammateIndex) {
         return implode('-', array_map('ucwords', explode('-',
@@ -81,6 +92,13 @@ class GooglePlanning {
                         'status' => $this->getStatus($tutor, $teammates)
                     );
                     $roamingDay++;
+                } else if (stripos($data[0], 'réunion') !== false
+                            || stripos($data[0], 'reunion') !== false
+                            || stripos($data[0], 'pratique') !== false) {
+                    if (!array_key_exists('infos', $roamingMonthData)) {
+                        $roamingMonthData['infos'] = array();
+                    }
+                    array_push($roamingMonthData['infos'], $data[0]);
                 }
             }
             fclose($handle);

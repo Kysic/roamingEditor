@@ -222,6 +222,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     $scope.roamingByFour;
     $scope.editRunning;
     $scope.uploadRunning;
+    $scope.planningInfos;
     $scope.showMonth = showMonth;
     $scope.roamingApiEndPoint = roamingApiEndPoint;
     $scope.editRoaming = editRoaming;
@@ -275,6 +276,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
 
     function initRoamings() {
         $scope.roamings = [];
+        $scope.planningInfos = '';
         var lastDayOfMonth = new Date($scope.month.getFullYear(), $scope.month.getMonth() + 1, 0);
         for (var d = $scope.month; d <= lastDayOfMonth;
                  d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)) {
@@ -342,6 +344,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
                 }
                 checkRoamingByFour(roaming);
             }
+            $scope.planningInfos = planning['infos'];
         }, function (response) {
             if (response.status == 401) {
                 $location.path('/login');

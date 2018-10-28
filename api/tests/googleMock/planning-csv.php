@@ -1,6 +1,5 @@
 Mois de Juin,,<?php echo $month; ?>,,<?php echo $year; ?>,,,,,,,,,,,,,,,,,,,,,,,,
-"Entre les dates de réunion, vous pouvez donner vos intentions de participation aux maraudes en envoyant un mail à     ",,,,,,,,,,,,,,,,,,,,,,,,,,,,
-XXXXXXXXX@gmail.com,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"En cas d'annulation, merci d'envoyer un mail à xxx@xxx.xx",,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ou en téléphonant au 06 XX XX XX XX ou 06 YY YY YY YY (boite vocale en cas d'absence),,,,,,,,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,,,1 T,1H,1 F,Nb Coequipier,Couleur,Passé
 "RAPPELEZ VOUS : AUTANT QUE POSSIBLE,  DES EQUIPES MIXTES",,Tuteur,H/F,Coéquipier,H/F,Coéquipier,H/F,"Coéquipier

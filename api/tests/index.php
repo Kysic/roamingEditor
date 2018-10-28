@@ -228,7 +228,8 @@ $result = getplannings($appliBrowser, $thirdDayOfMonth, $fifthDayOfMonth);
 assertEquals($result, (object) array(
         $thirdDayOfMonth => (object) array('tutor'=>'','teammates'=>array('Akim.s', 'Tatiana', 'Amelie G'),'status'=>'unsure'),
         $fourthDayOfMonth => (object) array('tutor'=>'Maraude','teammates'=>array('Annulee', '', ''),'status'=>'canceled'),
-        $fifthDayOfMonth => (object) array('tutor'=>'Roland T','teammates'=>array('Annie B', '', ''),'status'=>'planned-uncomplete')
+        $fifthDayOfMonth => (object) array('tutor'=>'Roland T','teammates'=>array('Annie B', '', ''),'status'=>'planned-uncomplete'),
+        'infos' => array('Réunion bureau/tuteurs : Mercredi 14 juin', 'Réunion mensuelle (ouverte à tous) : mercredi 28 juin - 19h')
     ));
 
 printTestCase('nextDaysStatus should succeed');
