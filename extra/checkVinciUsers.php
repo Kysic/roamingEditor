@@ -20,6 +20,15 @@ function areRolesConsistent($users, $members) {
                     return false;
                 }
             }
+            if ($user->firstname !== $member['firstname']) {
+                return false;
+            }
+            if ($user->lastname !== $member['lastname']) {
+                return false;
+            }
+            if ($user->gender !== $member['gender']) {
+                return false;
+            }
         } else {
             if ( !in_array( $user->role, array(APPLI, FORMER, GUEST) ) ) {
                 return false;
@@ -40,16 +49,16 @@ try {
     $members = $googleContacts->extractContacts();
 
     if ( !areRolesConsistent($users, $members) ) {
-        echo 'Invalid role detected'."\n";
-        $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Some VINCI user doesn\'t have the right role',
-            'Some user doesn\'t have the right role.'
+        echo 'Inconstency detected'."\n";
+        $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Some VINCI user are not in sync with official list',
+            'Some user doesn\'t have correct attributes.'
         );
     }
     echo 'done'."\n";
 
 } catch (Exception $e) {
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while checking users roles',
-        'An error has occured while checking the VINCI users roles: '."\n".print_r($e, true)
+    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while checking users',
+        'An error has occured while checking the VINCI users: '."\n".print_r($e, true)
     );
     throw $e;
 }

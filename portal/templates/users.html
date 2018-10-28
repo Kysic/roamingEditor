@@ -18,12 +18,12 @@
                     { 'noPassword': user.registrationFinalised == 0,
                       'wrongRole': !user.rightRole,
                       'roleAssigner': hasP('P_ASSIGN_ROLE') } ]">
-      <td>{{user.firstname}}</td>
-      <td>{{user.lastname}}</td>
+      <td ng-class="[ { 'wrongAttribute': user.wrongFirstname } ]">{{user.firstname}}</td>
+      <td ng-class="[ { 'wrongAttribute': user.wrongLastname } ]">{{user.lastname}}</td>
       <td>{{user.email}}</td>
       <td>{{user.phoneNumber}}</td>
       <td>{{user.address}}</td>
-      <td>{{user.gender == 'M' ? 'H' : user.gender}}</td>
+      <td ng-class="[ { 'wrongAttribute': user.wrongGender } ]">{{user.gender == 'M' ? 'H' : user.gender}}</td>
       <td>
         <span ng-if="!hasP('P_ASSIGN_ROLE') || user.userId == sessionInfo.user.userId">{{user.role}}</span>
         <span ng-if="hasP('P_ASSIGN_ROLE') && user.userId != sessionInfo.user.userId && user.role != 'unregistered'">

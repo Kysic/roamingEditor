@@ -134,6 +134,9 @@ ul.tabs>li.notselected:hover {
 .usersList .roleAssigner.wrongRole {
     background: #ffbbbb !important;
 }
+.usersList .roleAssigner .wrongAttribute {
+    background: #ffbbbb !important;
+}
 .usersList .former {
     background: #aaaaaa;
 }

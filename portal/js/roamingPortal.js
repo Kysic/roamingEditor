@@ -781,6 +781,9 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
                 }  else {
                     user.rightRole = user.role == 'member' || user.role == 'admin' || user.role == 'root';
                 }
+                user.wrongFirstname = user.firstname !== member.firstname;
+                user.wrongLastname = user.lastname !== member.lastname;
+                user.wrongGender = user.gender !== member.gender;
             }
         }
         if (!hasP('P_ASSIGN_ROLE')) {
