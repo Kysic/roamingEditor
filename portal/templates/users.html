@@ -3,8 +3,15 @@
     <div class='homeLink'><a href='/'><img src='img/home-32x32.png'></a></div>
     Liste des membres de l'association
   </h2>
+  <div class="searchBar">
+    <label>Rechercher : <input ng-model="searchText"></label>
+    <div ng-show="hasP('P_ASSIGN_ROLE')">
+      <label><input type="checkbox" ng-model="showFormer"> Anciens membres</label>
+      <label><input type="checkbox" ng-model="showErrorsOnly"> Erreurs uniquement</label>
+    </div>
+  </div>
   <div class='error' ng-show="errorMsg">{{errorMsg}}</div>
-  <table>
+  <table ng-show="filteredUsers.length">
     <tr>
       <th>Prénom</th>
       <th>Nom</th>
@@ -14,7 +21,7 @@
       <th>H/F</th>
       <th>Rôle</th>
     </tr>
-    <tr ng-repeat="user in users | orderBy:'firstname'" ng-class="[ user.role,
+    <tr ng-repeat="user in filteredUsers = (users | filter:filterUsers | orderBy:'firstname')" ng-class="[ user.role,
                     { 'noPassword': user.registrationFinalised == 0,
                       'wrongRole': !user.rightRole,
                       'roleAssigner': hasP('P_ASSIGN_ROLE') } ]">
@@ -36,4 +43,5 @@
       </td>
     </tr>
   </table>
+  <p ng-hide="filteredUsers.length">Aucun membre trouvé avec ces critères de recherche</p>
 </div>

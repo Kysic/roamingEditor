@@ -261,10 +261,10 @@ $browserRoot = new Browser();
 login($browserRoot, 'Laure.Maitre@example.com', 'Laure.Maitre@example.com');
 $result = getUsers($browserRoot);
 assertEquals($result->status, 'success');
-assertEquals(count($result->users), 7);
+assertEquals(count($result->users), 8);
 
 printTestCase('Set user role as root should succeed');
-setUserRole($browserRoot, 15, 'tutor', $sessionToken = NULL);
+setUserRole($browserRoot, 16, 'tutor', $sessionToken = NULL);
 $browser = new Browser();
 login($browser, 'berni@gmail.com', 'Berni-Password');
 assertEquals(getSessionUser($browser)->role, 'tutor');

@@ -720,9 +720,11 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
     $scope.hasP = hasP;
     $scope.setRole = setRole;
     $scope.sendInvitation = sendInvitation;
+    $scope.filterUsers = filterUsers;
     $scope.dbUsers;
     $scope.members;
     $scope.users;
+    $scope.searchText = '';
 
     retrieveDbUsers();
     retrieveMembers();
@@ -860,6 +862,25 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
 
     function sendInvitation(user) {
         authService.register(user.email);
+    }
+
+    function containsIgnoreCase(matchString, text) {
+        return text && text.toLowerCase().indexOf(matchString.toLowerCase()) != -1;
+    }
+
+    function filterUsers(user) {
+        if (!$scope.showFormer && user.role === 'former') {
+            return false;
+        }
+        if ($scope.showErrorsOnly && user.rightRole && !user.wrongFirstname && !user.wrongLastname && !user.wrongGender) {
+            return false;
+        }
+        return $scope.searchText === ''
+                || containsIgnoreCase($scope.searchText, user.firstname)
+                || containsIgnoreCase($scope.searchText, user.lastname)
+                || containsIgnoreCase($scope.searchText, user.email)
+                || containsIgnoreCase($scope.searchText, user.phoneNumber)
+                || containsIgnoreCase($scope.searchText, user.address);
     }
 
     $scope.$on('register', function () {

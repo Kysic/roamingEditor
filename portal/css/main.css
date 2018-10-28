@@ -152,7 +152,9 @@ ul.tabs>li.notselected:hover {
 .usersList .roleAssigner.noPassword:not(.appli):not(.wrongRole) {
     background: #ffddbb !important;
 }
-
+.usersList .searchBar {
+    padding: 10px;
+}
 .uploadReportField {
     display: none;
 }
