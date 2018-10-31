@@ -30,7 +30,7 @@ function doGet(request) {
 
 function enrol(docId, sheetId, day, position, user, gender) {
   var range = getUserRange(docId, sheetId, day, position);
-  if (range.getValue() != "") {
+  if (typeof range.getValue() !== 'string' || range.getValue().trim() !== "") {
       throw 'The user ' + range.getValue() + ' is already enroled for this day';
   }
   range.setValue(user);
@@ -114,3 +114,4 @@ function getColumnFor(position) {
       throw 'Invalid position ' + position;
   }
 }
+
