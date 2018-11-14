@@ -18,6 +18,9 @@
             title="Editer le planning" alt="[E]" src="img/edit.png" class="action" />
     </li>
   </ul>
+  <div class="error" ng-if="sessionInfo.user.role === 'former'">
+    Désolé, les anciens membres de l'association n'ont plus accès aux comptes rendus.
+  </div>
   <ul class='planningInfos'>
     <li ng-repeat="info in planningInfos">
         {{info}}
