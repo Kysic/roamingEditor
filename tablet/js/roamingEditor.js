@@ -503,6 +503,7 @@ roamingEditor.controller('InterventionController',
             blankets: 0,
             tents: 0,
             bai: false,
+            hygiene: false,
             comments: ''
         };
     }
@@ -671,7 +672,7 @@ roamingEditor.controller('DonationsController', function DonationsController($sc
             var roaming = roamingsMap[roamingDate];
             for (var intervention in roaming.interventions) {
                 var donation = roaming.interventions[intervention];
-                if (donation.blankets > 0 || donation.tents > 0) {
+                if (donation.blankets > 0 || donation.tents > 0 || donation.hygiene) {
                     donation.date = roamingDate;
                     $scope.donations.push(donation);
                 }

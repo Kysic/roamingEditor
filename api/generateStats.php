@@ -31,9 +31,31 @@ try {
 
     $roamingsStats = $stats->extractStatsFromRoamingsReports($roamingsDocs);
 
-    header('Content-Disposition: attachment; filename="stats-'.$fromDate->format('Y-m-d').'-'.$toDate->format('Y-m-d').'.csv"');
-    header('Content-type: text/csv');
-    echo $stats->csv_stats($roamingsStats);
+    if ( !empty($_GET['html']) ) {
+        echo '
+            <html><head>
+                <title>Stats from '.$fromDate->format('Y-m-d').' to '.$toDate->format('Y-m-d').'</title>
+                <style type="text/css">
+                    table {
+                        border-collapse: collapse;
+                    }
+                    table, th, td {
+                        border: 1px solid #808080;
+                    }
+                    th, td {
+                        text-align: center;
+                        padding: 2px 5px;
+                    }
+                </style>
+            </head><body>
+        ';
+        echo $stats->html_stats($roamingsStats);
+        echo '</body></html>';
+    } else {
+        header('Content-Disposition: attachment; filename="stats-'.$fromDate->format('Y-m-d').'-'.$toDate->format('Y-m-d').'.csv"');
+        header('Content-type: text/csv');
+        echo $stats->csv_stats($roamingsStats);
+    }
 
 } catch (Exception $e) {
     echo '<b>Error</b><br/><pre>'.$e.'</pre>';

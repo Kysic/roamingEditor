@@ -9,6 +9,7 @@
         <a target='_blank' href='https://www.samu-social-grenoble.fr/'>l'association VINCI</a>.
     </div>
     <h2>Maraude du {{roamingDate | humanDate | capitalize}}</h2>
+    <p ng-if="roaming != null">Equipiers : {{roaming.teammates.join(', ')}} et {{roaming.tutor}} - Véhicule : {{roaming.vehicle}}</p>
     <div ng-if="roaming == null">Pas de maraude accessible pour ce jour là.</div>
     <table ng-show="roaming.interventions.length > 0">
         <tr>
@@ -16,11 +17,12 @@
             <th>Lieu</th>
             <th>Heure</th>
             <th>Source</th>
-            <th>Adulte</th>
-            <th>Enfant</th>
-            <th>Couverture</th>
-            <th>Tente</th>
-            <th>BAI</th>
+            <th class="verticalTitle">A<br>d<br>u<br>l<br>t<br>e</th>
+            <th class="verticalTitle">E<br>n<br>f<br>a<br>n<br>t</th>
+            <th class="verticalTitle">C<br>o<br>u<br>v<br>e<br>r<br>t</th>
+            <th class="verticalTitle">T<br>e<br>n<br>t<br>e</th>
+            <th class="verticalTitle">B<br>A<br>I</th>
+            <th class="verticalTitle">H<br>y<br>g<br>i<br>è<br>n<br>e</th>
             <th>Commentaire</th>
         </tr>
         <tr ng-repeat="(interventionIndex, intervention) in roaming.interventions">
@@ -33,6 +35,7 @@
             <td>{{intervention.blankets}}</td>
             <td>{{intervention.tents}}</td>
             <td>{{intervention.bai ? 'X' : ''}}</td>
+            <td>{{intervention.hygiene ? 'X' : ''}}</td>
             <td>{{intervention.comments}}</td>
         </tr>
     </table>

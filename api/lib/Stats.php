@@ -21,7 +21,8 @@ class Stats {
     private function extractStatsFromRoamingReport($docId) {
         $reportCsvUrl = $this->docIdToCsvUrl($docId);
         $csv = array_map('str_getcsv', file($reportCsvUrl));
-        $srcInterventions = $this->extractSrcIntervention($csv);
+        $newFormat = $csv[8][4] == "Don produit d'hygiène";
+        $srcInterventions = $this->extractSrcIntervention($csv, $newFormat);
         return array(
             'date' => $csv[0][2],
             'nbVolunteer' => $this->getNbVolunteers($csv[2][2]),
@@ -29,9 +30,10 @@ class Stats {
             'nbAdult' => $csv[7][2],
             'nbChild' => $csv[8][2],
             'nbEncounter' => $csv[6][2],
-            'nbBlanket' => $csv[9][2],
-            'nbTent' => $csv[10][2],
-            'bai' => $csv[11][2],
+            'nbBlanket' => $newFormat ? $csv[5][7] : $csv[9][2],
+            'nbTent' => $newFormat ? $csv[6][7] : $csv[10][2],
+            'bai' => $newFormat ? $csv[7][7] : $csv[11][2],
+            'hygiene' => $newFormat ? $csv[8][7] : $csv[12][2],
             'src115' => @$srcInterventions['115'],
             'srcRoaming' => @$srcInterventions['Maraude']
         );
@@ -41,9 +43,9 @@ class Stats {
         return GOOGLE_DOC_URL.$docId.GOOGLE_DOC_CMD_CSV;
     }
 
-    private function extractSrcIntervention($csv) {
+    private function extractSrcIntervention($csv, $newFormat) {
         $srcInterventions = array();
-        $startLine = 18; // 19 in new CR format but keep 18 for compatibility
+        $startLine = $newFormat ? 15 : 19;
         for ($i = $startLine; $i < count($csv); $i++) {
             if (count($csv[$i]) > 6) {
                 if ($csv[$i][IDX_NB_ADULTS] > 0 || $csv[$i][IDX_NB_CHILDREN] > 0) {
@@ -102,6 +104,7 @@ class Stats {
             'nbBlanket' => 'Couvertures',
             'nbTent' => 'Tentes',
             'bai' => 'BAI',
+            'hygiene' => 'Hygiène',
             'src115' => 'Signalement 115',
             'srcRoaming' => 'Rencontre Maraude'
         );
@@ -119,7 +122,7 @@ class Stats {
                     },
                     array(
                         'date', 'nbVolunteer', 'nbIntervention', 'nbAdult', 'nbChild', 'nbEncounter',
-                        'nbBlanket', 'nbTent', 'bai', 'src115', 'srcRoaming'
+                        'nbBlanket', 'nbTent', 'bai', 'hygiene', 'src115', 'srcRoaming'
                     )
                 )
             );

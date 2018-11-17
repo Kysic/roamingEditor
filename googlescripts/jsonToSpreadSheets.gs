@@ -106,7 +106,7 @@ function fillRoamingSheet(roaming, sheet) {
   tryToSetInCell(sheet, 'c3', joinList(roaming.teammates) + ' et ' + undefToEmpty(roaming.tutor));
   for (var i = 0; i < roaming.interventions.length; i++) {
     var intervention = roaming.interventions[i];
-    var line = i + 18;
+    var line = i + 15;
     tryToSetInCell(sheet, 'a' + line, joinList(intervention.people));
     tryToSetInCell(sheet, 'c' + line, undefToEmpty(intervention.location));
     tryToSetInCell(sheet, 'd' + line, undefToEmpty(intervention.time));
@@ -116,7 +116,8 @@ function fillRoamingSheet(roaming, sheet) {
     tryToSetInCell(sheet, 'h' + line, undefToZero(intervention.blankets));
     tryToSetInCell(sheet, 'i' + line, undefToZero(intervention.tents));
     if (intervention.bai) { tryToSetInCell(sheet, 'j' + line, 'X'); };
-    tryToSetInCell(sheet, 'k' + line, undefToEmpty(intervention.comments));
+    if (intervention.hygiene) { tryToSetInCell(sheet, 'k' + line, 'X'); };
+    tryToSetInCell(sheet, 'l' + line, undefToEmpty(intervention.comments));
   }
 }
 
@@ -176,6 +177,7 @@ function testGenerationCR() {
         "blankets": 3,
         "tents": 0,
         "bai": true,
+        "hygiene": false,
         "comments": "DIACA"
       },
       {
@@ -194,6 +196,7 @@ function testGenerationCR() {
         "blankets": 1,
         "tents": 2,
         "bai": false,
+        "hygiene": true,
         "comments": "My comment"
       }
     ],

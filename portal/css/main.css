@@ -169,3 +169,6 @@ ul.tabs>li.notselected:hover {
 .uploadReportLabel:hover {
     background: #fff;
 }
+.verticalTitle {
+    font-size: x-small;
+}

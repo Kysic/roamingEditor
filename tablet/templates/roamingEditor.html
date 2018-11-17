@@ -11,7 +11,7 @@
     }}
     </div>
   </h2>
-  <button ng-click="goDonations()">Voir les dons de couvertures</button>
+  <button ng-click="goDonations()">Voir les dons</button>
   <br/><br/>
   <label for="tutorField">Tuteur</label>
   <input id="tutorField" ng-model="roaming.tutor" type="text" ng-change="updateRoaming()" ng-disabled="!isEditable()" /><br/>
@@ -34,11 +34,12 @@
       <th>Lieu</th>
       <th>Heure</th>
       <th>Source</th>
-      <th>Adulte</th>
-      <th>Enfant</th>
-      <th>Couverture</th>
-      <th>Tente</th>
-      <th>BAI</th>
+      <th class="verticalTitle">A<br>d<br>u<br>l<br>t<br>e</th>
+      <th class="verticalTitle">E<br>n<br>f<br>a<br>n<br>t</th>
+      <th class="verticalTitle">C<br>o<br>u<br>v<br>e<br>r<br>t</th>
+      <th class="verticalTitle">T<br>e<br>n<br>t<br>e</th>
+      <th class="verticalTitle">B<br>A<br>I</th>
+      <th class="verticalTitle">H<br>y<br>g<br>i<br>è<br>n<br>e</th>
       <th>Commentaire</th>
       <th ng-show="isEditable()">Action</th>
     </tr>
@@ -52,6 +53,7 @@
       <td>{{intervention.blankets}}</td>
       <td>{{intervention.tents}}</td>
       <td>{{intervention.bai ? 'X' : ''}}</td>
+      <td>{{intervention.hygiene ? 'X' : ''}}</td>
       <td>{{intervention.comments}}</td>
       <td ng-show="isEditable()">
         <button ng-click="reportIntervention(interventionIndex)">Faire signalement</button>

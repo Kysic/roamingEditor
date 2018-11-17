@@ -3,13 +3,10 @@ Véhicule ,,1,,,,,,,
 Equipe,,"Pierre P, Paul P,  et Patrick P",,,,,,,
 ,,,,,,,,,
 Statistiques,,,,,,,,,
-Nombre d'interventions,,9,,,,,,,
-Nombre de personnes,Total,18,,,,,,,
-,adultes,10,,,,,,,
-,enfants,8,,,,,,,
-Nombre de couvertures,,1,,,,,,,
-Nombre de tentes,,0,,,,,,,
-Don nourriture BAI,,5,,,,,,,
+Nombre d'interventions,,9,,Nombre de couvertures,,,1,,
+Nombre de personnes,Total,18,,Nombre de tentes,,,1,,
+,adultes,10,,Don nourriture BAI,,,5,,
+,enfants,8,,Don produit d'hygiène,,,4,,
 ,,,,,,,,,
 "Toutes les informations figurant sur ce compte rendu sont confidentielles, réservées à un usage interne permettant le bon fonctionnement de l'association.
 Il est strictement interdit de divulguer ou diffuser ces données en dehors de l'association de Samu Social de Grenoble, conformément à la déclaration CNIL n°XXXXX.
@@ -17,9 +14,9 @@ Si vous avez eu accès à ce document sans être membre de l'association, merci 
 ,,,,,,,,,
 Identité,,lieu,heure,source,Personnes,,Dons,,,Commentaires
 ,,,(xx:xx),,adulte,enfant,couverture,tente,BAI,
-Madame A,,Emplacement A,21:05,Particulier,1,0,0,0,,Diaca
-Famille B,,Emplacement B,22:10,115,2,3,0,1,X,Diaca
-Monsieur C,,Emplacement C,23:05,Maraude,1,0,1,0,,Diaca
-Groupe D,,Emplacement D,00:15,115,5,1,0,0,X,Diaca
-,,,01:20,Autre,0,0,0,0,Fin de maraude
+Madame A,,Emplacement A,21:05,Particulier,1,0,0,0,,X,Diaca
+Famille B,,Emplacement B,22:10,115,2,3,0,1,X,,Diaca
+Monsieur C,,Emplacement C,23:05,Maraude,1,0,1,0,,,Diaca
+Groupe D,,Emplacement D,00:15,115,5,1,0,0,X,X,Diaca
+,,,01:20,Autre,0,0,0,0,,,Fin de maraude
 

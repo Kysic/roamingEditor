@@ -54,6 +54,7 @@ function generateRoamingReport($roamingDate, $roamingVersion) {
       "blankets": 0,
       "tents": 0,
       "bai": true,
+      "hygiene": false,
       "comments": "DIACA"
     },
     {
@@ -68,6 +69,7 @@ function generateRoamingReport($roamingDate, $roamingVersion) {
       "blankets": 1,
       "tents": 0,
       "bai": false,
+      "hygiene": true,
       "comments": ""
     }
   ],
