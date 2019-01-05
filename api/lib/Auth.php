@@ -25,7 +25,7 @@ class Auth {
         $email = strtolower($pEmail);
         $this->validator->validateEmail($email);
         $bruteforceStorage = $this->lazyBruteforceStorage->get();
-        $this->checkNbFailedAttempts($bruteforceStorage);
+        $this->checkNbFailedAttempts($bruteforceStorage, 'Failed registration with email '.$email);
         $contacts = $this->lazyGoogleContacts->get()->extractContacts();
         $isInVinciContacts = array_key_exists($email, $contacts);
         if ($isInVinciContacts) {
@@ -67,7 +67,7 @@ class Auth {
         $this->validator->validateMailTokenFormat($pMailToken);
         $usersStorage = $this->lazyUSersStorage->get();
         $bruteforceStorage = $this->lazyBruteforceStorage->get();
-        $this->checkNbFailedAttempts($bruteforceStorage);
+        $this->checkNbFailedAttempts($bruteforceStorage, 'Failed password change for user '.$pUserId);
         try {
             $usersStorage->validateMailToken($pUserId, $pMailToken);
         } catch (Exception $e) {
@@ -101,7 +101,7 @@ class Auth {
         $this->validator->validatePasswordOnLogin($password);
         $usersStorage = $this->lazyUSersStorage->get();
         $bruteforceStorage = $this->lazyBruteforceStorage->get();
-        $this->checkNbFailedAttempts($bruteforceStorage);
+        $this->checkNbFailedAttempts($bruteforceStorage, 'Failed login with email '.$email);
         try {
             $user = $usersStorage->checkAndGetUser($email, $password);
         } catch (Exception $e) {
@@ -109,7 +109,8 @@ class Auth {
             throw $e;
         }
         if ($user->role === APPLI) {
-            throw new SecurityException('Login attempt with application '.$user->userId.' credentials on standard login form.');
+            throw new SecurityException('Request rejected',
+                'Login attempt with application '.$user->userId.' credentials on standard login form.');
         }
         $this->session->setUser($user);
         $usersStorage->resetUserMailToken($user->userId);
@@ -136,9 +137,10 @@ class Auth {
         $user = $usersStorage->getUserWithId($userId);
         $this->session->setUser($user);
     }
-    private function checkNbFailedAttempts($bruteforceStorage) {
+    private function checkNbFailedAttempts($bruteforceStorage, $details = 'no details') {
         if ($bruteforceStorage->getNbFailedAttemptsInPeriod($_SERVER['REMOTE_ADDR']) >= BRUTEFORCE_MAX_NB_ATTEMPTS) {
-            throw new SecurityException('Trop de tentatives depuis cette IP, veuillez réessayer dans un moment.');
+            throw new SecurityException('Trop de tentatives depuis cette IP, veuillez réessayer dans un moment.',
+                $details);
         }
     }
     private function checkToken($pSessionToken) {

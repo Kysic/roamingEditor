@@ -25,7 +25,13 @@ class AutologinStorage {
                 return $autologin->userId;
             } else {
                 $this->deleteAutologin($autologinId64);
-                throw new SecurityException('Incorrect autologin token detected');
+                throw new SecurityException('Request rejected',
+                    'Incorrect autologin token detected'."\r\n".
+                    'autologinId: '.$autologinId64."\r\n".
+                    'userId: '.$autologin->userId."\r\n".
+                    'receivedToken: '.$autologinToken64."\r\n".
+                    'receivedHash: '.base64_encode($autologinTokenHash)."\r\n".
+                    'databaseHash: '.base64_encode($autologin->autologinTokenHash));
             }
         }
         return NULL;

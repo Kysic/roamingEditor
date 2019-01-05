@@ -3,6 +3,7 @@
 define('ROAMING_API_DIR', __DIR__.'/..');
 
 require_once(ROAMING_API_DIR.'/conf/main.php');
+require_once(ROAMING_API_DIR.'/lib/Exceptions.php');
 define('PERMISSIONS_LIB', ROAMING_API_DIR.'/conf/RolesPermissions.php');
 
 define('SESSION_LIB', ROAMING_API_DIR.'/lib/Session.php');

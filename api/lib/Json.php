@@ -98,7 +98,8 @@ class Json {
             '[VINCI] Security alert',
             'IP: '.$_SERVER['REMOTE_ADDR']."\r\n".
             'Navigateur: '.$_SERVER['HTTP_USER_AGENT']."\r\n".
-            'Message:'."\r\n".$exception->getMessage()
+            'Message: '.$exception->getMessage()."\r\n".
+            'Security details:'."\r\n".$exception->getDetails()
         );
     }
 

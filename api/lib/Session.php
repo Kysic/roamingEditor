@@ -106,12 +106,14 @@ class Session {
                 } catch (Exception $e) {
                     setcookie(APPLICATION_ID_COOKIE_KEY, '', time() - 3000000, '/');
                     setcookie(APPLICATION_TOKEN_COOKIE_KEY, '', time() - 3000000, '/');
-                    throw new SecurityException('Failed login attempt with applicationId '.$applicationId.
-                                                " : ".$e->getMessage());
+                    throw new SecurityException(
+                        'Request rejected',
+                        'Failed login attempt with applicationId '.$applicationId.' : '.$e->getMessage());
                 }
                 if ($user->role !== APPLI) {
-                    throw new SecurityException('Login attempt with applicationId on non application user '.
-                                                $user->userId);
+                    throw new SecurityException(
+                        'Request rejected',
+                        'Login attempt with applicationId on non application user '.$user->userId);
                 }
                 $this->setUser($user);
             }

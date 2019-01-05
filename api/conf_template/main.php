@@ -32,10 +32,3 @@ define('TEAMUP_EDIT_MEETING_ID', '');
 # Set TimeZone
 date_default_timezone_set(DEFAULT_TIME_ZONE);
 
-# Exceptions
-class UnauthenticatedException extends Exception { }
-class ForbiddenException extends Exception { }
-class BadRequestException extends Exception { }
-class NotFoundException extends Exception { }
-class SecurityException extends Exception { }
-

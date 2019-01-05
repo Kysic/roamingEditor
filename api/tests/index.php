@@ -110,7 +110,7 @@ try {
     getSessionUser($appliBrowser);
     throw new AssertException('getSessionUser should have raised an HttpStatusException');
 } catch (Exception $e) {
-    assertException($e, 'Failed login attempt with applicationId tablet@example.com : Identifiants invalides.', 403);
+    assertException($e, 'Request rejected', 403);
 }
 assertEquals($appliBrowser->cookies['vinciApplicationId'], '');
 assertEquals($appliBrowser->cookies['vinciApplicationToken'], '');
@@ -122,7 +122,7 @@ try {
     login($appliBrowser, 'tablet@example.com', 'tablet1@example.com', false);
     throw new AssertException('login should have raised an HttpStatusException');
 } catch (Exception $e) {
-    assertException($e, 'Login attempt with application 1 credentials on standard login form.', 403);
+    assertException($e, 'Request rejected', 403);
 }
 assertIsVisitor(getSessionUser($appliBrowser));
 
@@ -187,7 +187,7 @@ try {
     getSessionUser($browser3);
     throw new AssertException('getSessionUser should have raised an HttpStatusException');
 } catch (Exception $e) {
-    assertException($e, 'Incorrect autologin token detected', 403);
+    assertException($e, 'Request rejected', 403);
 }
 assertEquals($browser3->cookies['vinciPersistentLoginId'], '');
 
