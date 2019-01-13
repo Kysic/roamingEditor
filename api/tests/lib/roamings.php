@@ -48,6 +48,7 @@ function generateRoamingReport($roamingDate, $roamingVersion) {
         "Jean",
         "Paul"
       ],
+      "phone": "555-3478",
       "source": "115",
       "nbAdults": 2,
       "nbChildren": 0,

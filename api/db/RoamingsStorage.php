@@ -19,7 +19,7 @@ class RoamingsStorage {
         $this->dbAccess->executeWithException($request);
     }
 
-    public function getAll($beginDate, $endDate) {
+    public function getAll($beginDate, $endDate, $showPhone = false) {
         $query = 'SELECT roamingId, rawJson FROM '.SQL_TABLE_ROAMINGS.' r1'.
                  ' WHERE :beginDate <= r1.roamingDate AND r1.roamingDate <= :endDate'.
                  ' AND r1.version = (select max(r2.version) from '.SQL_TABLE_ROAMINGS.' r2 where r1.roamingDate = r2.roamingDate)';
@@ -27,7 +27,11 @@ class RoamingsStorage {
         $request->bindValue(':beginDate', $beginDate, PDO::PARAM_STR);
         $request->bindValue(':endDate', $endDate, PDO::PARAM_STR);
         $this->dbAccess->executeWithException($request);
-        return $request->fetchAll(PDO::FETCH_FUNC|PDO::FETCH_GROUP|PDO::FETCH_UNIQUE, 'json_decode');
+        $roamings = $request->fetchAll(PDO::FETCH_FUNC|PDO::FETCH_GROUP|PDO::FETCH_UNIQUE, 'json_decode');
+        if (!$showPhone) {
+            $this->filterPhoneFromRoamings($roamings);
+        }
+        return $roamings;
     }
 
     public function getRoamingId($roamingDate) {
@@ -94,7 +98,9 @@ class RoamingsStorage {
         if ( !$roaming ) {
             throw new NotFoundException('No roaming found with id ' . $roamingId);
         }
-        return $roaming->rawJson;
+        $roaming = json_decode($roaming->rawJson);
+        $this->filterPhoneFromRoaming($roaming);
+        return json_encode($roaming);
     }
 
     public function setDocId($roamingId, $docId, $userId) {
@@ -133,6 +139,20 @@ class RoamingsStorage {
         $query = 'DELETE FROM '.SQL_TABLE_ROAMINGS.' WHERE roamingDate  < (NOW() - INTERVAL 125 DAY)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $this->dbAccess->executeWithException($request);
+    }
+
+    private function filterPhoneFromRoamings($roamings) {
+        foreach($roamings as $roaming) {
+            $this->filterPhoneFromRoaming($roaming);
+        }
+        return $roamings;
+    }
+
+    private function filterPhoneFromRoaming($roaming) {
+        foreach($roaming->interventions as $intervention) {
+            unset($intervention->phone);
+        }
+        return $roaming;
     }
 
 }

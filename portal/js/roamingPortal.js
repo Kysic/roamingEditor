@@ -226,6 +226,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     $scope.showMonth = showMonth;
     $scope.roamingApiEndPoint = roamingApiEndPoint;
     $scope.editRoaming = editRoaming;
+    $scope.seeRoaming = seeRoaming;
     $scope.editPlanning = editPlanning;
     $scope.uploadReport = uploadReport;
     $scope.deleteReport = deleteReport;
@@ -367,6 +368,10 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     function hasP(permission) {
         return $scope.sessionInfo && $scope.sessionInfo.user
                 && $scope.sessionInfo.user.permissions && $scope.sessionInfo.user.permissions.indexOf(permission) !== -1;
+    }
+
+    function seeRoaming(roamingDate) {
+        $location.path('/roaming/' + roamingDate);
     }
 
     function editRoaming(roamingId) {

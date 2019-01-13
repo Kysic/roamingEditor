@@ -394,6 +394,7 @@ roamingEditor.controller('RoamingController',
         $window.location.href = '/reportForm.php?names=' + intervention.people.join(', ')
             + '&date=' + $scope.roaming.date
             + '&place=' + intervention.location
+            + ( intervention.phone ? '&phone=' + intervention.phone : '' )
             + '&observations=' + intervention.comments
             + '&author=' + $scope.roaming.tutor;
     }
@@ -486,6 +487,9 @@ roamingEditor.controller('InterventionController',
         $scope.intervention = createEmptyIntervention();
     } else {
         $scope.intervention = roaming.interventions[interventionIndex];
+        if (!$scope.intervention.people || $scope.intervention.people.length == 0) {
+            $scope.intervention.people = [ '' ];
+        }
     }
     if ( !$scope.intervention ) {
         $location.path('/roaming/' + $routeParams.roamingId);

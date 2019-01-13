@@ -14,11 +14,12 @@ function retrieveAndCleanParam($paramName) {
 $names = retrieveAndCleanParam('names');
 $date = retrieveAndCleanParam('date');
 $place = retrieveAndCleanParam('place');
-$phoneNumber = retrieveAndCleanParam('phoneNumber');
+$phone = retrieveAndCleanParam('phone');
 $language = retrieveAndCleanParam('language');
 $constitution = retrieveAndCleanParam('constitution');
 $observations = retrieveAndCleanParam('observations');
 $author = retrieveAndCleanParam('author');
+$filled = retrieveAndCleanParam('filled');
 try {
     require_once('api/lib/Container.php');
     $container = new Container();
@@ -30,7 +31,7 @@ try {
         echo 'Redirection en cours';
         exit;
     }
-    if (!empty($names) && !empty($phoneNumber))  {
+    if ($filled && !empty($names))  {
         try {
             require_once('api/lib/Container.php');
             $container = new Container();
@@ -41,7 +42,7 @@ try {
                   '         Nom des personnes : '.$names."\r\n".
                   '      Date de la rencontre : '.$date."\r\n".
                   '       Lieu de la recontre : '.$place."\r\n".
-                  '       Numéro de téléphone : '.$phoneNumber."\r\n".
+                  '       Numéro de téléphone : '.$phone."\r\n".
                   '             Langue parlée : '.$language."\r\n".
                   'Constitution de la famille : '.$constitution."\r\n\r\n".
                   'Observations complémentaires :'."\r\n".$observations
@@ -133,7 +134,7 @@ if ($mailSent) {
       Formulaire de signalement de personnes en difficultées à destination du secrétariat de l'association.
     </div>
     <form class='reportForm' method='post' action='<?php echo basename(__FILE__); ?>'>
-      <input id='checkJavascript' name='javascript' type='hidden' value='false' />
+      <input id='filled' name='filled' type='hidden' value='true' />
       <div class='error'><?php echo $formError; ?></div>
       <div class="fieldGroup">
         <label for='names'>Personnes rencontrées</label>
@@ -143,11 +144,11 @@ if ($mailSent) {
             value="<?php echo $names; ?>" />
       </div>
       <div class="fieldGroup">
-        <label for='phoneNumber'>Téléphone</label>
-        <input id='phoneNumber' name='phoneNumber' type='text' required='true'
+        <label for='phone'>Téléphone</label>
+        <input id='phone' name='phone' type='text'
             placeholder="Numéro de téléphone des personnes ou d'un contact"
             title="Numéro de téléphone des personnes ou d'un contact"
-            value="<?php echo $phoneNumber; ?>" />
+            value="<?php echo $phone; ?>" />
       </div>
       <div class="fieldGroup">
         <label for='date'>Date</label>

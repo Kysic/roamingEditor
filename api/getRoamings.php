@@ -28,7 +28,9 @@ try {
         $toDate = new DateTime();
     }
 
-    $roamings = $roamingsStorage->getAll($fromDate->format('Y-m-d'), $toDate->format('Y-m-d'));
+    $roamings = $roamingsStorage->getAll($fromDate->format('Y-m-d'),
+                                         $toDate->format('Y-m-d'),
+                                         $session->hasPermission(P_SEE_REPORT_PHONE));
 
     $json->returnResult(array(
         'status' => 'success',

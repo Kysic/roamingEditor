@@ -16,6 +16,7 @@
             <th>Personnes rencontrées</th>
             <th>Lieu</th>
             <th>Heure</th>
+            <th ng-if="hasP('P_SEE_REPORT_PHONE')">Téléphone</th>
             <th>Source</th>
             <th class="verticalTitle">A<br>d<br>u<br>l<br>t<br>e</th>
             <th class="verticalTitle">E<br>n<br>f<br>a<br>n<br>t</th>
@@ -29,6 +30,7 @@
             <td><ul class="roamingEditorPeopleList"><li ng-repeat="person in intervention.people track by $index">{{person}}</li></ul></td>
             <td>{{intervention.location}}</td>
             <td>{{intervention.time}}</td>
+            <td ng-if="hasP('P_SEE_REPORT_PHONE')">{{intervention.phone}}</td>
             <td>{{intervention.source}}</td>
             <td>{{intervention.nbAdults}}</td>
             <td>{{intervention.nbChildren}}</td>
