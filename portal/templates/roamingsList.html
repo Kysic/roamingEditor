@@ -68,8 +68,6 @@
       <td class="teammateColumn" ng-show="roamingByFour">
         {{roaming.teammates[2]}}
         <div ng-if="hasP('P_ENROL') && !roaming.isPast">
-          <img ng-if="roaming.teammates[2] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
-              ng-click="enrol(roaming, 3)" />
           <img ng-if="isCurrentUser(roaming.teammates[2])" src="img/cancel.svg" width="15px" height="15px" class="action"
               ng-click="cancel(roaming, 3)" />
         </div>
