@@ -42,6 +42,12 @@ try {
 }
 assertIsVisitor(getSessionUser($browser));
 
+printTestCase('Register username should be generated correclty');
+$browser = new Browser();
+for ($i=0 ; $i<5; $i++) {
+    register($browser, 'p'.$i.'@gmail.com');
+}
+
 printTestCase('Login as member should succeed');
 $browser = new Browser();
 login($browser, 'berni@gmail.com', 'Berni-Password');
@@ -262,7 +268,23 @@ $browserRoot = new Browser();
 login($browserRoot, 'Laure.Maitre@example.com', 'Laure.Maitre@example.com');
 $result = getUsers($browserRoot);
 assertEquals($result->status, 'success');
-assertEquals(count($result->users), 8);
+assertEquals(count($result->users), 13);
+$usernames = array_map(function ($user) { return $user->username; }, $result->users);
+assertEquals($usernames, array(
+    'Alexis M',
+    'Amina T',
+    'Anaële C',
+    'Bernard D',
+    'Cerise M',
+    'Laure M',
+    'Paul Pa',
+    'Paul P',
+    'Paul Par 2',
+    'Paul Par 3',
+    'Paul Par',
+    'Tablette 1',
+    'User F'
+));
 
 printTestCase('Set user role as root should succeed');
 setUserRole($browserRoot, 16, 'tutor', $sessionToken = NULL);

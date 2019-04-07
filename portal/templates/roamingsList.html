@@ -1,5 +1,5 @@
 <div class="login">
-  Connecté en tant que {{sessionInfo.user.firstname}} {{sessionInfo.user.lastname}}
+  Connecté en tant que {{sessionInfo.user.username}}
   <button ng-click="setPassword()" ng-show="hasP('P_CHANGE_PASSWORD')">Modifier mon mot de passe</button>
   <button ng-click="logout()" ng-show="hasP('P_LOG_OUT')">Me déconnecter</button>
 </div>
@@ -45,34 +45,34 @@
         {{roaming.tutor}}
         <div ng-if="hasP('P_ENROL_AS_TUTOR') && !roaming.isPast">
           <img ng-if="roaming.tutor == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
-              ng-click="enrol(roaming, 0)" />
+              ng-click="enrol(roaming, 0)" title="S'inscrire" />
           <img ng-if="isCurrentUser(roaming.tutor)" src="img/cancel.svg" width="15px" height="15px" class="action"
-              ng-click="cancel(roaming, 0)" />
+              ng-click="cancel(roaming, 0)" title="Se désinscrire" />
         </div>
       </td>
       <td class="teammateColumn">
         {{roaming.teammates[0]}}
         <div ng-if="hasP('P_ENROL') && !roaming.isPast">
           <img ng-if="roaming.teammates[0] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
-              ng-click="enrol(roaming, 1)" />
+              ng-click="enrol(roaming, 1)" title="S'inscrire" />
           <img ng-if="isCurrentUser(roaming.teammates[0])" src="img/cancel.svg" width="15px" height="15px" class="action"
-              ng-click="cancel(roaming, 1)" />
+              ng-click="cancel(roaming, 1)" title="Se désinscrire" />
         </div>
       </td>
       <td class="teammateColumn">
         {{roaming.teammates[1]}}
         <div ng-if="hasP('P_ENROL') && !roaming.isPast">
           <img ng-if="roaming.teammates[1] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
-              ng-click="enrol(roaming, 2)" />
+              ng-click="enrol(roaming, 2)" title="S'inscrire" />
           <img ng-if="isCurrentUser(roaming.teammates[1])" src="img/cancel.svg" width="15px" height="15px" class="action"
-              ng-click="cancel(roaming, 2)" />
+              ng-click="cancel(roaming, 2)" title="Se désinscrire" />
         </div>
       </td>
       <td class="teammateColumn" ng-show="roamingByFour">
         {{roaming.teammates[2]}}
         <div ng-if="hasP('P_ENROL') && !roaming.isPast">
           <img ng-if="isCurrentUser(roaming.teammates[2])" src="img/cancel.svg" width="15px" height="15px" class="action"
-              ng-click="cancel(roaming, 3)" />
+              ng-click="cancel(roaming, 3)" title="Se désinscrire" />
         </div>
       </td>
       <td class="reportsActions">

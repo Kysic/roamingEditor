@@ -21,7 +21,7 @@ class UsersStorage {
     }
 
     public function getAllUsers() {
-        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate,'.
+        $query = 'SELECT userId, email, username, firstname, lastname, gender, role, registrationDate,'.
                  '  NOT(ISNULL(passwordHash)) as registrationFinalised'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' ORDER BY firstname, lastname';
@@ -31,7 +31,7 @@ class UsersStorage {
     }
 
     public function getUserWithId($userId) {
-        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate'.
+        $query = 'SELECT userId, email, username, firstname, lastname, gender, role, registrationDate'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' WHERE userId = :userId';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -41,7 +41,7 @@ class UsersStorage {
     }
 
     public function getUserWithEmail($email) {
-        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate'.
+        $query = 'SELECT userId, email, username, firstname, lastname, gender, role, registrationDate'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' WHERE email = :email';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -50,14 +50,25 @@ class UsersStorage {
         return $request->fetch(PDO::FETCH_OBJ);
     }
 
+    private function getUserWithUsername($username) {
+        $query = 'SELECT userId, email, username, firstname, lastname, gender, role, registrationDate'.
+                 ' FROM '.SQL_TABLE_USERS.
+                 ' WHERE username = :username';
+        $request = $this->dbAccess->getPdo()->prepare($query);
+        $request->bindValue(':username', $username, PDO::PARAM_STR);
+        $this->dbAccess->executeWithException($request);
+        return $request->fetch(PDO::FETCH_OBJ);
+    }
+
     public function addUser($email, $firstname, $lastname, $gender) {
         if ($this->getUserWithEmail($email)) {
             throw new BadRequestException('Un compte existe déjà pour cette adresse email, utilisez la procédure de mot de passe perdu si vous avez oublié votre mot de passe.');
         }
-        $query = 'INSERT INTO '.SQL_TABLE_USERS.' (email, firstname, lastname, gender)'.
-                 ' VALUES (:email, :firstname, :lastname, :gender)';
+        $query = 'INSERT INTO '.SQL_TABLE_USERS.' (email, username, firstname, lastname, gender)'.
+                 ' VALUES (:email, :username, :firstname, :lastname, :gender)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':email', $email, PDO::PARAM_STR);
+        $request->bindValue(':username', $this->generateUsername($firstname, $lastname), PDO::PARAM_STR);
         $request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
         $request->bindValue(':lastname', $lastname, PDO::PARAM_STR);
         $request->bindValue(':gender', $gender, PDO::PARAM_STR);
@@ -65,7 +76,7 @@ class UsersStorage {
     }
 
     public function checkAndGetUser($email, $password) {
-        $query = 'SELECT userId, email, firstname, lastname, gender, role, registrationDate, passwordSalt, passwordHash'.
+        $query = 'SELECT userId, email, username, firstname, lastname, gender, role, registrationDate, passwordSalt, passwordHash'.
                  ' FROM '.SQL_TABLE_USERS.
                  ' WHERE email = :email';
         $request = $this->dbAccess->getPdo()->prepare($query);
@@ -83,20 +94,6 @@ class UsersStorage {
         } else {
             throw new BadRequestException('Identifiants invalides.');
         }
-    }
-
-    public function updateUser($userId, $email, $firstname, $lastname, $gender) {
-        $query = 'UPDATE '.SQL_TABLE_USERS.
-                 ' SET email=:email, firstname=:firstname, lastname=:lastname, gender=:gender'.
-                 ' WHERE userId=:userId';
-        $request = $this->dbAccess->getPdo()->prepare($query);
-        $request->bindValue(':userId', $userId, PDO::PARAM_INT);
-        $request->bindValue(':email', $email, PDO::PARAM_STR);
-        $request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
-        $request->bindValue(':lastname', $email, PDO::PARAM_STR);
-        $request->bindValue(':gender', $gender, PDO::PARAM_STR);
-        $this->dbAccess->executeWithException($request);
-        return $request->errorCode();
     }
 
     public function updateUserRole($userId, $newRole) {
@@ -156,6 +153,29 @@ class UsersStorage {
 
     private function generateMailToken() {
         return openssl_random_pseudo_bytes(32);
+    }
+
+    private function generateUsername($firstname, $lastname) {
+        $i = 1;
+        $firstnamePC = $this->toPascalCase($firstname);
+        $lastnamePC = $this->toPascalCase($lastname);
+        do {
+            if ($i <= strlen($lastnamePC)) {
+                $username = $firstnamePC.' '.substr($lastnamePC, 0, $i);
+            }
+            else {
+                $username = $firstnamePC.' '.$lastnamePC.' '.($i + 1 - strlen($lastnamePC));
+            }
+            if ($i == 30) {
+                throw new SecurityException('Unable to generate username for '.$firstnamePC.' '.$lastnamePC);
+            }
+            $i++;
+        } while ($this->getUserWithUsername($username));
+        return $username;
+    }
+
+    private function toPascalCase($txt) {
+        return implode('-', array_map('ucwords', explode('-', mb_strtolower(trim($txt)))));
     }
 
 }

@@ -40,7 +40,6 @@ class Session {
     }
 
     public function setUser($user) {
-        $user->username = $this->generateUsername($user);
         $user->permissions = $this->rolesPermissions->getPermissions($user->role);
         $_SESSION['USER'] = $user;
     }
@@ -169,13 +168,6 @@ class Session {
         $expTime = time() - AUTOLOGIN_COOKIE_EXPIRATION;
         setcookie(AUTOLOGIN_ID_COOKIE_KEY, '', $expTime, '/');
         setcookie(AUTOLOGIN_TOKEN_COOKIE_KEY, '', $expTime, '/');
-    }
-
-    private function generateUsername($user) {
-        return $this->toPascalCase($user->firstname).' '.$this->toPascalCase($user->lastname);
-    }
-    private function toPascalCase($txt) {
-        return implode('-', array_map('ucwords', explode('-', mb_strtolower(trim($txt)))));
     }
 
 }

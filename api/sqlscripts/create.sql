@@ -2,6 +2,7 @@
 CREATE TABLE `vcr_users` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(100) NOT NULL,
+  `username` varchar(50),
   `lastname` varchar(50),
   `firstname` varchar(50),
   `gender` enum('M', 'F'),

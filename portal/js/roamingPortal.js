@@ -475,13 +475,17 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     }
 
     function enrol(roaming, position) {
-        _enrol(roaming, position, 'enrol', 'S\'inscrire', $scope.sessionInfo.user.username);
+        _enrol(roaming, position, 'enrol', 'S\'inscrire pour la maraude du ' + dateUtils.humanDate(new Date(roaming.date)),
+                                             $scope.sessionInfo.user.username);
     }
     function cancel(roaming, position) {
-        _enrol(roaming, position, 'cancel', 'Annuler votre inscription', '');
+        _enrol(roaming, position, 'cancel', 'Annuler votre inscription pour la maraude du '
+                                            + dateUtils.humanDate(new Date(roaming.date))
+                                            + ' ?\n(si la maraude est proche, merci de prévenir le secrétariat et vos équipiers)',
+                                             '');
     }
     function _enrol(roaming, position, action, msg, newUsername) {
-        mcxDialog.confirm(msg + ' pour la maraude du ' + dateUtils.humanDate(new Date(roaming.date)) + ' ?', {
+        mcxDialog.confirm(msg, {
             sureBtnClick: function(){
                 var prevUsername = getTeammate(roaming, position);
                 setTeammate('[en cours]', roaming, position);
