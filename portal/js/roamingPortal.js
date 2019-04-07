@@ -213,7 +213,7 @@ roamingPortal.filter('capitalize', function() {
 
 /* Controllers */
 roamingPortal.controller('RoamingListController', function RoamingListController(
-        $scope, $http, $window, $routeParams, $location, authService, dateUtils) {
+        $scope, $http, $window, $routeParams, $location, $sce, authService, dateUtils) {
 
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.monthList;
@@ -238,6 +238,8 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     $scope.reportUploadId = reportUploadId;
     $scope.isSelectedMonth = isSelectedMonth;
     $scope.isCurrentUser = isCurrentUser;
+    $scope.calendarUrl = '';
+
 
     $scope.$watch('sessionInfo', function () {
         if ($scope.sessionInfo.loggedIn === false) {
@@ -346,6 +348,10 @@ roamingPortal.controller('RoamingListController', function RoamingListController
                 checkRoamingByFour(roaming);
             }
             $scope.planningInfos = planning['infos'];
+    $scope.calendarUrl = $sce.trustAsResourceUrl(
+        planning['calendarUrl'] +
+        '&showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&wkst=2'
+    );
         }, function (response) {
             if (response.status == 401) {
                 $location.path('/login');

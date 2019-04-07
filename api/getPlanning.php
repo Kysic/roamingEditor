@@ -39,6 +39,9 @@ try {
             $response[$date->format('Y-m-d')] = $googlePlanning->getRoamingOfDate($date->getTimestamp());
         }
         $response['infos'] = $googlePlanning->getInfos();
+        if ($session->hasPermission(P_SEE_MEETING)) {
+            $response['calendarUrl'] = CALENDAR_PROVIDER_URL.CALENDAR_ID;
+        }
     }
     $json->returnResult($response);
 

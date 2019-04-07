@@ -25,9 +25,8 @@ define('AUTOLOGIN_DB_EXPIRATION', '5443200'); // 63 jours
 define('APPLICATION_ID_COOKIE_KEY', 'vinciApplicationId');
 define('APPLICATION_TOKEN_COOKIE_KEY', 'vinciApplicationToken');
 
-define('TEAMUP_URL', 'https://teamup.com');
-define('TEAMUP_SEE_MEETING_ID', '');
-define('TEAMUP_EDIT_MEETING_ID', '');
+define('CALENDAR_PROVIDER_URL', 'https://calendar.google.com/calendar/embed?src=');
+define('CALENDAR_ID', '');
 
 # Set TimeZone
 date_default_timezone_set(DEFAULT_TIME_ZONE);
