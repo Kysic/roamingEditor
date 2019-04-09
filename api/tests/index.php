@@ -235,7 +235,8 @@ assertEquals($result, (object) array(
         $thirdDayOfMonth => (object) array('tutor'=>'','teammates'=>array('Akim.s', 'Tatiana', 'Amelie G'),'status'=>'unsure'),
         $fourthDayOfMonth => (object) array('tutor'=>'Maraude','teammates'=>array('Annulee', '', ''),'status'=>'canceled'),
         $fifthDayOfMonth => (object) array('tutor'=>'Roland T','teammates'=>array('Annie B', '', ''),'status'=>'planned-uncomplete'),
-        'infos' => array('Réunion bureau/tuteurs : Mercredi 14 juin', 'Réunion mensuelle (ouverte à tous) : mercredi 28 juin - 19h')
+        'infos' => array('Réunion bureau/tuteurs : Mercredi 14 juin', 'Réunion mensuelle (ouverte à tous) : mercredi 28 juin - 19h'),
+        'calendarUrl' => 'https://calendar.google.com/calendar/embed?src='
     ));
 
 printTestCase('nextDaysStatus should succeed');
@@ -418,7 +419,8 @@ function assertIsTablet1($user) {
                                         'P_EDIT_PLANNING',
                                         'P_SEE_LAST_REPORT',
                                         'P_SAVE_ROAMINGS',
-                                        'P_SEE_USERS_LIST'
+                                        'P_SEE_USERS_LIST',
+                                        'P_SEE_MEETING'
                                      ));
 }
 
