@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="unregister.svg"
+   inkscape:version="0.92.2 2405546, 2018-03-11">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1600"
+     inkscape:window-height="873"
+     id="namedview8"
+     showgrid="false"
+     inkscape:zoom="19.666667"
+     inkscape:cx="13.648363"
+     inkscape:cy="17.687959"
+     inkscape:window-x="0"
+     inkscape:window-y="177"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <path
+     d="M0 0h24v24H0z"
+     fill="none"
+     id="path2" />
+  <path
+     d="m 8.4082555,19.181664 3.2490865,-2.923677 3.249086,2.923677 1.411489,-1.270121 -3.249086,-2.923677 3.249086,-2.923676 -1.411489,-1.270121 -3.249086,2.923675 -3.2490865,-2.923675 -1.4114887,1.270121 3.2490872,2.923676 -3.2490872,2.923677 z M 21.311389,2.4064728 H 19.979797 V 0.01001679 H 17.316612 V 2.4064728 H 6.6638687 V 0.01001679 H 4.0006829 V 2.4064728 H 2.6690901 c -1.4780681,0 -2.64986994,1.0784051 -2.64986994,2.3964558 L 0.00590423,21.57812 c 0,1.318051 1.18511777,2.396457 2.66318587,2.396457 H 21.311389 c 1.464753,0 2.663187,-1.078406 2.663187,-2.396457 V 4.8029286 c 0,-1.3180507 -1.198434,-2.3964558 -2.663187,-2.3964558 z m 0,19.1716472 H 2.6690901 V 8.3976127 H 21.311389 Z"
+     id="path4"
+     inkscape:connector-curvature="0"
+     style="stroke-width:1.26315153" />
+</svg>
