@@ -137,7 +137,7 @@ class GooglePlanning {
         $monthId = date('Y-m', $roamingDate);
         $docId = GooglePlanningRef::getDocId($monthId);
         $sheetId = GooglePlanningRef::getSheetId($monthId);
-        $day = date('d', $roamingDate);
+        $day = date('j', $roamingDate);
         $username = $user->username;
         $gender = $user->gender;
         $scriptUrl = GOOGLE_ENROL_SCRIPT .'?docId=' . urlencode($docId) . '&sheetId=' . urlencode($sheetId) .
