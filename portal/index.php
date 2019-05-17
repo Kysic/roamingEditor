@@ -2,7 +2,11 @@
 // Start session in index page to avoid starting concurrent session on concurrent ajax call later
 require_once('../api/lib/Container.php');
 $container = new Container();
-$session = $container->getSession();
+try {
+    $session = $container->getSession();
+} catch (Exception $e) {
+    echo '<!-- '.$e->getMessage().' -->';
+}
 ?>
 <!doctype html>
 <html lang="fr" ng-app="roamingPortal">
