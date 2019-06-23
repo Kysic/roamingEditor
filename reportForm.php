@@ -41,7 +41,7 @@ try {
                   'Signalé par '.$author.' identifié en tant que '.$session->getUser()->firstname.' '.$session->getUser()->lastname."\r\n\r\n".
                   '         Nom des personnes : '.$names."\r\n".
                   '      Date de la rencontre : '.$date."\r\n".
-                  '       Lieu de la recontre : '.$place."\r\n".
+                  '      Lieu de la rencontre : '.$place."\r\n".
                   '       Numéro de téléphone : '.$phone."\r\n".
                   '             Langue parlée : '.$language."\r\n".
                   'Constitution de la famille : '.$constitution."\r\n\r\n".
