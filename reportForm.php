@@ -35,7 +35,7 @@ try {
         try {
             require_once('api/lib/Container.php');
             $container = new Container();
-            $emails = array(SECRETARIAT_EMAIL, $session->getUser()->email);
+            $emails = array(SECRETARIAT_EMAIL, PRESIDENT_EMAIL, $session->getUser()->email);
             foreach ($emails as $email) {
                 $container->getMail()->sendMail($email, '[VINCI] Fiche de signalement '.$names,
                   'Signalé par '.$author.' identifié en tant que '.$session->getUser()->firstname.' '.$session->getUser()->lastname."\r\n\r\n".
