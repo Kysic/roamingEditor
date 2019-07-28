@@ -7,6 +7,7 @@ ini_set('display_errors', 1);
 define('ADMIN_EMAIL', 'it-test-admin@samu-social-grenoble.fr');
 define('SECRETARIAT_EMAIL', 'it-test-secretariat@samu-social-grenoble.fr');
 define('PRESIDENT_EMAIL', 'it-test-president@samu-social-grenoble.fr');
+define('PRESIDENT_REPORTING_EMAIL', 'it-test-president-reporting@samu-social-grenoble.fr');
 define('DEFAULT_TIME_ZONE', 'Europe/Paris');
 define('APPLICATION_PATH', '/');
 define('PORTAL_APPLICATION_PATH', APPLICATION_PATH.'/portal');

@@ -7,6 +7,7 @@ ini_set('display_errors', 1);
 define('ADMIN_EMAIL', '');
 define('SECRETARIAT_EMAIL', '');
 define('PRESIDENT_EMAIL', '');
+define('PRESIDENT_REPORTING_EMAIL', '');
 define('DEFAULT_TIME_ZONE', 'Europe/Paris');
 define('APPLICATION_PATH', '/roamingEditor');
 define('PORTAL_APPLICATION_PATH', APPLICATION_PATH.'/portal');
