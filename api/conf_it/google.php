@@ -19,6 +19,9 @@ define('GOOGLE_ENROL_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/go
 define('CONTACT_DOC_ID', 'contactDocId');
 define('CONTACT_SHEET_ID', 'contactSheetId');
 
+# Google script to add new member
+define('GOOGLE_ADD_MEMBER_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/addMember.php');
+
 # Google docs roamings subscription
 define('DOC_ID', 'DOC_ID');
 define('SHEET_ID', 'SHEET_ID');

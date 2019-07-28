@@ -19,6 +19,9 @@ define('GOOGLE_ENROL_SCRIPT', '');
 define('CONTACT_DOC_ID', '');
 define('CONTACT_SHEET_ID', '');
 
+# Google script to add new member
+define('GOOGLE_ADD_MEMBER_SCRIPT', '');
+
 # Google docs roamings subscription
 define('DOC_ID', 'DOC_ID');
 define('SHEET_ID', 'SHEET_ID');

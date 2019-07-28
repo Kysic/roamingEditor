@@ -5,6 +5,7 @@ class UnauthenticatedException extends Exception { }
 class ForbiddenException extends Exception { }
 class BadRequestException extends Exception { }
 class NotFoundException extends Exception { }
+class InternalException extends Exception { }
 
 class SecurityException extends Exception {
 
