@@ -2,40 +2,40 @@
 
 require_once('/var/www/vinci/api/lib/Container.php');
 
-function areRolesConsistent($users, $members) {
+function checkConsistency($users, $members) {
     foreach ($users as $user) {
         $email = strtolower($user->email);
         if (array_key_exists($email, $members)) {
             $member = $members[$email];
             if ($member['isBoard']) {
                 if ( !in_array( $user->role, array(BOARD, ADMIN, ROOT) ) ) {
-                    return false;
+                    return 'role of '.$email;
                 }
             } else if ($member['isTutor']) {
                 if ( !in_array( $user->role, array(TUTOR, ADMIN, ROOT) ) ) {
-                    return false;
+                    return 'role of '.$email;
                 }
             } else {
                 if ( !in_array( $user->role, array(MEMBER, ADMIN, ROOT) ) ) {
-                    return false;
+                    return 'role of '.$email;
                 }
             }
             if ($user->firstname !== $member['firstname']) {
-                return false;
+                return 'firstname of '.$email;
             }
             if ($user->lastname !== $member['lastname']) {
-                return false;
+                return 'lastname of '.$email;
             }
             if ($user->gender !== $member['gender']) {
-                return false;
+                return 'gender of '.$email;
             }
         } else {
             if ( !in_array( $user->role, array(APPLI, FORMER, GUEST) ) ) {
-                return false;
+                return 'presence of '.$email;
             }
         }
     }
-    return true;
+    return false;
 }
 
 try {
@@ -48,10 +48,11 @@ try {
     $users = $usersStorage->getAllUsers();
     $members = $googleContacts->extractContacts();
 
-    if ( !areRolesConsistent($users, $members) ) {
-        echo 'Inconstency detected'."\n";
+    $error = checkConsistency($users, $members);
+    if ($error) {
+        echo 'Inconstency detected : '.$error."\n";
         $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Some VINCI user are not in sync with official list',
-            'Some user doesn\'t have correct attributes.'
+            'Some user doesn\'t have correct attributes :'."\n".$error
         );
     }
     echo 'done'."\n";
