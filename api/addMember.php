@@ -37,8 +37,15 @@ try {
                  '&phoneNumber=' . urlencode($member->phoneNumber) .
                  '&address=' . urlencode($member->address) .
                  '&message=' . urlencode($memberSubscription->message);
-    $opts = array('http' => array('method' => 'GET', 'ignore_errors' => '1'));
-    $responseContent = file_get_contents($scriptUrl, false, stream_context_create($opts));
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $scriptUrl);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // follow redirects
+    curl_setopt($ch, CURLOPT_AUTOREFERER, 1); // set referer on redirect
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // return content on exec
+    $responseContent = curl_exec($ch);
+    curl_close($ch);
+
     if (!$responseContent) {
         throw new InternalException('Unable to join remote server');
     }
@@ -46,7 +53,7 @@ try {
     if (!$response) {
         throw new InternalException('Unable to understand remote server response');
     }
-    return $json->returnResult($response);
+    $json->returnResult($response);
 
 } catch (Exception $e) {
     $json->returnError($e);
