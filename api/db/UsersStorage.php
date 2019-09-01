@@ -24,7 +24,7 @@ class UsersStorage {
         $query = 'SELECT userId, email, username, firstname, lastname, gender, role, registrationDate,'.
                  '  NOT(ISNULL(passwordHash)) as registrationFinalised'.
                  ' FROM '.SQL_TABLE_USERS.
-                 ' ORDER BY firstname, lastname';
+                 ' ORDER BY firstname, lastname, username';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $this->dbAccess->executeWithException($request);
         return $request->fetchAll(PDO::FETCH_OBJ);
@@ -60,18 +60,19 @@ class UsersStorage {
         return $request->fetch(PDO::FETCH_OBJ);
     }
 
-    public function addUser($email, $firstname, $lastname, $gender) {
+    public function addUser($email, $firstname, $lastname, $gender, $role) {
         if ($this->getUserWithEmail($email)) {
             throw new BadRequestException('Un compte existe déjà pour cette adresse email, utilisez la procédure de mot de passe perdu si vous avez oublié votre mot de passe.');
         }
-        $query = 'INSERT INTO '.SQL_TABLE_USERS.' (email, username, firstname, lastname, gender)'.
-                 ' VALUES (:email, :username, :firstname, :lastname, :gender)';
+        $query = 'INSERT INTO '.SQL_TABLE_USERS.' (email, username, firstname, lastname, gender, role)'.
+                 ' VALUES (:email, :username, :firstname, :lastname, :gender, :role)';
         $request = $this->dbAccess->getPdo()->prepare($query);
         $request->bindValue(':email', $email, PDO::PARAM_STR);
         $request->bindValue(':username', $this->generateUsername($firstname, $lastname), PDO::PARAM_STR);
         $request->bindValue(':firstname', $firstname, PDO::PARAM_STR);
         $request->bindValue(':lastname', $lastname, PDO::PARAM_STR);
         $request->bindValue(':gender', $gender, PDO::PARAM_STR);
+        $request->bindValue(':role', $role, PDO::PARAM_STR);
         $this->dbAccess->executeWithException($request);
     }
 

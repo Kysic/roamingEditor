@@ -26,11 +26,17 @@ printTestCase('DB init');
 $sql = new Sql();
 $sql->reinitItDb();
 
-printTestCase('Register as member should succeed');
+printTestCase('Register as night watcher should succeed');
 $browser = new Browser();
 assertIsVisitor(getSessionUser($browser));
 registerAndSetPassword($browser, 'berni@gmail.com', 'Berni-Password');
 assertIsBernard(getSessionUser($browser));
+
+printTestCase('Register as member should succeed');
+$browser = new Browser();
+assertIsVisitor(getSessionUser($browser));
+registerAndSetPassword($browser, 'soso21@yahoo.fr', 'Soso@215');
+assertIsSophie(getSessionUser($browser));
 
 printTestCase('Register with address not in contacts should be forbidden');
 $browser = new Browser();
@@ -48,17 +54,35 @@ for ($i=0 ; $i<5; $i++) {
     register($browser, 'p'.$i.'@gmail.com');
 }
 
+printTestCase('Login as former should succeed');
+$browser = new Browser();
+login($browser, 'former.user@example.com', 'Former7899');
+assertEquals($browser->cookies['vinciPersistentLogin'], '');
+assertIsFormer(getSessionUser($browser));
+
 printTestCase('Login as member should succeed');
+$browser = new Browser();
+login($browser, 'soso21@yahoo.fr', 'Soso@215');
+assertEquals($browser->cookies['vinciPersistentLogin'], '');
+assertIsMember(getSessionUser($browser));
+
+printTestCase('Login as tutor should succeed');
+$browser = new Browser();
+login($browser, 'cerise.48@gmail.com', 'cerise.48@gmail.com');
+assertEquals($browser->cookies['vinciPersistentLogin'], '');
+assertIsTutor(getSessionUser($browser));
+
+printTestCase('Login as night watcher should succeed');
 $browser = new Browser();
 login($browser, 'berni@gmail.com', 'Berni-Password');
 assertEquals($browser->cookies['vinciPersistentLogin'], '');
 assertIsBernard(getSessionUser($browser));
 
-printTestCase('Change password as member should succeed');
+printTestCase('Change password as night watcher should succeed');
 setPasswordWhenLogged($browser, 'berni-password-2', 'berni-password-2');
 assertIsBernard(getSessionUser($browser));
 
-printTestCase('Change to low security password as member should failed');
+printTestCase('Change to low security password as night watcher should failed');
 try {
     setPasswordWhenLogged($browser, 'berni-password', 'berni-password');
     throw new AssertException('logout should have raised an HttpStatusException');
@@ -70,7 +94,7 @@ try {
     );
 }
 
-printTestCase('Change password with bad confirmation as member should failed');
+printTestCase('Change password with bad confirmation as night watcher should failed');
 try {
     setPasswordWhenLogged($browser, 'berni-password-2', 'berni-Password-2');
     throw new AssertException('logout should have raised an HttpStatusException');
@@ -78,12 +102,12 @@ try {
     assertException($e, 'Le mot de passe et sa confirmation doivent être identiques.', 400);
 }
 
-printTestCase('Logout as member should succeed');
+printTestCase('Logout as night watcher should succeed');
 assertIsBernard(getSessionUser($browser));
 logout($browser);
 assertIsVisitor(getSessionUser($browser));
 
-printTestCase('Login as member on three browsers with new password should succeed');
+printTestCase('Login as night watcher on three browsers with new password should succeed');
 $browser1 = new Browser();
 login($browser1, 'berni@gmail.com', 'berni-password-2', true);
 $autologinId1 = $browser1->cookies['vinciPersistentLoginId'];
@@ -140,7 +164,7 @@ assertIsTablet1(getSessionUser($appliBrowser));
 assertEquals($appliBrowser->cookies['vinciApplicationId'], 'tablet@example.com');
 assertEquals($appliBrowser->cookies['vinciApplicationToken'], 'tablet1@example.com');
 
-printTestCase('Autologin as member should succeed');
+printTestCase('Autologin as night watcher should succeed');
 $browser1 = createAutologinBrowser($autologinId1, $autologinToken1);
 $browser2 = createAutologinBrowser($autologinId2, $autologinToken2);
 $browser3 = createAutologinBrowser($autologinId3, $autologinToken3);
@@ -166,7 +190,7 @@ try {
 }
 assertIsTablet1(getSessionUser($appliBrowser));
 
-printTestCase('Logout as member should unset autologin');
+printTestCase('Logout as night watcher should unset autologin');
 assertIsBernard(getSessionUser($browser1));
 logout($browser1);
 assertEquals($browser1->cookies['vinciPersistentLoginId'], '');
@@ -269,7 +293,6 @@ $browserRoot = new Browser();
 login($browserRoot, 'Laure.Maitre@example.com', 'Laure.Maitre@example.com');
 $result = getUsers($browserRoot);
 assertEquals($result->status, 'success');
-assertEquals(count($result->users), 13);
 $usernames = array_map(function ($user) { return $user->username; }, $result->users);
 assertEquals($usernames, array(
     'Alexis M',
@@ -277,18 +300,20 @@ assertEquals($usernames, array(
     'Anaële C',
     'Bernard D',
     'Cerise M',
+    'Jean D',
     'Laure M',
-    'Paul Pa',
     'Paul P',
+    'Paul Pa',
+    'Paul Par',
     'Paul Par 2',
     'Paul Par 3',
-    'Paul Par',
+    'Sophie D',
     'Tablette 1',
     'User F'
 ));
 
 printTestCase('Set user role as root should succeed');
-setUserRole($browserRoot, 16, 'tutor', $sessionToken = NULL);
+setUserRole($browserRoot, 17, 'tutor', $sessionToken = NULL);
 $browser = new Browser();
 login($browser, 'berni@gmail.com', 'Berni-Password');
 assertEquals(getSessionUser($browser)->role, 'tutor');
@@ -392,16 +417,67 @@ function assertIsVisitor($user) {
 }
 
 function assertIsBernard($user) {
-    assertEquals($user->role, 'member');
     assertEquals($user->email, 'berni@gmail.com');
     assertEquals($user->firstname, 'Bernard');
     assertEquals($user->lastname, 'DUPONT');
+    assertEquals($user->username, 'Bernard D');
+    assertIsNightWatcher($user);
+}
+function assertIsSophie($user) {
+    assertEquals($user->email, 'soso21@yahoo.fr');
+    assertEquals($user->firstname, 'Sophie');
+    assertEquals($user->lastname, 'DUPRES');
+    assertEquals($user->username, 'Sophie D');
+    assertIsMember($user);
+}
+
+function assertIsFormer($user) {
+    assertEquals($user->role, 'former');
     assertEquals($user->permissions, array(
+                                        'P_LOG_OUT',
+                                        'P_CHANGE_PASSWORD'
+                                     ));
+}
+function assertIsMember($user) {
+    assertEquals($user->role, 'member');
+    assertEquals($user->permissions, array(
+                                        'P_SEE_USERS_LIST',
+                                        'P_SEE_MEETING',
                                         'P_ENROL',
                                         'P_EDIT_PLANNING',
                                         'P_SEE_LAST_REPORT',
+                                        'P_SEE_PLANNING',
+                                        'P_SEE_NAMES',
+                                        'P_LOG_OUT',
+                                        'P_CHANGE_PASSWORD'
+                                     ));
+}
+function assertIsNightWatcher($user) {
+    assertEquals($user->role, 'night_watcher');
+    assertEquals($user->permissions, array(
                                         'P_SEE_USERS_LIST',
                                         'P_SEE_MEETING',
+                                        'P_ENROL',
+                                        'P_EDIT_PLANNING',
+                                        'P_SEE_LAST_REPORT',
+                                        'P_SEE_PLANNING',
+                                        'P_SEE_NAMES',
+                                        'P_LOG_OUT',
+                                        'P_CHANGE_PASSWORD'
+                                     ));
+}
+
+function assertIsTutor($user) {
+    assertEquals($user->role, 'tutor');
+    assertEquals($user->permissions, array(
+                                        'P_EDIT_REPORT',
+                                        'P_ENROL_AS_TUTOR',
+                                        'P_GEN_STATS',
+                                        'P_SEE_USERS_LIST',
+                                        'P_SEE_MEETING',
+                                        'P_ENROL',
+                                        'P_EDIT_PLANNING',
+                                        'P_SEE_LAST_REPORT',
                                         'P_SEE_PLANNING',
                                         'P_SEE_NAMES',
                                         'P_LOG_OUT',

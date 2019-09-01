@@ -32,6 +32,7 @@ class Auth {
             $firstname = $contacts[$email]['firstname'];
             $lastname = $contacts[$email]['lastname'];
             $gender = $contacts[$email]['gender'];
+            $role = $contacts[$email]['doRoaming'] ? NIGHT_WATCHER : MEMBER;
         } else {
             $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
             throw new ForbiddenException('Cette adresse mail n\'est pas repertoriée dans la liste des contacts du VINCI.');
@@ -39,7 +40,7 @@ class Auth {
         $usersStorage = $this->lazyUSersStorage->get();
         $user = $usersStorage->getUserWithEmail($email);
         if ( ! $user ) {
-            $usersStorage->addUser($email, $firstname, $lastname, $gender);
+            $usersStorage->addUser($email, $firstname, $lastname, $gender, $role);
             $user = $usersStorage->getUserWithEmail($email);
         }
         $mailToken = $usersStorage->generateUserMailToken($user->userId);

@@ -29,6 +29,7 @@ define('APPLI', 'appli');
 define('FORMER', 'former');
 define('GUEST', 'guest');
 define('MEMBER', 'member');
+define('NIGHT_WATCHER', 'night_watcher');
 define('TUTOR', 'tutor');
 define('BOARD', 'board');
 define('ADMIN', 'admin');
@@ -40,6 +41,7 @@ class RolesPermissions {
     private $former;
     private $guest;
     private $member;
+    private $nightWatcher;
     private $tutor;
     private $board;
     private $admin;
@@ -50,8 +52,9 @@ class RolesPermissions {
         $this->appli = array ( P_SEE_PLANNING, P_EDIT_PLANNING, P_SEE_LAST_REPORT, P_SAVE_ROAMINGS, P_SEE_USERS_LIST, P_SEE_MEETING );
         $this->former = array( P_LOG_OUT, P_CHANGE_PASSWORD );
         $this->guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES ), $this->former);
-        $this->member = array_merge(array( P_ENROL, P_EDIT_PLANNING, P_SEE_LAST_REPORT, P_SEE_USERS_LIST, P_SEE_MEETING ), $this->guest);
-        $this->tutor = array_merge(array( P_EDIT_REPORT, P_ENROL_AS_TUTOR, P_GEN_STATS ), $this->member);
+        $this->member = array_merge(array( P_SEE_USERS_LIST, P_SEE_MEETING, P_ENROL, P_EDIT_PLANNING, P_SEE_LAST_REPORT ), $this->guest);
+        $this->nightWatcher = array_merge(array( ), $this->member);
+        $this->tutor = array_merge(array( P_EDIT_REPORT, P_ENROL_AS_TUTOR, P_GEN_STATS ), $this->nightWatcher);
         $this->board = array_merge(array( P_EDIT_MEETING ), $this->tutor);
         $this->admin = array_merge(array( P_UPLOAD_REPORT, P_DELETE_REPORT, P_SEE_REPORT_PHONE ), $this->board);
         $this->root = array_merge(array( P_SEE_ALL_REPORT, P_ASSIGN_ROLE, P_REGISTER ), $this->admin);
@@ -59,14 +62,15 @@ class RolesPermissions {
 
     public function getPermissions($role) {
         switch ($role) {
-            case APPLI: return $this->appli;
-            case FORMER: return $this->former;
-            case GUEST: return $this->guest;
-            case MEMBER: return $this->member;
-            case TUTOR: return $this->tutor;
-            case BOARD: return $this->board;
-            case ADMIN: return $this->admin;
             case ROOT: return $this->root;
+            case ADMIN: return $this->admin;
+            case BOARD: return $this->board;
+            case TUTOR: return $this->tutor;
+            case NIGHT_WATCHER: return $this->nightWatcher;
+            case MEMBER: return $this->member;
+            case APPLI: return $this->appli;
+            case GUEST: return $this->guest;
+            case FORMER: return $this->former;
             default: return $this->visitor;
         }
     }

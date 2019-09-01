@@ -32,9 +32,9 @@
       <td>{{user.address}}</td>
       <td ng-class="[ { 'wrongAttribute': user.wrongGender } ]">{{user.gender == 'M' ? 'H' : user.gender}}</td>
       <td>
-        <span ng-if="!hasP('P_ASSIGN_ROLE') || user.userId == sessionInfo.user.userId">{{user.role}}</span>
+        <span ng-if="!hasP('P_ASSIGN_ROLE') || user.userId == sessionInfo.user.userId">{{roles[user.role]}}</span>
         <span ng-if="hasP('P_ASSIGN_ROLE') && user.userId != sessionInfo.user.userId && user.role != 'unregistered'">
-          <select type='text' ng-model="user.role" ng-options="role as role for role in roles" ng-change="setRole(user)">
+          <select type='text' ng-model="user.role" ng-options="role as role for (role, label) in roles" ng-change="setRole(user)">
           </select>
         </span>
         <span ng-if="hasP('P_REGISTER') && user.role == 'unregistered'" class="invitation">

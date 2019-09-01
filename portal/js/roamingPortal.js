@@ -735,7 +735,18 @@ roamingPortal.controller('MailSentController', function MailSentController($scop
 
 roamingPortal.controller('UsersController', function UsersController($scope, $http, $routeParams, $location, authService) {
 
-    $scope.roles = ['unregistered', 'appli', 'former', 'guest', 'member', 'tutor', 'board', 'admin', 'root'];
+    $scope.roles = {
+        'unregistered': 'non affecté',
+        'appli': 'appli',
+        'former': 'ancien',
+        'guest': 'invité',
+        'member': 'membre',
+        'night_watcher': 'maraudeur',
+        'tutor': 'tuteur',
+        'board': 'bureau',
+        'admin': 'bureau',
+        'root': 'bureau'
+    };
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.hasP = hasP;
     $scope.setRole = setRole;
@@ -800,7 +811,9 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
                     user.rightRole = user.role == 'board' || user.role == 'admin' || user.role == 'root';
                 }else if (member.isTutor) {
                     user.rightRole = user.role == 'tutor' || user.role == 'admin' || user.role == 'root';
-                }  else {
+                } else if (member.doRoaming) {
+                    user.rightRole = user.role == 'night_watcher' || user.role == 'admin' || user.role == 'root';
+                } else {
                     user.rightRole = user.role == 'member' || user.role == 'admin' || user.role == 'root';
                 }
                 user.wrongFirstname = user.firstname !== member.firstname;

@@ -7,12 +7,16 @@ function checkConsistency($users, $members) {
         $email = strtolower($user->email);
         if (array_key_exists($email, $members)) {
             $member = $members[$email];
-            if ($member['isBoard']) {
+            if (@$member['isBoard']) {
                 if ( !in_array( $user->role, array(BOARD, ADMIN, ROOT) ) ) {
                     return 'role of '.$email;
                 }
-            } else if ($member['isTutor']) {
+            } else if (@$member['isTutor']) {
                 if ( !in_array( $user->role, array(TUTOR, ADMIN, ROOT) ) ) {
+                    return 'role of '.$email;
+                }
+            } else if (@$member['doRoaming']) {
+                if ( !in_array( $user->role, array(NIGHT_WATCHER, ADMIN, ROOT) ) ) {
                     return 'role of '.$email;
                 }
             } else {
