@@ -17,7 +17,8 @@ define('GOOGLE_ENROL_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/go
 
 # Google docs contacts liste
 define('CONTACT_DOC_ID', 'contactDocId');
-define('CONTACT_SHEET_ID', 'contactSheetId');
+define('CONTACT_ROAMING_SHEET_ID', 'contactRoamingSheetId');
+define('CONTACT_OTHER_SHEET_ID', 'contactOtherSheetId');
 
 # Google script to add new member
 define('GOOGLE_ADD_MEMBER_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/addMember.php');

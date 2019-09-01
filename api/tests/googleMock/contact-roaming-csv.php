@@ -1,5 +1,4 @@
-fti,NOM (MAJUSCULES),PRÉNOM (MAJUSCULES),NUMÉRO DE TÉLÉPHONE,ANNÉE DE NAISSANCE (sous forme 19xx),MAIL,VILLE DE RÉSIDENCE,BUREAU VINCI,TUTEUR,"Date d'entrée 
-dans l'association "
+fti,NOM (MAJUSCULES),PRÉNOM (MAJUSCULES),NUMÉRO DE TÉLÉPHONE,ANNÉE DE NAISSANCE (sous forme 19xx),MAIL,VILLE DE RÉSIDENCE,BUREAU VINCI,TUTEUR,"Date d'entrée dans l'association "
 F,MAITRE,LAURE,667788990,1985,Laure.Maitre@example.com,GRENOBLE,,,mars. 2017
 H,DUPONT,BERNARD,0,1974,berni@gmail.com,Grenoble,,,mars. 2017
 H,PAR,PAUL,0,1974,p0@gmail.com,Grenoble,,,mars. 2017

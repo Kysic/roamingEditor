@@ -9,10 +9,13 @@ if ($docId == 'planningDocId') {
     list($year, $month) = explode('-', $sheetId);
     header('Content-type: text/csv');
     include('planning-csv.php');
-} else if ($docId == 'contactDocId') {
+} else if ($docId == 'contactDocId' && $sheetId == "contactRoamingSheetId") {
     header('Content-type: text/csv');
-    include('contact-csv.php');
-} else if ($docId) {
+    include('contact-roaming-csv.php');
+} else if ($docId == 'contactDocId' && $sheetId == "contactOtherSheetId") {
+    header('Content-type: text/csv');
+    include('contact-other-csv.php');
+}else if ($docId) {
     if ($type == 'csv') {
         header('Content-type: text/csv');
         include('roaming-csv.php');
