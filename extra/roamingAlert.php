@@ -11,7 +11,7 @@ try {
     $planningToday = $googlePlanning->getRoamingOfDate($today->getTimestamp());
 
     if ($planningToday['status'] == 'unsure') {
-        $emails = array(ADMIN_EMAIL, SECRETARIAT_EMAIL);
+        $emails = array(SECRETARIAT_EMAIL);
         $missing = empty(@$planningToday['tutor']) ? 'un tuteur' : 'des bénévoles';
         foreach ($emails as $email) {
             $container->getMail()->sendMail(
@@ -23,8 +23,8 @@ try {
     }
 
 } catch (Exception $e) {
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while creating the roamingReport',
-        'An error has occured while generating today\'s report: '."\n".print_r($e, true)
+    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while checking roaming status',
+        'An error has occured: '."\n".print_r($e, true)
     );
     throw $e;
 }
