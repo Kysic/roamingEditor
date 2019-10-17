@@ -443,9 +443,7 @@ function assertIsMember($user) {
     assertEquals($user->permissions, array(
                                         'P_SEE_USERS_LIST',
                                         'P_SEE_MEETING',
-                                        'P_ENROL',
                                         'P_EDIT_PLANNING',
-                                        'P_SEE_LAST_REPORT',
                                         'P_SEE_PLANNING',
                                         'P_SEE_NAMES',
                                         'P_LOG_OUT',
@@ -455,11 +453,11 @@ function assertIsMember($user) {
 function assertIsNightWatcher($user) {
     assertEquals($user->role, 'night_watcher');
     assertEquals($user->permissions, array(
+                                        'P_ENROL',
+                                        'P_SEE_LAST_REPORT',
                                         'P_SEE_USERS_LIST',
                                         'P_SEE_MEETING',
-                                        'P_ENROL',
                                         'P_EDIT_PLANNING',
-                                        'P_SEE_LAST_REPORT',
                                         'P_SEE_PLANNING',
                                         'P_SEE_NAMES',
                                         'P_LOG_OUT',
@@ -473,11 +471,11 @@ function assertIsTutor($user) {
                                         'P_EDIT_REPORT',
                                         'P_ENROL_AS_TUTOR',
                                         'P_GEN_STATS',
+                                        'P_ENROL',
+                                        'P_SEE_LAST_REPORT',
                                         'P_SEE_USERS_LIST',
                                         'P_SEE_MEETING',
-                                        'P_ENROL',
                                         'P_EDIT_PLANNING',
-                                        'P_SEE_LAST_REPORT',
                                         'P_SEE_PLANNING',
                                         'P_SEE_NAMES',
                                         'P_LOG_OUT',

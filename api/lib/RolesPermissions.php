@@ -52,8 +52,8 @@ class RolesPermissions {
         $this->appli = array ( P_SEE_PLANNING, P_EDIT_PLANNING, P_SEE_LAST_REPORT, P_SAVE_ROAMINGS, P_SEE_USERS_LIST, P_SEE_MEETING );
         $this->former = array( P_LOG_OUT, P_CHANGE_PASSWORD );
         $this->guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES ), $this->former);
-        $this->member = array_merge(array( P_SEE_USERS_LIST, P_SEE_MEETING, P_ENROL, P_EDIT_PLANNING, P_SEE_LAST_REPORT ), $this->guest);
-        $this->nightWatcher = array_merge(array( ), $this->member);
+        $this->member = array_merge(array( P_SEE_USERS_LIST, P_SEE_MEETING, P_EDIT_PLANNING ), $this->guest);
+        $this->nightWatcher = array_merge(array( P_ENROL, P_SEE_LAST_REPORT ), $this->member);
         $this->tutor = array_merge(array( P_EDIT_REPORT, P_ENROL_AS_TUTOR, P_GEN_STATS ), $this->nightWatcher);
         $this->board = array_merge(array( P_EDIT_MEETING ), $this->tutor);
         $this->admin = array_merge(array( P_UPLOAD_REPORT, P_DELETE_REPORT, P_SEE_REPORT_PHONE ), $this->board);
