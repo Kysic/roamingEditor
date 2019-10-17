@@ -32,7 +32,6 @@ class Stats {
             'nbEncounter' => $csv[6][2],
             'nbBlanket' => $newFormat ? $csv[5][7] : $csv[9][2],
             'nbTent' => $newFormat ? $csv[6][7] : $csv[10][2],
-            'bai' => $newFormat ? $csv[7][7] : $csv[11][2],
             'hygiene' => $newFormat ? $csv[8][7] : $csv[12][2],
             'src115' => @$srcInterventions['115'],
             'srcRoaming' => @$srcInterventions['Maraude']
@@ -103,7 +102,6 @@ class Stats {
             'nbEncounter' => 'Total personnes',
             'nbBlanket' => 'Couvertures',
             'nbTent' => 'Tentes',
-            'bai' => 'BAI',
             'hygiene' => 'Hygiène',
             'src115' => 'Signalement 115',
             'srcRoaming' => 'Rencontre Maraude'
@@ -122,7 +120,7 @@ class Stats {
                     },
                     array(
                         'date', 'nbVolunteer', 'nbIntervention', 'nbAdult', 'nbChild', 'nbEncounter',
-                        'nbBlanket', 'nbTent', 'bai', 'hygiene', 'src115', 'srcRoaming'
+                        'nbBlanket', 'nbTent', 'hygiene', 'src115', 'srcRoaming'
                     )
                 )
             );
