@@ -807,6 +807,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
             } else {
                 user.phoneNumber = member.phoneNumber;
                 user.address = member.address;
+                user.birthday = member.birthDate;
                 if (member.isBoard) {
                     user.rightRole = user.role == 'board' || user.role == 'admin' || user.role == 'root';
                 }else if (member.isTutor) {
@@ -843,6 +844,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
                     'phoneNumber': member.phoneNumber,
                     'address': member.address,
                     'gender': member.gender,
+                    'birthday': member.birthDate,
                     'role': 'unregistered',
                     'rightRole': true
                 });
