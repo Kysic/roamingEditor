@@ -1,0 +1,19 @@
+<div id="logistic">
+  <h2>Signalement problème technique</h2>
+  <button ng-click="goBack()">Retour</button>
+  <br/><br/>
+  <div class="info">
+    Cette page sert à signaler quand les réserves de quelque chose sont basses ou s'il y a un problème quelconque
+    avec le local ou la voiture.
+  </div>
+  <br/>
+  <form class='form' method='post'>
+    <div class='statusFailed'>{{error}}</div>
+    <div class="fieldGroup">
+      <label for="message">Votre message</label><br>
+      <textarea id='message' name='message' rows="10" cols="100" ng-disabled='sendInProgress' ng-model="msg"></textarea>
+    </div>
+    <br/>
+    <button ng-click="send()" ng-disabled='sendInProgress'>Envoyer</button>
+  </form>
+</div>

@@ -23,6 +23,10 @@ roamingEditor.config(['$routeProvider', function($routeProvider) {
         templateUrl: 'templates/donations.html',
         controller: 'DonationsController'
     })
+    .when('/logistic/:roamingId?', {
+        templateUrl: 'templates/logistic.html',
+        controller: 'LogisticController'
+    })
     .when('/debug', {
         templateUrl: 'templates/debug.html',
         controller: 'DebugController'
@@ -299,6 +303,10 @@ roamingEditor.controller('RoamingListController', function RoamingListController
         $location.path('/donations');
     }
 
+    $scope.logisticReport = function () {
+        $location.path('/logistic');
+    }
+
     $scope.$on('roamingUpdate', function () {
         retrieveRoamings();
     });
@@ -322,6 +330,7 @@ roamingEditor.controller('RoamingController',
     $scope.goMap = goMap;
     $scope.goMapLocation = goMapLocation;
     $scope.goDonations = goDonations;
+    $scope.logisticReport = logisticReport;
     $scope.isEditable = isEditable;
 
     var refreshTimer;
@@ -453,6 +462,10 @@ roamingEditor.controller('RoamingController',
 
     function goDonations() {
         $location.path('/donations/' + $scope.roaming.date);
+    }
+
+    function logisticReport() {
+        $location.path('/logistic/' + $scope.roaming.date);
     }
 
     function isEditable() {
@@ -681,6 +694,49 @@ roamingEditor.controller('DonationsController', function DonationsController($sc
                 }
             }
         }
+    }
+
+    function goBack() {
+        if ($routeParams.roamingId) {
+            $location.path('/roaming/' + $routeParams.roamingId);
+        } else {
+            $location.path('/roamingsList');
+        }
+    }
+
+});
+
+roamingEditor.controller('LogisticController', function LogisticController($scope, $routeParams, $location, $http) {
+
+    $scope.goBack = goBack;
+    $scope.send = send;
+    $scope.msg = '';
+    $scope.error = '';
+    $scope.sendInProgress = false;
+
+    function send() {
+        if (!$scope.msg) {
+            $scope.error = 'Erreur, veuillez renseigner un message.';
+            return;
+        }
+        $scope.sendInProgress = true;
+        $http.post(
+            roamingApiEndPoint + '/logistic.php',
+            { msg: $scope.msg }
+        ).then(function (response) {
+            if (response.data.status == 'success') {
+                $scope.error = '';
+                $scope.sendInProgress = false;
+                alert('Message envoyé');
+                goBack();
+            } else {
+                $scope.error = 'Erreur, impossible d\'envoyer le message.';
+                $scope.sendInProgress = false;
+            }
+        }, function (response) {
+            $scope.error = 'Erreur, impossible d\'envoyer le message.';
+            $scope.sendInProgress = false;
+        });
     }
 
     function goBack() {
