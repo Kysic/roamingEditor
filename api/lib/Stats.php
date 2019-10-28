@@ -21,8 +21,7 @@ class Stats {
     private function extractStatsFromRoamingReport($docId) {
         $reportCsvUrl = $this->docIdToCsvUrl($docId);
         $csv = array_map('str_getcsv', file($reportCsvUrl));
-        $newFormat = $csv[8][4] == "Don produit d'hygiène";
-        $srcInterventions = $this->extractSrcIntervention($csv, $newFormat);
+        $srcInterventions = $this->extractSrcIntervention($csv);
         return array(
             'date' => $csv[0][2],
             'nbVolunteer' => $this->getNbVolunteers($csv[2][2]),
@@ -30,9 +29,9 @@ class Stats {
             'nbAdult' => $csv[7][2],
             'nbChild' => $csv[8][2],
             'nbEncounter' => $csv[6][2],
-            'nbBlanket' => $newFormat ? $csv[5][7] : $csv[9][2],
-            'nbTent' => $newFormat ? $csv[6][7] : $csv[10][2],
-            'hygiene' => $newFormat ? $csv[8][7] : $csv[12][2],
+            'nbBlanket' => $csv[5][7],
+            'nbTent' => $csv[6][7],
+            'hygiene' => $csv[8][7],
             'src115' => @$srcInterventions['115'],
             'srcRoaming' => @$srcInterventions['Maraude']
         );
@@ -42,9 +41,9 @@ class Stats {
         return GOOGLE_DOC_URL.$docId.GOOGLE_DOC_CMD_CSV;
     }
 
-    private function extractSrcIntervention($csv, $newFormat) {
+    private function extractSrcIntervention($csv) {
         $srcInterventions = array();
-        $startLine = $newFormat ? 15 : 19;
+        $startLine = 15;
         for ($i = $startLine; $i < count($csv); $i++) {
             if (count($csv[$i]) > 6) {
                 if ($csv[$i][IDX_NB_ADULTS] > 0 || $csv[$i][IDX_NB_CHILDREN] > 0) {
