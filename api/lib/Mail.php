@@ -1,6 +1,6 @@
 <?php
 
-require_once(ROAMING_API_DIR.'/conf/smtp.php');
+require_once(ROAMING_API_DIR.'/conf/mail.php');
 require_once(ROAMING_API_DIR.'/lib/ext/class.phpmailer.php');
 require_once(ROAMING_API_DIR.'/lib/ext/class.smtp.php');
 
@@ -55,8 +55,22 @@ class Mail {
         if (MAIL_MODE == 'STUB') {
             require_once(ROAMING_API_DIR.'/tests/lib/mailStub.php');
             sendMailStub($to, $subject, $body, $from, $isHTML);
-        } else {
+        } elseif (MAIL_MODE == 'SMTP') {
             $this->sendMailSMTP($to, $subject, $body, $from, $isHTML);
+        } else {
+            $this->sendMailNative($to, $subject, $body, $from, $isHTML);
+        }
+    }
+
+    private function sendMailNative($to, $subject, $body, $from, $isHTML) {
+        $headers = "From: ".$from."\r\nReply-to: ".$from."\r\n";
+        if ($isHTML) {
+            $headers .= 'Content-type: text/html; charset="utf-8"'."\r\n";
+        } else {
+            $headers .= 'Content-Type: text/plain; charset="utf-8"'."\r\n";
+        }
+        if ( !@mail($to, $subject, $body, $headers) ) {
+            throw new Exception('Erreur lors de l\'envoi du mail, veuillez contacter l\'administrateur du site.');
         }
     }
 
@@ -85,11 +99,7 @@ class Mail {
 
         if(!$mail->send()) {
             // echo 'Mailer Error: ' . $mail->ErrorInfo;
-            $headers = "From: ".$from."\r\nReply-to: ".$from."\r\n";
-            $headers .= 'Content-Type: text/plain; charset="utf-8"'."\r\n";
-            if ( !@mail($to, $subject, $body, $headers) ) {
-                throw new Exception('Erreur lors de l\'envoi du mail, veuillez contacter l\'administrateur du site.');
-            }
+            sendMailNative($to, $subject, $body, $from, $isHTML);
         }
     }
 
