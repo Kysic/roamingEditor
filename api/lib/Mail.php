@@ -69,9 +69,13 @@ class Mail {
         } else {
             $headers .= 'Content-Type: text/plain; charset="utf-8"'."\r\n";
         }
-        if ( !@mail($to, $subject, $body, $headers) ) {
+        if ( !@mail($to, $this->encodeRFC1342($subject), $body, $headers) ) {
             throw new Exception('Erreur lors de l\'envoi du mail, veuillez contacter l\'administrateur du site.');
         }
+    }
+
+    private function encodeRFC1342($txt) {
+        return mb_encode_mimeheader($txt);
     }
 
     private function sendMailSMTP($to, $subject, $body, $from, $isHTML) {
