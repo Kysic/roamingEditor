@@ -9,7 +9,7 @@ try {
         $newLocation = '/portal/#!/login//site:'.basename(__FILE__);
     } else {
         $session->checkHasPermission(P_SEE_MEETING);
-        $newLocation = CALENDAR_PROVIDER_URL.CALENDAR_ID;
+        $newLocation = CALENDAR_PROVIDER_URL.CALENDAR_ID."&mode=AGENDA";
     }
     header('Location: '.$newLocation);
     echo '<script type="text/javascript">document.location="'.$newLocation.'";</script>';

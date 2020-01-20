@@ -13,7 +13,7 @@
 .mdl-layout {
   min-width: 350px;
 }
-.mdl-layout__content {
+.main-content {
   display: flex;
   flex-flow: row wrap;
   padding: 20px;
@@ -26,9 +26,13 @@
   flex-direction: column;
   justify-content: space-between;
 }
+.mdl-card__title-text {
+  margin-right: 30px;
+}
 .mdl-card__title-text a {
   color: #000;
   text-decoration: none;
+  font-weight: normal;
   cursor: pointer;
 }
 .mdl-card__title-text i.material-icons {
@@ -121,7 +125,7 @@ document.onkeydown = function(evt) {
       <a class="mdl-navigation__link" href="/contactForm.php"><i class="material-icons">live_help</i> Aide</a>
     </nav>
   </div>
-  <main class="mdl-layout__content">
+  <main class="mdl-layout__content"><div class="main-content">
 
     <div class="faq-card mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
@@ -154,9 +158,6 @@ document.onkeydown = function(evt) {
           <i class="material-icons">ondemand_video</i>
         </button>,
         soit via ce <a href="/redirectionPlanning.php">google sheet</a>
-        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/YFrCS8IL_rs')">
-          <i class="material-icons">ondemand_video</i>
-        </button>
         en mettant votre nom dans la case adequate.<br> 
         Pour s'inscrire pour les soupes du dimanche, seul le <a href="/redirectionPlanning.php">fichier google sheet</a>
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/C8dTPbqYrow')">
@@ -273,6 +274,7 @@ document.onkeydown = function(evt) {
         Si vous rencontrer une erreur, un problème d'accès ou n'arrivez pas à faire quelque chose sur le site,
         rendez-vous sur <a href="/contactForm.php">la page contact</a> pour signaler le problème et obtenir de l'aide.<br>
         Pensez à donner le plus d'informations possibles sur le soucis pour que l'on puisse vous aider.
+        Et pour tout ce qui n'est pas lié au site, contacter le <a href="mailto:associationvinci@gmail.com">secrétariat de l'association</a>.
       </div>
       <div class="mdl-card__actions mdl-card--border">
         <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/contactForm.php">
@@ -282,7 +284,7 @@ document.onkeydown = function(evt) {
     </div>
 
 
-  </main>
+  </div></main>
 </div>
 
 <div id="modal-background" onclick="closeModal()">
