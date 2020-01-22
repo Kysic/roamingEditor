@@ -3,7 +3,7 @@ $formError = '';
 $mailSent = false;
 $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
 $message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
-if (!empty($email) && !empty($message))  {
+if (!empty($email) && !empty($message)) {
   try {
     require_once('api/lib/Container.php');
     $container = new Container();
@@ -27,72 +27,148 @@ if (!empty($email) && !empty($message))  {
 ?>
 <!doctype html>
 <html lang="fr">
+<!-- Roaming Editor - License GNU GPL - https://github.com/Kysic/roamingEditor -->
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" href="img/favicon.png" />
-<link rel="stylesheet" href="css/main.css"/>
-<title>Demande d'assistance</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VINCI - Demande d'assistance</title>
+  <link rel="stylesheet" href="material-icon.css">
+  <link rel="stylesheet" href="material.teal-blue.min.css">
+  <link rel="icon" type="image/png" href="img/favicon.png">
+  <script defer src="material.min.js" type="text/javascript"></script>
 <style>
-.info {
-  text-align: center;
-  max-width: 800px;
-  margin: auto;
+.mdl-layout {
+  min-width: 350px;
 }
-.form {
-  margin: 20px;
+.main-content {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 20px;
+  justify-content: center;
 }
-.fieldGroup {
-  padding: 10px;
+.faq-card.mdl-card {
+  width: 700px;
+  margin: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-#message {
-  max-width: 800px;
-  width: 90%;
-  height: 300px;
+.mdl-card__title-text i.material-icons {
+  color: #555;
+  margin-right: 10px;
+}
+.mdl-card__supporting-text {
+  padding: 0 15px 10px 15px;
+  width: unset;
+}
+.mdl-card__supporting-text form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.mdl-card__supporting-text form > div {
+  width: 500px;
+}
+.notification {
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.notification i.material-icons {
+  margin-right: 10px;
+  padding-bottom: 5px;
+}
+.success {
+  color: #2a6;
+}
+.error {
+  color: #f44;
 }
 </style>
 </head>
 <body>
-  <h1>Formulaire de demande d'assistance sur l'utilisation du site</h1>
-  <p>
-<?php
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">Demande d'assistance sur l'utilisation du site</span>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Navigation</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="/"><i class="material-icons">home</i> Accueil</a>
+      <a class="mdl-navigation__link" href="/redirectionPlanning.php"><i class="material-icons">date_range</i> Planning maraudes</a>
+      <a class="mdl-navigation__link" href="/portal/#!/roamingsList/"><i class="material-icons">assignment</i> Compte-rendus</a>
+      <a class="mdl-navigation__link" href="/redirectionReunion.php"><i class="material-icons">event</i> Calendrier réunions</a>
+      <a class="mdl-navigation__link" href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a>
+      <a class="mdl-navigation__link" href="/dokuwiki/"><i class="material-icons">school</i> Base connaissances</a>
+      <a class="mdl-navigation__link" href="https://samu-social-grenoble.fr"><i class="material-icons">web</i> Site Web</a>
+      <a class="mdl-navigation__link" href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">face</i> Page Facebook</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content"><div class="main-content">
+
+    <div class="faq-card mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text"><i class="material-icons">live_help</i> Formulaire de demande d'assistance</h2>
+      </div>
+      <?php
 if ($mailSent) {
 ?>
-    <div class="success info">
-      Votre message a bien été envoyé. Nous vous recontacterons dès que possible.
-    </div>
+      <div class="mdl-card__supporting-text notification success">
+         <i class="material-icons">check_circle</i> Votre message a bien été envoyé.
+         Nous vous recontacterons dès que possible.
+      </div>
 <?php
 } else {
 ?>
-    <div class="info">
-      Si vous rencontrez un problème dans l'utilisation du site, n'hésitez pas à utiliser le formulaire
-      suivant pour nous contacter et que l'on puisse résoudre cela ensemble.
-    </div>
-    <form class='form' method='post'>
-      <input id='checkJavascript' name='javascript' type='hidden' value='false' />
-      <div class='error'><?php echo $formError; ?></div>
-      <div class="fieldGroup">
-        <label for='email'>Email</label>
-        <input id='email' type='text' name='email' placeholder="Votre adresse email" value="<?php echo $email; ?>"
-            title="Merci de renseiger votre adresse email pour que l'on puisse vous répondre" />
+      <div class="mdl-card__supporting-text">
+         Si vous rencontrez un problème dans l'utilisation du site, vous pouvez utiliser le formulaire suivant pour nous contacter et que l'on puisse résoudre cela ensemble.
       </div>
-      <div class="fieldGroup">
-        <label for="message">Votre message (n'hésitez pas à donner le plus de détails possibles sur le problème)</label><br>
-        <textarea id='message' name='message'
-        title="Quel est le problème rencontré ? A quel moment ? Que voyez vous à l'écran à ce moment là ? Est-ce pareil avec un autre navigateur ?"
-        ><?php echo $message; ?></textarea>
+<?php
+  if ($formError) {
+?>
+      <div class="mdl-card__supporting-text notification error">
+         <i class="material-icons">error</i> <?php echo $formError; ?>
       </div>
-      <div class="fieldGroup">
-        <input type="submit" value="Envoyer" />
+<?php
+  }
+?>
+      <div class="mdl-card__supporting-text">
+        <form method="post">
+          <input id='checkJavascript' name='javascript' type='hidden' value='false' />
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="email" name="email"
+              pattern="[a-zA-Z0-9.!#$%&amp;’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+" required>
+            <label class="mdl-textfield__label" for="email">Votre adresse email</label>
+          </div>
+
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <textarea class="mdl-textfield__input" type="text" rows= "8" id="message" name="message" required></textarea>
+            <label class="mdl-textfield__label" for="message">Le problème rencontré (n'hésitez pas à détailler)</label>
+          </div>
+
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit">Envoyer</button>
+
+        </form>
       </div>
-    </form>
-    <script type="text/javascript">document.getElementById('checkJavascript').value = 'true';</script>
+      <script type="text/javascript">document.getElementById('checkJavascript').value = 'true';</script>
 <?php
 }
 ?>
-  </p>
-  <p>
-    <a href="/">Retour à l'accueil</a>
-  </p>
+      <div class="mdl-card__actions mdl-card--border">
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/">
+          Retour à l'accueil
+        </a>
+      </div>
+    </div>
+
+
+  </div></main>
+</div>
+
 </body>
 </html>
