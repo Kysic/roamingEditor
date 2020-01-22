@@ -72,7 +72,7 @@ class Session {
         }
     }
 
-    public function checkHasPermission($permission, $errorMsg = 'Vous n\'êtes pas authorisé à faire cette action.') {
+    public function checkHasPermission($permission, $errorMsg = 'Vous n\'êtes pas autorisé à faire cette action.') {
         if (!$this->hasPermission($permission)) {
             throw new ForbiddenException($errorMsg);
         }

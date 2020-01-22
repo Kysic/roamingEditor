@@ -46,7 +46,7 @@ if (!empty($email) && !empty($message)) {
   padding: 20px;
   justify-content: center;
 }
-.faq-card.mdl-card {
+.mdl-card {
   width: 700px;
   margin: 15px;
   display: flex;
@@ -102,7 +102,7 @@ if (!empty($email) && !empty($message)) {
       <a class="mdl-navigation__link" href="/"><i class="material-icons">home</i> Accueil</a>
       <a class="mdl-navigation__link" href="/redirectionPlanning.php"><i class="material-icons">date_range</i> Planning maraudes</a>
       <a class="mdl-navigation__link" href="/portal/#!/roamingsList/"><i class="material-icons">assignment</i> Compte-rendus</a>
-      <a class="mdl-navigation__link" href="/redirectionReunion.php"><i class="material-icons">event</i> Calendrier réunions</a>
+      <a class="mdl-navigation__link" href="/meetings.php"><i class="material-icons">event</i> Calendrier réunions</a>
       <a class="mdl-navigation__link" href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a>
       <a class="mdl-navigation__link" href="/dokuwiki/"><i class="material-icons">school</i> Base connaissances</a>
       <a class="mdl-navigation__link" href="https://samu-social-grenoble.fr"><i class="material-icons">web</i> Site Web</a>
@@ -111,7 +111,7 @@ if (!empty($email) && !empty($message)) {
   </div>
   <main class="mdl-layout__content"><div class="main-content">
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><i class="material-icons">live_help</i> Formulaire de demande d'assistance</h2>
       </div>

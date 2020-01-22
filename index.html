@@ -19,7 +19,7 @@
   padding: 20px;
   justify-content: center;
 }
-.faq-card.mdl-card {
+.mdl-card {
   width: 450px;
   margin: 15px;
   display: flex;
@@ -117,7 +117,7 @@ document.onkeydown = function(evt) {
     <nav class="mdl-navigation">
       <a class="mdl-navigation__link" href="/redirectionPlanning.php"><i class="material-icons">date_range</i> Planning maraudes</a>
       <a class="mdl-navigation__link" href="/portal/#!/roamingsList/"><i class="material-icons">assignment</i> Compte-rendus</a>
-      <a class="mdl-navigation__link" href="/redirectionReunion.php"><i class="material-icons">event</i> Calendrier réunions</a>
+      <a class="mdl-navigation__link" href="/meetings.php"><i class="material-icons">event</i> Calendrier réunions</a>
       <a class="mdl-navigation__link" href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a>
       <a class="mdl-navigation__link" href="/dokuwiki/"><i class="material-icons">school</i> Base connaissances</a>
       <a class="mdl-navigation__link" href="https://samu-social-grenoble.fr"><i class="material-icons">web</i> Site Web</a>
@@ -127,7 +127,7 @@ document.onkeydown = function(evt) {
   </div>
   <main class="mdl-layout__content"><div class="main-content">
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><a href="/portal/#!/register"><i class="material-icons">how_to_reg</i> Inscription au site</a></h2>
       </div>
@@ -148,7 +148,7 @@ document.onkeydown = function(evt) {
       </div>
     </div>
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><a href="/redirectionPlanning.php"><i class="material-icons">date_range</i> Planning maraudes et soupes</a></h2>
       </div>
@@ -177,7 +177,7 @@ document.onkeydown = function(evt) {
       </div>
     </div>
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><a href="/portal/#!/roamingsList/"><i class="material-icons">assignment</i> Compte-rendus de maraudes</a></h2>
       </div>
@@ -198,7 +198,7 @@ document.onkeydown = function(evt) {
       </div>
     </div>
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><a href="/dokuwiki"><i class="material-icons">school</i> Base de connaissances (WIKI)</a></h2>
       </div>
@@ -215,7 +215,7 @@ document.onkeydown = function(evt) {
       </div>
     </div>
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><a href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">web</i> Réseaux sociaux</a></h2>
       </div>
@@ -233,7 +233,7 @@ document.onkeydown = function(evt) {
       </div>
     </div>
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><a href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a></h2>
       </div>
@@ -250,23 +250,23 @@ document.onkeydown = function(evt) {
       </div>
     </div>
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text"><a href="/redirectionReunion.php"><i class="material-icons">event</i> Agenda des réunions</a></h2>
+        <h2 class="mdl-card__title-text"><a href="/meetings.php"><i class="material-icons">event</i> Agenda des réunions</a></h2>
       </div>
       <div class="mdl-card__supporting-text">
-        La liste des réunions et autres évènements de l'association est disponible sur <a href="/redirectionReunion.php">ce calendrier google</a>.
-        Tous les évènements ne concernent pas forcément tous les bénévoles, quand c'est le cas c'est généralement indiqué dans le titre.
-        N'hésitez pas à ajouter ce calendrier à votre propre agenda en cliquant sur <a href="https://calendar.google.com/calendar/r?cid=n97gng0hpmcn59sgb0ml5o18oc@group.calendar.google.com">ce lien</a>.
+        La liste des réunions et autres évènements de l'association est disponible sur <a href="/meetings.php">ce calendrier google</a>.
+        Tous les évènements ne concernent pas forcément tous les bénévoles, quand c'est le cas c'est généralement indiqué dans le titre.<br>
+        N'hésitez pas à ajouter ce calendrier à votre propre agenda en cliquant sur le + afficher en bas à droite de celui-ci.
       </div>
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/redirectionReunion.php">
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/meetings.php">
           Accéder à l'agenda
         </a>
       </div>
     </div>
 
-    <div class="faq-card mdl-card mdl-shadow--2dp">
+    <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><a href="/contactForm.php"><i class="material-icons">live_help</i> Demander de l'aide</a></h2>
       </div>
