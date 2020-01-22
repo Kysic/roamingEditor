@@ -115,11 +115,11 @@ document.onkeydown = function(evt) {
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">Navigation</span>
     <nav class="mdl-navigation">
-      <a class="mdl-navigation__link" href="/redirectionPlanning.php"><i class="material-icons">date_range</i> Planning maraudes</a>
       <a class="mdl-navigation__link" href="/portal/#!/roamingsList/"><i class="material-icons">assignment</i> Compte-rendus</a>
+      <a class="mdl-navigation__link" href="/redirectionPlanning.php"><i class="material-icons">date_range</i> Planning maraudes</a>
       <a class="mdl-navigation__link" href="/meetings.php"><i class="material-icons">event</i> Calendrier réunions</a>
-      <a class="mdl-navigation__link" href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a>
       <a class="mdl-navigation__link" href="/dokuwiki/"><i class="material-icons">school</i> Base connaissances</a>
+      <a class="mdl-navigation__link" href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a>
       <a class="mdl-navigation__link" href="https://samu-social-grenoble.fr"><i class="material-icons">web</i> Site Web</a>
       <a class="mdl-navigation__link" href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">face</i> Page Facebook</a>
       <a class="mdl-navigation__link" href="/contactForm.php"><i class="material-icons">live_help</i> Aide</a>
@@ -143,6 +143,27 @@ document.onkeydown = function(evt) {
       </div>
       <div class="mdl-card__menu">
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/LXNPehoScsg')">
+          <i class="material-icons">ondemand_video</i>
+        </button>
+      </div>
+    </div>
+
+    <div class="mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text"><a href="/portal/#!/roamingsList/"><i class="material-icons">assignment</i> Compte-rendus de maraudes</a></h2>
+      </div>
+      <div class="mdl-card__supporting-text">
+        Pour consulter les compte-rendus des maraudes, rendez-vous sur <a href="/portal/#!/roamingsList/">cette page</a>
+        et cliquer sur le lien dans la colonne compte-rendu.<br>
+        Pour les tuteurs, vous pourrez aussi modifier le compte-rendu de la veille pour compléter ou corriger des infos.
+      </div>
+      <div class="mdl-card__actions mdl-card--border">
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/portal/#!/roamingsList/">
+          Consulter les compte-rendus
+        </a>
+      </div>
+      <div class="mdl-card__menu">
+        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/A9UIb97j9dw')">
           <i class="material-icons">ondemand_video</i>
         </button>
       </div>
@@ -179,22 +200,17 @@ document.onkeydown = function(evt) {
 
     <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text"><a href="/portal/#!/roamingsList/"><i class="material-icons">assignment</i> Compte-rendus de maraudes</a></h2>
+        <h2 class="mdl-card__title-text"><a href="/meetings.php"><i class="material-icons">event</i> Agenda des réunions</a></h2>
       </div>
       <div class="mdl-card__supporting-text">
-        Pour consulter les compte-rendus des maraudes, rendez-vous sur <a href="/portal/#!/roamingsList/">cette page</a>
-        et cliquer sur le lien dans la colonne compte-rendu.<br>
-        Pour les tuteurs, vous pourrez aussi modifier le compte-rendu de la veille pour compléter ou corriger des infos.
+        La liste des réunions et autres évènements de l'association est disponible sur <a href="/meetings.php">ce calendrier google</a>.
+        Tous les évènements ne concernent pas forcément tous les bénévoles, quand c'est le cas c'est généralement indiqué dans le titre.<br>
+        N'hésitez pas à ajouter ce calendrier à votre propre agenda en cliquant sur le + afficher en bas à droite de celui-ci.
       </div>
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/portal/#!/roamingsList/">
-          Consulter les compte-rendus
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/meetings.php">
+          Accéder à l'agenda
         </a>
-      </div>
-      <div class="mdl-card__menu">
-        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/A9UIb97j9dw')">
-          <i class="material-icons">ondemand_video</i>
-        </button>
       </div>
     </div>
 
@@ -217,24 +233,6 @@ document.onkeydown = function(evt) {
 
     <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text"><a href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">web</i> Réseaux sociaux</a></h2>
-      </div>
-      <div class="mdl-card__supporting-text">
-        Pour suivre l'actualité de l'association, la source la plus à jour est généralement notre <a href="https://www.facebook.com/SamuSocialGrenoble">page Facebook</a>.<br>
-        Pour discuter ou organiser des évènements entre membres, nous avons un <a href="https://www.facebook.com/groups/benevolesvinci">groupe privé Facebook</a>.<br>
-        Pour retrouver des vidéos de reportages ou des articles sur l'association, il y a le <a href="https://www.samu-social-grenoble.fr/presse-actus/">site web</a>
-        et notre <a href="https://www.youtube.com/channel/UCoLUJ4HGLVEzC7d3mS49MiQ"> chaîne youtube</a>.
-      </div>
-      <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://www.facebook.com/SamuSocialGrenoble">Facebook</a>
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://samu-social-grenoble.fr">Site Web</a>
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://www.youtube.com/channel/UCoLUJ4HGLVEzC7d3mS49MiQ">Youtube</a>
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://twitter.com/SamuSocialVINCI">Twitter</a>
-      </div>
-    </div>
-
-    <div class="mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><a href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a></h2>
       </div>
       <div class="mdl-card__supporting-text">
@@ -252,17 +250,19 @@ document.onkeydown = function(evt) {
 
     <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text"><a href="/meetings.php"><i class="material-icons">event</i> Agenda des réunions</a></h2>
+        <h2 class="mdl-card__title-text"><a href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">web</i> Réseaux sociaux</a></h2>
       </div>
       <div class="mdl-card__supporting-text">
-        La liste des réunions et autres évènements de l'association est disponible sur <a href="/meetings.php">ce calendrier google</a>.
-        Tous les évènements ne concernent pas forcément tous les bénévoles, quand c'est le cas c'est généralement indiqué dans le titre.<br>
-        N'hésitez pas à ajouter ce calendrier à votre propre agenda en cliquant sur le + afficher en bas à droite de celui-ci.
+        Pour suivre l'actualité de l'association, la source la plus à jour est généralement notre <a href="https://www.facebook.com/SamuSocialGrenoble">page Facebook</a>.<br>
+        Pour discuter ou organiser des évènements entre membres, nous avons un <a href="https://www.facebook.com/groups/benevolesvinci">groupe privé Facebook</a>.<br>
+        Pour retrouver des vidéos de reportages ou des articles sur l'association, il y a le <a href="https://www.samu-social-grenoble.fr/presse-actus/">site web</a>
+        et notre <a href="https://www.youtube.com/channel/UCoLUJ4HGLVEzC7d3mS49MiQ"> chaîne youtube</a>.
       </div>
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/meetings.php">
-          Accéder à l'agenda
-        </a>
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://www.facebook.com/SamuSocialGrenoble">Facebook</a>
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://samu-social-grenoble.fr">Site Web</a>
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://www.youtube.com/channel/UCoLUJ4HGLVEzC7d3mS49MiQ">Youtube</a>
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://twitter.com/SamuSocialVINCI">Twitter</a>
       </div>
     </div>
 
