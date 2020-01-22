@@ -3,7 +3,6 @@ require_once('api/lib/Container.php');
 
 $container = new Container();
 $session = $container->getSession();
-$validator = $container->getValidator();
 $error = '';
 try {
     if (!$session->isLoggedIn()) {
@@ -40,6 +39,11 @@ try {
   flex-flow: row wrap;
   padding: 20px;
   justify-content: center;
+}
+.mdl-menu__item a {
+  font-weight: unset;
+  text-decoration: none;
+  color: unset;
 }
 .mdl-card {
   width: 500px;
@@ -79,6 +83,27 @@ try {
   color: #f44;
 }
 </style>
+<script type="text/javascript">
+function post(path, params, method='post') {
+  const form = document.createElement('form');
+  form.method = method;
+  form.action = path;
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const hiddenField = document.createElement('input');
+      hiddenField.type = 'hidden';
+      hiddenField.name = key;
+      hiddenField.value = params[key];
+      form.appendChild(hiddenField);
+    }
+  }
+  document.body.appendChild(form);
+  form.submit();
+}
+function logout() {
+  post('/', { action: 'logout', sessionToken: '<?php echo $session->getToken();?>' });
+}
+</script>
 </head>
 <body>
 
@@ -86,6 +111,17 @@ try {
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <span class="mdl-layout-title">Calendriers des réunions et évènements du VINCI</span>
+      <div class="mdl-layout-spacer"></div>
+      <div id="user-menu-button">
+        <?php echo $session->getUser()->username;?>
+        <button class="mdl-button mdl-js-button mdl-button--icon">
+           <i class="material-icons">person</i>
+        </button>
+      </div>
+      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="user-menu-button">
+        <li class="mdl-menu__item"><a href="/portal/#!/setPassword">Changer de mot de passe</a></li>
+        <li class="mdl-menu__item" onclick="logout()">Se déconnecter</li>
+      </ul>
     </div>
   </header>
   <div class="mdl-layout__drawer">

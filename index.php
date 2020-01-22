@@ -1,3 +1,21 @@
+<?php
+$username = '';
+try {
+  require_once('api/lib/Container.php');
+  $container = new Container();
+  $session = $container->getSession();
+  if ($session->isLoggedIn()) {
+    if (@$_POST['action'] == 'logout') {
+      $auth = $container->getAuth();
+      $auth->logout(@$_POST['sessionToken']);
+    } else {
+      $username = $session->getUser()->username;
+    }
+  }
+} catch (Exception $e) {
+    // Nothing
+}
+?>
 <!doctype html>
 <html lang="fr">
 <!-- Roaming Editor - License GNU GPL - https://github.com/Kysic/roamingEditor -->
@@ -18,6 +36,11 @@
   flex-flow: row wrap;
   padding: 20px;
   justify-content: center;
+}
+.mdl-menu__item a {
+  font-weight: unset;
+  text-decoration: none;
+  color: unset;
 }
 .mdl-card {
   width: 450px;
@@ -102,6 +125,25 @@ document.onkeydown = function(evt) {
         closeModal();
     }
 };
+function post(path, params, method='post') {
+  const form = document.createElement('form');
+  form.method = method;
+  form.action = path;
+  for (const key in params) {
+    if (params.hasOwnProperty(key)) {
+      const hiddenField = document.createElement('input');
+      hiddenField.type = 'hidden';
+      hiddenField.name = key;
+      hiddenField.value = params[key];
+      form.appendChild(hiddenField);
+    }
+  }
+  document.body.appendChild(form);
+  form.submit();
+}
+function logout() {
+  post('/', { action: 'logout', sessionToken: '<?php echo $session->getToken();?>' });
+}
 </script>
 </head>
 <body>
@@ -110,6 +152,25 @@ document.onkeydown = function(evt) {
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <span class="mdl-layout-title">Outils informatique du VINCI</span>
+      <div class="mdl-layout-spacer"></div>
+<?php
+if ($username) {
+?>
+      <div id="user-menu-button">
+        <?php echo $username;?>
+        <button class="mdl-button mdl-js-button mdl-button--icon">
+          <i class="material-icons">person</i>
+        </button>
+      </div>
+      <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="user-menu-button">
+        <li class="mdl-menu__item"><a href="/portal/#!/setPassword">Changer de mot de passe</a></li>
+        <li class="mdl-menu__item" onclick="logout()">Se déconnecter</li>
+      </ul>
+<?php
+} else {
+  echo '<a href="/portal/#!/login//site:'.basename(__FILE__).'" class="mdl-navigation__link">Se connecter <i class="material-icons">person</i></a>';
+}
+?>
     </div>
   </header>
   <div class="mdl-layout__drawer">
@@ -132,7 +193,7 @@ document.onkeydown = function(evt) {
         <h2 class="mdl-card__title-text"><a href="/portal/#!/register"><i class="material-icons">how_to_reg</i> Inscription au site</a></h2>
       </div>
       <div class="mdl-card__supporting-text">
-        Pour vous inscrire sur le site, rendez-vous sur <a href="/portal/#!/register">cette page</a> et     
+        Pour vous inscrire sur le site, rendez-vous sur <a href="/portal/#!/register">cette page</a> et
         suivez les instructions.<br>
         Pour retrouver facilement ce site, pensez à l'ajouter à vos favoris ou votre écran d'accueil.
       </div>
@@ -179,7 +240,7 @@ document.onkeydown = function(evt) {
           <i class="material-icons">ondemand_video</i>
         </button>,
         soit via ce <a href="/redirectionPlanning.php">google sheet</a>
-        en mettant votre nom dans la case adequate.<br> 
+        en mettant votre nom dans la case adequate.<br>
         Pour s'inscrire pour les soupes du dimanche, seul le <a href="/redirectionPlanning.php">fichier google sheet</a>
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/C8dTPbqYrow')">
           <i class="material-icons">ondemand_video</i>
@@ -221,7 +282,7 @@ document.onkeydown = function(evt) {
       <div class="mdl-card__supporting-text">
         Vous pouvez retrouver sur le <a href="/dokuwiki/">WIKI</a> des liens et informations sur le fonctionnement de notre association ainsi
         que sur les associations partenaires et le monde du social.<br>
-        N'hésitez pas à consulter les  
+        N'hésitez pas à consulter les
         <a href="https://docs.google.com/document/d/14nd4-hjs8ZgZ3STmCqo_Yb92afCJbe990GNXF6MAaVc">fiches infos de conseil d'orientation</a> notamment.
       </div>
       <div class="mdl-card__actions mdl-card--border">
@@ -237,7 +298,7 @@ document.onkeydown = function(evt) {
       </div>
       <div class="mdl-card__supporting-text">
         Pour trouver les informations de contact d'un autre membre de l'association,
-        rendez-vous sur <a href="/portal/#!/users">la liste des membres</a> et rechercher 
+        rendez-vous sur <a href="/portal/#!/users">la liste des membres</a> et rechercher
         le nom de cette personne.<br>N'hésitez pas à prendre contact, mais n'oubliez pas non plus que
         tout le monde est bénévole et n'as pas forcément de temps à vous accorder.
       </div>
