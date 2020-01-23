@@ -151,13 +151,14 @@ function logout() {
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">Outils informatique du VINCI</span>
+      <span class="mdl-layout-title mdl-layout--small-screen-only">Accueil</span>
+      <span class="mdl-layout-title mdl-layout--large-screen-only">Outils informatique du VINCI</span>
       <div class="mdl-layout-spacer"></div>
 <?php
 if ($username) {
 ?>
       <div id="user-menu-button">
-        <?php echo $username;?>
+        <span><?php echo $username;?></span>
         <button class="mdl-button mdl-js-button mdl-button--icon">
           <i class="material-icons">person</i>
         </button>

@@ -110,10 +110,11 @@ function logout() {
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">Calendriers des réunions et évènements du VINCI</span>
+      <span class="mdl-layout-title mdl-layout--small-screen-only">Réunions</span>
+      <span class="mdl-layout-title mdl-layout--large-screen-only">Calendrier des réunions et évènements du VINCI</span>
       <div class="mdl-layout-spacer"></div>
       <div id="user-menu-button">
-        <?php echo $session->getUser()->username;?>
+        <span><?php echo $session->getUser()->username;?></span>
         <button class="mdl-button mdl-js-button mdl-button--icon">
            <i class="material-icons">person</i>
         </button>

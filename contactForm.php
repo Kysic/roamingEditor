@@ -93,7 +93,10 @@ if (!empty($email) && !empty($message)) {
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-drawer">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">Demande d'assistance sur l'utilisation du site</span>
+      <span class="mdl-layout-title mdl-layout--small-screen-only">Aide</span>
+      <span class="mdl-layout-title mdl-layout--large-screen-only">
+        Demande d'assistance sur l'utilisation du site
+      </span>
     </div>
   </header>
   <div class="mdl-layout__drawer">
