@@ -382,12 +382,6 @@ roamingPortal.controller('RoamingListController', function RoamingListController
                 checkRoamingByFour(roaming);
             }
             $scope.planningInfos = planning['infos'];
-            if (planning['calendarUrl']) {
-                $scope.calendarUrl = $sce.trustAsResourceUrl(
-                    planning['calendarUrl'] +
-                    '&showTitle=0&showNav=0&showDate=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=AGENDA&wkst=2'
-                );
-            }
         }, function (response) {
             if (response.status == 401) {
                 $location.path('/login');
