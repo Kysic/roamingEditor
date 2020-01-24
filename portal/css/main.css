@@ -7,11 +7,12 @@ body {
     margin: 0px;
     height: 100%;
 }
-main {
+main.mdl-layout__content {
     text-align: center;
     background: #fbfbfb;
     color: #1f2123;
     padding: 0 5px;
+    overflow: auto;
 }
 main a > img {
     border: 0;
