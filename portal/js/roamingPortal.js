@@ -6,23 +6,33 @@ var roamingPortal = angular.module('roamingPortal', ['ngRoute', 'angular-loading
 
 roamingPortal.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList/', {
-        templateUrl: 'templates/roamingsList.html',
+        shortTitle: 'Compte-rendus',
+        longTitle: 'Compte-rendus des maraudes',
+        templateUrl: 'templates/roamingsList.html?v=1',
         controller: 'RoamingListController',
         reloadOnSearch: false
     })
     .when('/login/:email?/:referer?', {
+        shortTitle: 'Connexion',
+        longTitle: 'Connexion au site du VINCI',
         templateUrl: 'templates/login.html',
         controller: 'LoginController'
     })
     .when('/register/:email?', {
+        shortTitle: 'Inscription',
+        longTitle: 'Inscription au site du VINCI',
         templateUrl: 'templates/register.html',
         controller: 'RegisterController'
     })
     .when('/resetPassword/:email?', {
+        shortTitle: 'Mdp perdu',
+        longTitle: 'Réinitialisation de votre mot de passe',
         templateUrl: 'templates/resetPassword.html',
         controller: 'ResetPasswordController'
     })
     .when('/setPassword/:userId?/:mailToken?', {
+        shortTitle: 'Choix mdp',
+        longTitle: 'Modification de votre mot de passe',
         templateUrl: 'templates/setPassword.html',
         controller: 'SetPasswordController'
     })
@@ -31,11 +41,15 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
         controller: 'MailSentController'
     })
     .when('/users', {
-        templateUrl: 'templates/users.html',
+        shortTitle: 'Membres',
+        longTitle: 'Liste des membres du VINCI',
+        templateUrl: 'templates/users.html?v=1',
         controller: 'UsersController'
     })
     .when('/roaming/:roamingDate', {
-        templateUrl: 'templates/roamingView.html',
+        shortTitle: 'CR Maraude',
+        longTitle: 'Compte-rendu de la maraude',
+        templateUrl: 'templates/roamingView.html?v=1',
         controller: 'RoamingViewController'
     })
     .otherwise({
@@ -212,6 +226,28 @@ roamingPortal.filter('capitalize', function() {
 });
 
 /* Controllers */
+roamingPortal.controller('MainCtrl', ['$route', '$routeParams', '$location', 'authService',
+    function MainCtrl($route, $routeParams, $location, authService) {
+
+  this.sessionInfo = authService.getSessionInfo();
+  this.setPassword = setPassword;
+  this.logout = logout;
+  this.hasP = hasP;
+  this.route = $route;
+
+  function setPassword() {
+    $location.path('/setPassword');
+  }
+  function logout() {
+    authService.logout();
+  }
+  function hasP(permission) {
+    return this.sessionInfo && this.sessionInfo.user
+       && this.sessionInfo.user.permissions && this.sessionInfo.user.permissions.indexOf(permission) !== -1;
+  }
+
+}]);
+
 roamingPortal.controller('RoamingListController', function RoamingListController(
         $scope, $http, $window, $routeParams, $location, $sce, authService, dateUtils) {
 
@@ -233,8 +269,6 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     $scope.deleteReport = deleteReport;
     $scope.enrol = enrol;
     $scope.cancel = cancel;
-    $scope.setPassword = setPassword;
-    $scope.logout = logout;
     $scope.hasP = hasP;
     $scope.reportUploadId = reportUploadId;
     $scope.isSelectedMonth = isSelectedMonth;
@@ -529,12 +563,6 @@ roamingPortal.controller('RoamingListController', function RoamingListController
             roaming.teammates[position-1] = teammate;
         }
     }
-    function setPassword() {
-        $location.path('/setPassword');
-    }
-    function logout() {
-        authService.logout();
-    }
 
     function dateRangeQuerySelector() {
         var c = $scope.roamings;
@@ -658,7 +686,7 @@ roamingPortal.controller('SetPasswordController', function SetPasswordController
 
     $scope.cancel = function () {
         cleanLocation();
-        $location.path('/roamingsList');
+        window.history.back();
     }
 
 });
