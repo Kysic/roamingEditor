@@ -153,7 +153,7 @@ if ($error) {
 } else {
 ?>
     <div class="calendar-container">
-        <iframe class="calendar-iframe" src="<?php echo $calendarURL; ?>&amp;mode=AGENDA&amp;showTitle=0" frameborder="0"
+        <iframe class="calendar-iframe" src="<?php echo $calendarURL; ?>&amp;mode=AGENDA&amp;showTitle=0&amp;ctz=Europe%2FParis" frameborder="0"
             scrolling="no"></iframe>
     </div>
 <?php
