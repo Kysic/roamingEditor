@@ -11,8 +11,8 @@ function compareConfDir {
             echo "$f1 does not exist at contrary to $f2" >&2
             exit 1
         fi
-        SED_CMD='sed -e "s/\(define(.*, \).*\();\)/\1\2/" -e "s/array(.*)/array()/" -e "s/^#//"'
-        if ! diff -q <(eval $SED_CMD "$f1") <(eval $SED_CMD "$f2")
+        SED_CMD='sed -e "s/.*\(PREVIOUS\|CURRENT\|NEXT\)_YEAR.*//" -e "s/.*DOC_ID.*SHEET_ID.*//" -e "s/\(define(.*, \).*\();\)/\1\2/" -e "s/array(.*)/array()/" -e "s/^#//"'
+        if ! diff -B -q <(eval $SED_CMD "$f1") <(eval $SED_CMD "$f2")
         then
             echo "$f1 differs from $f2 :" >&2
             diff <(eval $SED_CMD "$f1") <(eval $SED_CMD "$f2") >&2
@@ -31,7 +31,6 @@ function compareConfDir {
 }
 
 compareConfDir "conf_template" "conf_prod"
-compareConfDir "conf_template" "conf_dev"
 compareConfDir "conf_template" "conf_it"
 
 if ! diff -q api/sqlscripts/create.sql <(eval sed -e "s/it_/vcr_/" api/tests/sqlscripts/it_create.sql) 1>/dev/null
