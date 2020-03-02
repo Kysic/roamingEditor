@@ -75,14 +75,14 @@ class Stats {
     }
 
     public function html_stats($roamingsStats) {
-        return '<table>'.
+        return '<table>'."\r\n".
             $this->render_stats(
                 $roamingsStats,
                 function ($output, $stats) {
-                    return $output.'<tr><td>'.$this->row_renderer($stats, '</td><td>').'</td></tr>';
+                    return $output.'<tr><td>'.$this->row_renderer($stats, '</td><td>').'</td></tr>'."\r\n";
                 },
                 function ($output, $stats) {
-                    return $output.'<tr><th>'.$this->row_renderer($stats, '</th><th>').'</th></tr>';
+                    return $output.'<tr><th>'.$this->row_renderer($stats, '</th><th>').'</th></tr>'."\r\n";
                 }
             ).
             '</table>';
