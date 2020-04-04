@@ -41,7 +41,7 @@ class ReportFiles {
         $this->deleteCRFolder(CR_DIR.$limitDateTime->format('Y/m'));
         // Delete year directory when limit month is december
         if ( $limitDateTime->format('m') == "12" )  {
-            deleteCRFolder(CR_DIR.$limitDateTime->format('Y'));
+            $this->deleteCRFolder(CR_DIR.$limitDateTime->format('Y'));
         }
     }
 
