@@ -177,3 +177,14 @@ ul.tabs>li.notselected:hover {
 .verticalTitle {
     font-size: x-small;
 }
+.cancelForAll {
+    border: 1px solid #ccc;
+    background: #eee;
+    display: inline-block;
+    padding: 2px 8px 1px 8px;
+    cursor: pointer;
+    font-size: small;
+}
+.cancelForAll:hover {
+    background: #fff;
+}

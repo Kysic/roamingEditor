@@ -54,7 +54,7 @@
       </td>
       <td class="teammateColumn">
         {{roaming.teammates[1]}}
-        <div ng-if="hasP('P_ENROL') && !roaming.isPast">
+        <div ng-if="hasP('P_ENROL') && !roaming.isPast && roaming.status != 'canceled'">
           <img ng-if="roaming.teammates[1] == ''" src="img/enrol.svg" width="15px" height="15px" class="action"
               ng-click="enrol(roaming, 2)" title="S'inscrire" />
           <img ng-if="isCurrentUser(roaming.teammates[1])" src="img/unregister.svg" width="15px" height="15px" class="action"
@@ -87,6 +87,11 @@
           <input type="file" ng-attr-id="{{reportUploadId(roaming.date)}}" name="report" class="uploadReportField"
               onChange="angular.element(this).scope().uploadReport(angular.element(this).scope().roaming.date)" />
         </div>
+        <button ng-if="hasP('P_CANCEL_ROAMING') && roaming.isToday && roaming.status != 'canceled'"
+            class="cancelForAll" ng-click="cancelForAll(roaming, 0)">
+          Annuler la maraude
+        </button>
+      </div>
       </td>
     </tr>
   </table>

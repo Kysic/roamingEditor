@@ -269,6 +269,7 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     $scope.deleteReport = deleteReport;
     $scope.enrol = enrol;
     $scope.cancel = cancel;
+    $scope.cancelForAll = cancelForAll;
     $scope.hasP = hasP;
     $scope.reportUploadId = reportUploadId;
     $scope.isSelectedMonth = isSelectedMonth;
@@ -514,6 +515,10 @@ roamingPortal.controller('RoamingListController', function RoamingListController
                                             + ' ?\n(si la maraude est proche, merci de prévenir le secrétariat et vos équipiers)',
                                              '');
     }
+    function cancelForAll(roaming, position) {
+        _enrol(roaming, position, 'cancel_for_all',
+            'Annuler la maraude du ' + dateUtils.humanDate(new Date(roaming.date)) + ' ?', '');
+    }
     function _enrol(roaming, position, action, msg, newUsername) {
         mcxDialog.confirm(msg, {
             sureBtnClick: function(){
@@ -529,7 +534,11 @@ roamingPortal.controller('RoamingListController', function RoamingListController
                     }
                 ).then(function success(response) {
                     if (response.data.status == 'success') {
-                        setTeammate(newUsername, roaming, position);
+                        if (action == 'cancel_for_all') {
+                            setRoamingCanceled(roaming);
+                        } else {
+                            setTeammate(newUsername, roaming, position);
+                        }
                         mcxDialog.toast('Modification enregistrée');
                     } else {
                         alert(response.data.errorMsg);
@@ -549,6 +558,14 @@ roamingPortal.controller('RoamingListController', function RoamingListController
     }
     function getTeammate(roaming, position) {
         return position == 0 ? roaming.tutor : roaming.teammates[position-1];
+    }
+    function setRoamingCanceled(roaming) {
+        roaming.tutor = 'Maraude';
+        roaming.teammates[0] = 'annulée';
+        roaming.teammates[1] = '';
+        roaming.teammates[2] = '';
+        roaming.teammates[3] = '';
+        roaming.status = 'canceled';
     }
     function setTeammate(teammate, roaming, position) {
         if (position == 0) {

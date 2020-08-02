@@ -107,8 +107,11 @@ class Validator {
     }
 
     public function validateEnrolAction($action) {
-        if ( !in_array($action, array('enrol', 'cancel')) ) {
-            throw new BadRequestException('Action invalide, valeur attendue "enrol" ou "cancel".');
+        if ( !in_array($action, array('enrol', 'cancel', 'cancel_for_all')) ) {
+            throw new BadRequestException('Action invalide, valeur attendue "enrol", "cancel" ou "cancel_for_all".');
+        }
+        if ( $action == 'cancel_for_all' ) {
+            $this->session->checkHasPermission(P_CANCEL_ROAMING);
         }
     }
 

@@ -21,6 +21,10 @@ function doGet(request) {
       enrol(docId, sheetId, day, position, user, gender);
     } else if (action == 'cancel') {
       cancel(docId, sheetId, day, position, user, gender);
+    } else if (action == 'cancel_for_all') {
+      cancelForAll(docId, sheetId, day);
+    } else {
+      throw 'Unsupported action';
     }
     return jsonTextoutput({ status: 'success' });
   } catch (e) {
@@ -46,6 +50,14 @@ function cancel(docId, sheetId, day, position, user, gender) {
   setGenderValue(docId, sheetId, day, position, '');
 }
 
+function cancelForAll(docId, sheetId, day) {
+  var sheet = getSheet(docId, sheetId);
+  var dayRow = findRowOfDay(sheet, day);
+  var firstColumn = getColumnFor(0);
+  var range = sheet.getRange(dayRow, firstColumn, 1, 6);
+  range.setValues([ [ 'Maraude', '', 'annulée', '', '', '' ] ]);
+}
+
 function setGenderValue(docId, sheetId, day, position, gender) {
   var range = getGenderRange(docId, sheetId, day, position);
   if (range.getValue() == '' || range.getValue() == 'H' || range.getValue() == 'F') {
@@ -64,19 +76,22 @@ function jsonTextoutput(object) {
 }
 
 function getUserRange(docId, sheetId, day, position) {
-  var spreadsheet = SpreadsheetApp.openById(docId);
-  var sheet = getSheetById(spreadsheet, sheetId);
+  var sheet = getSheet(docId, sheetId);
   var dayRow = findRowOfDay(sheet, day);
   var userColumn = getColumnFor(position);
   return sheet.getRange(dayRow, userColumn);
 }
 
 function getGenderRange(docId, sheetId, day, position) {
-  var spreadsheet = SpreadsheetApp.openById(docId);
-  var sheet = getSheetById(spreadsheet, sheetId);
+  var sheet = getSheet(docId, sheetId);
   var dayRow = findRowOfDay(sheet, day);
   var genderColumn = getColumnFor(position) + 1;
   return sheet.getRange(dayRow, genderColumn);
+}
+function getSheet(docId, sheetId) {
+  var spreadsheet = SpreadsheetApp.openById(docId);
+  var sheet = getSheetById(spreadsheet, sheetId);
+  return sheet;
 }
 
 function getSheetById(spreadsheet, sheetId) {
@@ -114,4 +129,3 @@ function getColumnFor(position) {
       throw 'Invalid position ' + position;
   }
 }
-
