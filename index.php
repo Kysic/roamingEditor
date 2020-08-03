@@ -71,6 +71,9 @@ try {
 .mdl-card__supporting-text a i.material-icons {
   color: #000;
 }
+.video {
+  color: #555;
+}
 #modal-background {
   display: none;
   position: fixed;
@@ -206,7 +209,7 @@ if ($username) {
       </div>
       <div class="mdl-card__menu">
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/LXNPehoScsg')">
-          <i class="material-icons">ondemand_video</i>
+          <i class="material-icons video">help_center</i>
         </button>
       </div>
     </div>
@@ -227,7 +230,7 @@ if ($username) {
       </div>
       <div class="mdl-card__menu">
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/A9UIb97j9dw')">
-          <i class="material-icons">ondemand_video</i>
+          <i class="material-icons video">help_center</i>
         </button>
       </div>
     </div>
@@ -239,13 +242,13 @@ if ($username) {
       <div class="mdl-card__supporting-text">
         Pour vous inscrire sur une maraude, vous pouvez le faire soit via la <a href="/portal/#!/roamingsList/">page des compte-rendus</a>
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/Ns351UrhLlA')">
-          <i class="material-icons">ondemand_video</i>
+          <i class="material-icons">help_center</i>
         </button>,
         soit via ce <a href="/redirectionPlanning.php">google sheet</a>
         en mettant votre nom dans la case adequate.<br>
         Pour s'inscrire pour les soupes du dimanche, seul le <a href="/redirectionPlanning.php">fichier google sheet</a>
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/C8dTPbqYrow')">
-          <i class="material-icons">ondemand_video</i>
+          <i class="material-icons">help_center</i>
         </button>
         le permet.
       </div>
@@ -256,7 +259,7 @@ if ($username) {
       </div>
       <div class="mdl-card__menu">
         <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" title="Voir la vidéo tutoriel" onClick="openYoutube('https://www.youtube.com/embed/YFrCS8IL_rs')">
-          <i class="material-icons">ondemand_video</i>
+          <i class="material-icons video">help_center</i>
         </button>
       </div>
     </div>
