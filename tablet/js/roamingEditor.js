@@ -6,29 +6,33 @@ var roamingHistoryNbDays = 30;
 
 var roamingEditor = angular.module('roamingEditor', ['ngRoute', 'ngCookies']);
 
+var roamingDtoVersion = 3;
+
+var version = '201122';
+
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
-        templateUrl: 'templates/roamingsList.html',
+        templateUrl: 'templates/roamingsList.html?v='+version,
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html',
+        templateUrl: 'templates/roamingEditor.html?v='+version,
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
-        templateUrl: 'templates/interventionEditor.html',
+        templateUrl: 'templates/interventionEditor.html?v='+version,
         controller: 'InterventionController'
     })
     .when('/donations/:roamingId?', {
-        templateUrl: 'templates/donations.html',
+        templateUrl: 'templates/donations.html?v='+version,
         controller: 'DonationsController'
     })
     .when('/logistic/:roamingId?', {
-        templateUrl: 'templates/logistic.html',
+        templateUrl: 'templates/logistic.html?v='+version,
         controller: 'LogisticController'
     })
     .when('/debug', {
-        templateUrl: 'templates/debug.html',
+        templateUrl: 'templates/debug.html?v='+version,
         controller: 'DebugController'
     })
     .otherwise({
@@ -367,6 +371,7 @@ roamingEditor.controller('RoamingController',
 
     function initRoaming() {
         $scope.roaming = {
+            dtoVersion: roamingDtoVersion,
             date: $routeParams.roamingId,
             tutor: '',
             teammates: [ '' ],
@@ -515,8 +520,10 @@ roamingEditor.controller('InterventionController',
             location: '',
             people: [ '' ],
             source: '115',
+            household: 'seules',
             nbAdults: 0,
             nbChildren: 0,
+            food: 0,
             blankets: 0,
             tents: 0,
             hygiene: false,

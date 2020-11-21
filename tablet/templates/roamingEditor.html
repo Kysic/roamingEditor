@@ -35,8 +35,10 @@
       <th>Lieu</th>
       <th>Heure</th>
       <th>Source</th>
+      <th class="verticalTitle">F<br>o<br>y<br>e<br>r</th>
       <th class="verticalTitle">A<br>d<br>u<br>l<br>t<br>e</th>
       <th class="verticalTitle">E<br>n<br>f<br>a<br>n<br>t</th>
+      <th class="verticalTitle">A<br>l<br>i<br>m<br>e<br>n<br>t</th>
       <th class="verticalTitle">C<br>o<br>u<br>v<br>e<br>r<br>t</th>
       <th class="verticalTitle">T<br>e<br>n<br>t<br>e</th>
       <th class="verticalTitle">H<br>y<br>g<br>i<br>è<br>n<br>e</th>
@@ -48,8 +50,10 @@
       <td>{{intervention.location}} <img class="mapLink" ng-click="goMapLocation(intervention)" src="img/earth.png"></td>
       <td>{{intervention.time}}</td>
       <td>{{intervention.source}}</td>
+      <td>{{intervention.household}}</td>
       <td>{{intervention.nbAdults}}</td>
       <td>{{intervention.nbChildren}}</td>
+      <td>{{intervention.food}}</td>
       <td>{{intervention.blankets}}</td>
       <td>{{intervention.tents}}</td>
       <td>{{intervention.hygiene ? 'X' : ''}}</td>

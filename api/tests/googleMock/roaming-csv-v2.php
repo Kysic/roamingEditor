@@ -19,4 +19,3 @@ Famille B,,Emplacement B,22:10,115,2,3,0,1,,Diaca
 Monsieur C,,Emplacement C,23:05,Maraude,1,0,1,0,Diaca
 Groupe D,,Emplacement D,00:15,115,5,1,0,0,X,Diaca
 ,,,01:20,Autre,0,0,0,0,,,Fin de maraude
-

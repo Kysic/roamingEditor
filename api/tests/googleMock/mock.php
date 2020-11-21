@@ -15,10 +15,10 @@ if ($docId == 'planningDocId') {
 } else if ($docId == 'contactDocId' && $sheetId == "contactOtherSheetId") {
     header('Content-type: text/csv');
     include('contact-other-csv.php');
-}else if ($docId) {
+} else if ($docId) {
     if ($type == 'csv') {
         header('Content-type: text/csv');
-        include('roaming-csv.php');
+        include('roaming-csv-v3.php');
     } else if ($type == 'edit') {
         header('Content-Type: application/json');
         include('../tmp/roamingReports-'.$docId.'.json');

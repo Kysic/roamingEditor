@@ -49,6 +49,7 @@ ul.roamingEditorPeopleList {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    padding: 3px 0;
 }
 .interventionEditorStatistics li label {
     flex: 1 0;
@@ -57,7 +58,18 @@ ul.roamingEditorPeopleList {
     padding-right: 20px;
 }
 .interventionEditorStatistics button {
-    margin-left: 10px;
+    margin: 0 5px;
+}
+.interventionEditorStatistics li.household {
+    padding: 6px 0;
+    justify-content: center;
+}
+.interventionEditorStatistics li.household label {
+    display: flex;
+    flex-grow: 0;
+    text-align: center;
+    padding: 0px 10px;
+    margin: 0;
 }
 input[type="number"] {
     -moz-appearance:textfield;

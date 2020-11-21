@@ -21,6 +21,15 @@ class Stats {
     private function extractStatsFromRoamingReport($docId) {
         $reportCsvUrl = $this->docIdToCsvUrl($docId);
         $csv = array_map('str_getcsv', file($reportCsvUrl));
+        $tmplVersion = $csv[4][3];
+        if ($tmplVersion == "V3") {
+            return $this->extractStatsFromRoamingReportV3($csv);
+        } else {
+            return $this->extractStatsFromRoamingReportV2($csv);
+        }
+    }
+
+    private function extractStatsFromRoamingReportV2($csv) {
         $srcInterventions = $this->extractSrcIntervention($csv);
         return array(
             'date' => $csv[0][2],
@@ -32,6 +41,30 @@ class Stats {
             'nbBlanket' => $csv[5][7],
             'nbTent' => $csv[6][7],
             'hygiene' => $csv[8][7],
+            'src115' => @$srcInterventions['115'],
+            'srcRoaming' => @$srcInterventions['Maraude']
+        );
+    }
+
+    private function extractStatsFromRoamingReportV3($csv) {
+        $srcInterventions = $this->extractSrcIntervention($csv);
+        $statsCol1Idx = 2;
+        $statsCol2Idx = 8;
+        $statsCol3Idx = 14;
+        return array(
+            'date' => $csv[0][2],
+            'nbVolunteer' => $this->getNbVolunteers($csv[2][2]),
+            'nbIntervention' => $csv[5][$statsCol1Idx],
+            'nbEncounter' => $csv[6][$statsCol1Idx],
+            'nbAdult' => $csv[7][$statsCol1Idx],
+            'nbChild' => $csv[8][$statsCol1Idx],
+            'nbFood' => $csv[5][$statsCol2Idx],
+            'nbBlanket' => $csv[6][$statsCol2Idx],
+            'nbTent' => $csv[7][$statsCol2Idx],
+            'hygiene' => $csv[8][$statsCol2Idx],
+            'nbAlone' => $csv[5][$statsCol3Idx],
+            'nbCouple' => $csv[6][$statsCol3Idx],
+            'nbFamily' => $csv[7][$statsCol3Idx],
             'src115' => @$srcInterventions['115'],
             'srcRoaming' => @$srcInterventions['Maraude']
         );
@@ -99,6 +132,10 @@ class Stats {
             'nbAdult' => 'Adultes',
             'nbChild' => 'Enfants',
             'nbEncounter' => 'Total personnes',
+            'nbAlone' => 'Personnes seules',
+            'nbCouple' => 'Couples',
+            'nbFamily' => 'Familles',
+            'nbFood' => 'Parts alimentaires',
             'nbBlanket' => 'Couvertures',
             'nbTent' => 'Tentes',
             'hygiene' => 'Hygiène',
@@ -115,11 +152,12 @@ class Stats {
         return implode($sep,
                 array_map(
                     function ($column) use ($stats, $minWidth) {
-                        return str_pad($stats[$column], $minWidth, ' ', STR_PAD_BOTH);
+                        return str_pad(@$stats[$column], $minWidth, ' ', STR_PAD_BOTH);
                     },
                     array(
                         'date', 'nbVolunteer', 'nbIntervention', 'nbAdult', 'nbChild', 'nbEncounter',
-                        'nbBlanket', 'nbTent', 'hygiene', 'src115', 'srcRoaming'
+                        'nbAlone', 'nbCouple', 'nbFamily', 'nbFood', 'nbBlanket', 'nbTent', 'hygiene',
+                        'src115', 'srcRoaming'
                     )
                 )
             );

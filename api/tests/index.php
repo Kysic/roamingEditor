@@ -333,9 +333,6 @@ assertEquals($result->status, 'success');
 assertEquals($result->docId, $docId);
 assertEquals($result->editUrl, $editUrl);
 
-
-
-
 printTestCase('Bruteforce system should forbid to much connexion attempts');
 for ($i=0 ; $i<10; $i++) {
     try {
@@ -352,6 +349,7 @@ try {
     assertException($e, 'Trop de tentatives depuis cette IP, veuillez réessayer dans un moment.', 403);
 }
 
+printTestCase('All done');
 
 
 

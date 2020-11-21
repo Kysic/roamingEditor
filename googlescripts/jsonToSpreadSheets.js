@@ -2,6 +2,7 @@
 Script properties :
 reportFolderId = "0000000000000000000000000000"
 crTemplateId = "0000000000000000000000000000"
+crTemplateId_V3 = "0000000000000000000000000000"
 */
 
 /** Called every month */
@@ -87,24 +88,33 @@ function doPost(request) {
 }
 
 function createRoamingCR(roaming) {
-  var crFile = createNewCRFromTemplate(roaming.date);
+  var templatePropertyName;
+  var fillRoamingSheet;
+  if (roaming.dtoVersion == 3) {
+    templatePropertyName = 'crTemplateId_V3';
+    fillRoamingSheet = fillRoamingSheetV3;
+  } else {
+    templatePropertyName = 'crTemplateId';
+    fillRoamingSheet = fillRoamingSheetV2;
+  }
+  var crFile = createNewCRFromTemplate(roaming.date, templatePropertyName);
   var crSpreadSheep = SpreadsheetApp.open(crFile);
   var sheet = crSpreadSheep.getSheets()[0];
   fillRoamingSheet(roaming, sheet);
   // Allow edition to every one with link
   crFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.EDIT);
-  // Forbidd editors to modify share access
+  // Forbid editors to modify share access
   crFile.setShareableByEditors(false);
   return crFile;
 }
 
-function createNewCRFromTemplate(roamingDate) {
-  var template = DriveApp.getFileById(PropertiesService.getScriptProperties().getProperty('crTemplateId'));
+function createNewCRFromTemplate(roamingDate, templatePropertyName) {
+  var template = DriveApp.getFileById(PropertiesService.getScriptProperties().getProperty(templatePropertyName));
   var folder = DriveApp.getFolderById(PropertiesService.getScriptProperties().getProperty('reportFolderId'));
   return template.makeCopy('CR_' + roamingDate, folder);
 }
 
-function fillRoamingSheet(roaming, sheet) {
+function fillRoamingSheetV2(roaming, sheet) {
   tryToSetInCell(sheet, 'c1', undefToEmpty(roaming.date));
   tryToSetInCell(sheet, 'c2', undefToEmpty(roaming.vehicle));
   tryToSetInCell(sheet, 'c3', joinList(roaming.teammates) + ' et ' + undefToEmpty(roaming.tutor));
@@ -121,6 +131,28 @@ function fillRoamingSheet(roaming, sheet) {
     tryToSetInCell(sheet, 'i' + line, undefToZero(intervention.tents));
     if (intervention.hygiene) { tryToSetInCell(sheet, 'j' + line, 'X'); };
     tryToSetInCell(sheet, 'k' + line, undefToEmpty(intervention.comments));
+  }
+}
+
+function fillRoamingSheetV3(roaming, sheet) {
+  tryToSetInCell(sheet, 'c1', undefToEmpty(roaming.date));
+  tryToSetInCell(sheet, 'c2', undefToEmpty(roaming.vehicle));
+  tryToSetInCell(sheet, 'c3', joinList(roaming.teammates) + ' et ' + undefToEmpty(roaming.tutor));
+  for (var i = 0; i < roaming.interventions.length; i++) {
+    var intervention = roaming.interventions[i];
+    var line = i + 15;
+    tryToSetInCell(sheet, 'a' + line, joinList(intervention.people));
+    tryToSetInCell(sheet, 'c' + line, undefToEmpty(intervention.location));
+    tryToSetInCell(sheet, 'd' + line, undefToEmpty(intervention.time));
+    tryToSetInCell(sheet, 'e' + line, undefToEmpty(intervention.source));
+    tryToSetInCell(sheet, 'f' + line, undefToEmpty(intervention.household));
+    tryToSetInCell(sheet, 'g' + line, undefToZero(intervention.nbAdults));
+    tryToSetInCell(sheet, 'h' + line, undefToZero(intervention.nbChildren));
+    tryToSetInCell(sheet, 'i' + line, undefToZero(intervention.food));
+    tryToSetInCell(sheet, 'j' + line, undefToZero(intervention.blankets));
+    tryToSetInCell(sheet, 'k' + line, undefToZero(intervention.tents));
+    if (intervention.hygiene) { tryToSetInCell(sheet, 'l' + line, 'X'); };
+    tryToSetInCell(sheet, 'm' + line, undefToEmpty(intervention.comments));
   }
 }
 
@@ -157,7 +189,7 @@ function dev_findFolderId() {
   Logger.log(DriveApp.getFoldersByName("CR VINCI").next().getId());
 }
 
-function testGenerationCR() {
+function testGenerationCR_V2() {
   var roaming = {
     "date": "2017-05-19",
     "tutor": "Tintin",
@@ -199,6 +231,78 @@ function testGenerationCR() {
         "tents": 2,
         "hygiene": true,
         "comments": "My comment"
+      }
+    ],
+    "version": 8,
+    "synchroStatus": "SYNCHRONIZED"
+  };
+  createRoamingCR(roaming);
+}
+
+function testGenerationCR_V3() {
+  var roaming = {
+    "dtoVersion": 3,
+    "date": "2017-05-19",
+    "tutor": "Tintin",
+    "teammates": [
+       "Gerda",
+       "Popeye"
+    ],
+    "vehicle": "2",
+    "interventions": [
+      {
+        "time": "21:45",
+        "location": "Gare",
+        "people": [
+          "Pierrot",
+          "Gertrude"
+        ],
+        "source": "115",
+        "household": "couple",
+        "nbAdults": 2,
+        "nbChildren": 0,
+        "food": 2,
+        "blankets": 3,
+        "tents": 0,
+        "hygiene": false,
+        "comments": "DIACA"
+      },
+      {
+        "undefIntervention": "withoutFields"
+      },
+      {
+        "time": "22:30",
+        "location": "CHU",
+        "people": [
+          "Jean",
+          "Jeanne"
+        ],
+        "source": "Autre",
+        "household": "famille",
+        "nbAdults": 1,
+        "nbChildren": 1,
+        "food": 4,
+        "blankets": 1,
+        "tents": 2,
+        "hygiene": true,
+        "comments": "My comment"
+      },
+      {
+        "time": "23:30",
+        "location": "Victor Hugo",
+        "people": [
+          "Marco",
+          "Polo"
+        ],
+        "source": "Maraude",
+        "household": "seules",
+        "nbAdults": 2,
+        "nbChildren": 0,
+        "food": 2,
+        "blankets": 3,
+        "tents": 0,
+        "hygiene": false,
+        "comments": ""
       }
     ],
     "version": 8,

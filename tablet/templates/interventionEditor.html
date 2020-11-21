@@ -43,17 +43,27 @@
           <select name="source" id="sourceField" ng-model="intervention.source" ng-options="s as s for s in sources" required="true">
           </select>
         </li>
+        <li class="household">
+          <label><input type="radio" name="household" ng-model="intervention.household" value="seules" />&nbsp;personnes&nbsp;seules</label>
+          <label><input type="radio" name="household" ng-model="intervention.household" value="couple" />&nbsp;couple</label>
+          <label><input type="radio" name="household" ng-model="intervention.household" value="famille" />&nbsp;famille</label></li>
         <li>
-          <label for="nbAdultsField">Nombre d'adultes</label>
+          <label for="nbAdultsField">Nombre d'adultes vus</label>
           <input type="number" name="nbAdults" id="nbAdultsField" ng-model="intervention.nbAdults" required="true" min="0" max="100" />
           <button ng-click="intervention.nbAdults=intervention.nbAdults-1" ng-attr-title="Décrémenter le nombre d'adultes" ng-disabled="intervention.nbAdults &lt;= 0">-</button>
           <button ng-click="intervention.nbAdults=intervention.nbAdults+1" ng-attr-title="Incrémenter le nombre d'adultes" ng-disabled="intervention.nbAdults >= 100">+</button>
         </li>
         <li>
-          <label for="nbChildrenField">Nombre d'enfants</label>
+          <label for="nbChildrenField">Nombre d'enfants vus</label>
           <input type="number" name="nbChildren" id="nbChildrenField" ng-model="intervention.nbChildren" required="true" min="0" max="100" />
           <button ng-click="intervention.nbChildren=intervention.nbChildren-1" ng-attr-title="Décrémenter le nombre d'enfant" ng-disabled="intervention.nbChildren &lt;= 0">-</button>
           <button ng-click="intervention.nbChildren=intervention.nbChildren+1" ng-attr-title="Incrémenter le nombre d'enfant" ng-disabled="intervention.nbChildren >= 100">+</button>
+        </li>
+        <li>
+          <label for="foodField">Nombre de parts alimentaires</label>
+          <input type="number" name="food" id="foodField" ng-model="intervention.food" required="true" min="0" max="100" />
+          <button ng-click="intervention.food=intervention.food-1" ng-attr-title="Décrémenter le nombre de parts alimentaires" ng-disabled="intervention.food &lt;= 0">-</button>
+          <button ng-click="intervention.food=intervention.food+1" ng-attr-title="Incrémenter le nombre de parts alimentaires" ng-disabled="intervention.food >= 100">+</button>
         </li>
         <li>
           <label for="blanketsField">Nombre de couvertures</label>

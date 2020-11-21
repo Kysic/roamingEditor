@@ -4,52 +4,54 @@ var roamingApiEndPoint = '../api';
 
 var roamingPortal = angular.module('roamingPortal', ['ngRoute', 'angular-loading-bar']);
 
+var version = '201122';
+
 roamingPortal.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList/', {
         shortTitle: 'Compte-rendus',
         longTitle: 'Compte-rendus des maraudes',
-        templateUrl: 'templates/roamingsList.html?v=1',
+        templateUrl: 'templates/roamingsList.html?v='+version,
         controller: 'RoamingListController',
         reloadOnSearch: false
     })
     .when('/login/:email?/:referer?', {
         shortTitle: 'Connexion',
         longTitle: 'Connexion au site du VINCI',
-        templateUrl: 'templates/login.html',
+        templateUrl: 'templates/login.html?v='+version,
         controller: 'LoginController'
     })
     .when('/register/:email?', {
         shortTitle: 'Inscription',
         longTitle: 'Inscription au site du VINCI',
-        templateUrl: 'templates/register.html',
+        templateUrl: 'templates/register.html?v='+version,
         controller: 'RegisterController'
     })
     .when('/resetPassword/:email?', {
         shortTitle: 'Mdp perdu',
         longTitle: 'Réinitialisation de votre mot de passe',
-        templateUrl: 'templates/resetPassword.html',
+        templateUrl: 'templates/resetPassword.html?v='+version,
         controller: 'ResetPasswordController'
     })
     .when('/setPassword/:userId?/:mailToken?', {
         shortTitle: 'Choix mdp',
         longTitle: 'Modification de votre mot de passe',
-        templateUrl: 'templates/setPassword.html',
+        templateUrl: 'templates/setPassword.html?v='+version,
         controller: 'SetPasswordController'
     })
     .when('/mailSent/:email?', {
-        templateUrl: 'templates/mailSent.html',
+        templateUrl: 'templates/mailSent.html?v='+version,
         controller: 'MailSentController'
     })
     .when('/users', {
         shortTitle: 'Membres',
         longTitle: 'Liste des membres du VINCI',
-        templateUrl: 'templates/users.html?v=1',
+        templateUrl: 'templates/users.html?v='+version,
         controller: 'UsersController'
     })
     .when('/roaming/:roamingDate', {
         shortTitle: 'CR Maraude',
         longTitle: 'Compte-rendu de la maraude',
-        templateUrl: 'templates/roamingView.html?v=1',
+        templateUrl: 'templates/roamingView.html?v='+version,
         controller: 'RoamingViewController'
     })
     .otherwise({
