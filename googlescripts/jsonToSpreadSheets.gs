@@ -91,13 +91,17 @@ function createRoamingCR(roaming) {
   var crSpreadSheep = SpreadsheetApp.open(crFile);
   var sheet = crSpreadSheep.getSheets()[0];
   fillRoamingSheet(roaming, sheet);
+  // Allow edition to every one with link
   crFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.EDIT);
+  // Forbidd editors to modify share access
+  crFile.setShareableByEditors(false);
   return crFile;
 }
 
 function createNewCRFromTemplate(roamingDate) {
   var template = DriveApp.getFileById(PropertiesService.getScriptProperties().getProperty('crTemplateId'));
-  return template.makeCopy('CR_' + roamingDate);
+  var folder = DriveApp.getFolderById(PropertiesService.getScriptProperties().getProperty('reportFolderId'));
+  return template.makeCopy('CR_' + roamingDate, folder);
 }
 
 function fillRoamingSheet(roaming, sheet) {
@@ -115,9 +119,8 @@ function fillRoamingSheet(roaming, sheet) {
     tryToSetInCell(sheet, 'g' + line, undefToZero(intervention.nbChildren));
     tryToSetInCell(sheet, 'h' + line, undefToZero(intervention.blankets));
     tryToSetInCell(sheet, 'i' + line, undefToZero(intervention.tents));
-    if (intervention.bai) { tryToSetInCell(sheet, 'j' + line, 'X'); };
-    if (intervention.hygiene) { tryToSetInCell(sheet, 'k' + line, 'X'); };
-    tryToSetInCell(sheet, 'l' + line, undefToEmpty(intervention.comments));
+    if (intervention.hygiene) { tryToSetInCell(sheet, 'j' + line, 'X'); };
+    tryToSetInCell(sheet, 'k' + line, undefToEmpty(intervention.comments));
   }
 }
 
@@ -176,7 +179,6 @@ function testGenerationCR() {
         "nbChildren": 0,
         "blankets": 3,
         "tents": 0,
-        "bai": true,
         "hygiene": false,
         "comments": "DIACA"
       },
@@ -195,7 +197,6 @@ function testGenerationCR() {
         "nbChildren": 1,
         "blankets": 1,
         "tents": 2,
-        "bai": false,
         "hygiene": true,
         "comments": "My comment"
       }
@@ -205,4 +206,3 @@ function testGenerationCR() {
   };
   createRoamingCR(roaming);
 }
-
