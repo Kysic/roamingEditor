@@ -1,0 +1,4 @@
+<Replace by presidentEmailAddress> <expected sender email address in the right domain>
+<Replace by secretariatEmailAddress> <expected sender email address in the right domain>
+
+<Replace by my email address> <expected sender email address in the right domain>

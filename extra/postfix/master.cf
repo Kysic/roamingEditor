@@ -1,0 +1,7 @@
+#
+# <Replace by all the stuff by default>
+#
+
+# Trigger script on email reception
+vinci_robot   unix  -       n       n       -       -       pipe
+  flags=F user=www-data argv=/var/www/vinci/tools/robotSignalements.php

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DEST=ovh:/var/www/vinci/
+DEST=ldp.ovh:/var/www/vinci/
 
 RSYNC_OPTIONS="--checksum --recursive --verbose --delete-after"
 

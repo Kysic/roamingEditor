@@ -1,0 +1,62 @@
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+# Debian specific:  Specifying a file name will cause the first
+# line of that file to be used as the name.  The Debian default
+# is /etc/mailname.
+#myorigin = /etc/mailname
+
+compatibility_level = 2
+
+smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+biff = no
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+readme_directory = no
+
+# Avoid warning nis domain not set
+alias_maps = hash:/etc/aliases
+
+# TLS configuration
+# smtpd
+smtpd_tls_security_level = may
+smtpd_tls_cert_file = /etc/letsencrypt/live/ldp.ovh/fullchain.pem
+smtpd_tls_key_file = /etc/letsencrypt/live/ldp.ovh/privkey.pem
+# smtp
+smtp_tls_session_cache_database = btree:/var/lib/postfix/smtp_scache
+smtp_tls_security_level = may
+tls_random_source = dev:/dev/urandom
+smtp_tls_loglevel = 1
+
+# DKIM
+milter_default_action = accept
+milter_protocol = 6
+smtpd_milters = unix:/var/run/opendkim/opendkim.sock
+non_smtpd_milters = unix:/var/run/opendkim/opendkim.sock
+
+# Reject system that doesn't have a valid hostname
+smtpd_helo_required = yes
+smtpd_helo_restrictions = reject_unknown_helo_hostname
+# Reject mail from unkown host
+smtpd_sender_restrictions = reject_unknown_sender_domain
+
+# Configure virtual alias
+virtual_alias_domains = vincicodex.com ldp.ovh vinci.ldp.ovh
+virtual_alias_maps = hash:/etc/postfix/virtual
+
+# Restrict authorized senders for mailing lists + trigger script on email reception
+smtpd_recipient_restrictions = hash:/etc/postfix/protected_destinations
+smtpd_restriction_classes = vinci_authorized_senders, vinci_tutors_authorized_senders, vinci_board_authorized_senders, vinci_robot_recipient
+vinci_authorized_senders = check_sender_access hash:/etc/postfix/vinci_authorized_senders, reject
+vinci_tutors_authorized_senders = check_sender_access hash:/etc/postfix/vinci_tutors_authorized_senders, reject
+vinci_board_authorized_senders = check_sender_access hash:/etc/postfix/vinci_board_authorized_senders, reject
+
+# Trigger script on email reception
+vinci_robot_recipient = check_recipient_access hash:/etc/postfix/vinci_robot, permit_mynetworks, reject_unauth_destination
+
+# Change envelope from address
+sender_canonical_maps = hash:/etc/postfix/sender_canonical

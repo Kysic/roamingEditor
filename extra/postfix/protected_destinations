@@ -1,0 +1,14 @@
+# Mailing lists
+<Replace by mailing all list email address> vinci_authorized_senders
+<Replace by mailing roaming list email address> vinci_authorized_senders
+<Replace by mailing roaming other email address> vinci_authorized_senders
+<Replace by mailing tutors list email address> vinci_tutors_authorized_senders
+<Replace by mailing boards list email address> vinci_board_authorized_senders
+
+# Scripts triggered on mail reception
+<Replace by robot email address> vinci_robot_recipient
+
+# Spam
+daily@vincicodex.com vinci_authorized_senders
+contact@vincicodex.com vinci_authorized_senders
+

@@ -48,3 +48,10 @@ CREATE TABLE `vcr_roamings` (
   INDEX (`roamingDate`, `version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `vcr_reports` (
+  `reportingId` int NOT NULL AUTO_INCREMENT,
+  `creationDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `rawJson` text NOT NULL,
+  PRIMARY KEY (`reportingId`),
+  INDEX (`creationDate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

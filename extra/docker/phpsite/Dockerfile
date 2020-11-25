@@ -7,3 +7,4 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
+RUN apt-get update && apt-get install -y ripmime xlsx2csv

@@ -494,7 +494,8 @@ function assertIsTablet1($user) {
                                         'P_SEE_LAST_REPORT',
                                         'P_SAVE_ROAMINGS',
                                         'P_SEE_USERS_LIST',
-                                        'P_SEE_MEETING'
+                                        'P_SEE_MEETING',
+                                        'P_SEE_LAST_115_REPORTS'
                                      ));
 }
 

@@ -1,6 +1,8 @@
 <?php
 
-define('ROAMING_API_DIR', __DIR__.'/..');
+define('ROAMING_API_DIR', realpath (__DIR__.'/..'));
+
+define('ROAMING_TMP_DIR', ROAMING_API_DIR.'/tmp');
 
 require_once(ROAMING_API_DIR.'/conf/main.php');
 require_once(ROAMING_API_DIR.'/lib/Exceptions.php');
@@ -19,11 +21,14 @@ define('SPREADSHEETS_GENERATOR_LIB', ROAMING_API_DIR.'/lib/SpreadsheetsGenerator
 define('REPORT_FILES_LIB', ROAMING_API_DIR.'/lib/ReportFiles.php');
 define('STATS_LIB', ROAMING_API_DIR.'/lib/Stats.php');
 
+define('REPORTING_115_LIB', ROAMING_API_DIR.'/lib/Reporting115.php');
+
 define('DB_ACCESS_LIB', ROAMING_API_DIR.'/db/DbAccess.php');
 define('USERS_STORAGE_LIB', ROAMING_API_DIR.'/db/UsersStorage.php');
 define('ROAMINGS_STORAGE_LIB', ROAMING_API_DIR.'/db/RoamingsStorage.php');
 define('AUTOLOGIN_STORAGE_LIB', ROAMING_API_DIR.'/db/AutologinStorage.php');
 define('BRUTEFORCE_STORAGE_LIB', ROAMING_API_DIR.'/db/BruteforceStorage.php');
+define('REPORTS_STORAGE_LIB', ROAMING_API_DIR.'/db/ReportsStorage.php');
 
 class Container {
 
@@ -42,7 +47,9 @@ class Container {
     private $roamingsStorage = NULL;
     private $autologinStorage = NULL;
     private $bruteforceStorage = NULL;
+    private $reportsStorage = NULL;
     private $stats = NULL;
+    private $reporting115 = NULL;
 
     public function getRolesPermissions() {
         if (!$this->rolesPermissions) {
@@ -195,6 +202,14 @@ class Container {
         return new LazyLoader($this, 'getBruteforceStorage');
     }
 
+    public function getReportsStorage() {
+        if (!$this->reportsStorage) {
+            require_once(REPORTS_STORAGE_LIB);
+            $this->reportsStorage = new ReportsStorage($this->getDbAccess());
+        }
+        return $this->reportsStorage;
+    }
+
     public function getReportFiles() {
         if (!$this->reportFiles) {
             require_once(REPORT_FILES_LIB);
@@ -211,6 +226,14 @@ class Container {
         return $this->stats;
     }
 
+    public function getReporting115() {
+        if (!$this->reporting115) {
+            require_once(REPORTING_115_LIB);
+            $this->reporting115 = new Reporting115($this->getReportsStorage());
+        }
+        return $this->reporting115;
+    }
+
 }
 
 class LazyLoader {
@@ -224,4 +247,3 @@ class LazyLoader {
         return call_user_func(array($this->getterObj, $this->getterMethod));
     }
 }
-
