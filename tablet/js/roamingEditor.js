@@ -336,6 +336,7 @@ roamingEditor.controller('RoamingController',
     $scope.goDonations = goDonations;
     $scope.logisticReport = logisticReport;
     $scope.isEditable = isEditable;
+    $scope.getReports = getReports;
 
     var refreshTimer;
 
@@ -352,7 +353,10 @@ roamingEditor.controller('RoamingController',
       initRoaming();
     }
     if ($scope.roaming.tutor == '' && angular.equals($scope.roaming.teammates, [ '' ])) {
-        getTeammates()
+        getTeammates();
+    }
+    if ($scope.roaming.interventions.length === 0) {
+        getReports();
     }
 
     $scope.$on('roamingUpdate', function (event, roaming) {
@@ -397,6 +401,61 @@ roamingEditor.controller('RoamingController',
             }
             $scope.updateRoaming();
         });
+    }
+
+    function getReports() {
+        if (!isEditable()) {
+            return;
+        }
+        $http.get(
+            roamingApiEndPoint + '/getTodaysReports.php'
+        ).then(function (response) {
+            if (response.status == 200 && response.data.status == 'success') {
+                var initialInterventions = $scope.roaming.interventions.slice();
+                for (var i = 0; i < response.data.reports.length; i++) {
+                    var report = response.data.reports[i];
+                    var intervention = reportToIntervention(report);
+                    if (!containsIntervention(initialInterventions, intervention)) {
+                        $scope.roaming.interventions.push(intervention);
+                    }
+                }
+                $scope.updateRoaming();
+            }
+        });
+    }
+
+    function containsIntervention(interventionsList, intervention) {
+        for (var i = 0; i < interventionsList.length; i++) {
+            if (isSameIntervention(intervention, interventionsList[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isSameIntervention(interventionA, interventionB) {
+        return (interventionA.phone && interventionA.phone === interventionB.phone)
+            || (interventionA.people && interventionB.people && interventionA.people.length > 0 && interventionB.people.length > 0
+                && interventionA.people[0] === interventionB.people[0]);
+    }
+
+    function reportToIntervention(report) {
+        console.log(report);
+        return {
+            time: '03:00',
+            phone: report.telephone,
+            location: report.lieu,
+            people: [ report.prenom + ' ' + report.nom ],
+            source: '115',
+            household: 'seules',
+            nbAdults: 0,
+            nbChildren: 0,
+            food: 0,
+            blankets: 0,
+            tents: 0,
+            hygiene: false,
+            comments: 'Compo: ' + report.compo + '\nBesoins: ' + report.besoins + '\n'
+        }
     }
 
     function addIntervention() {
@@ -485,6 +544,7 @@ roamingEditor.controller('InterventionController',
     $scope.sources = ['115', 'Maraude', 'Particulier', 'Direct', 'CHU', 'SemiTag', 'Pompier', 'Police', 'Autre'];
     $scope.localizeMe = localizeMe;
     $scope.resetLocation = resetLocation;
+    $scope.setTimeNow = setTimeNow;
     $scope.goMap = goMap;
     $scope.range = range;
     $scope.addPerson = addPerson;
@@ -541,6 +601,11 @@ roamingEditor.controller('InterventionController',
         }
         $scope.hour = ('00' + hour).slice(-2);
         $scope.minute = ('00' + minute).slice(-2);
+    }
+
+    function setTimeNow() {
+        $scope.intervention.time = $filter('date')(new Date(), 'HH:mm');
+        updateFormTimeWithInterventionTime();
     }
 
     function localisationFinished() {

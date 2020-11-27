@@ -75,6 +75,9 @@ input[type="number"] {
     -moz-appearance:textfield;
     width: 30px;
 }
+button[setTimeNow] {
+    margin-left: 50px;
+}
 fieldset {
     margin: auto;
     width: 600px;

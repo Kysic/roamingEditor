@@ -9,6 +9,7 @@
       <select name="minute" ng-model="minute" required="true">
         <option ng-repeat="i in range(0,55,5)" value="{{('00'+i).slice(-2)}}">{{('00'+i).slice(-2)}}</option>
       </select>
+      <button ng-click="setTimeNow()" ng-attr-title="Maintenant" setTimeNow>Maintenant</button>
     </fieldset>
     <fieldset>
       <legend>Lieu de la rencontre</legend>
