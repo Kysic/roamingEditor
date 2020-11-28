@@ -339,7 +339,7 @@ $container = new Container();
 $container->getReporting115()->extractFromMailFile('/var/www/html/api/tests/mock/reportsEmail.eml');
 $container->getReportsStorage()->getTodaysLast(); // raised a 404 if no reports is found
 
-printTestCase('Todays report should anwswer successfully');
+printTestCase('Todays report as appli should anwswer successfully');
 $result = $appliBrowser->get(END_POINT.'/api/getTodaysReports.php');
 assertEquals($result->status, 'success');
 $reports = $result->reports;
@@ -350,6 +350,28 @@ assertEquals($reports[0]->lieu, 'St Egreve - devant hôtel de ville');
 assertEquals($reports[0]->telephone, '01 02 03 04 05');
 assertEquals($reports[0]->besoins, 'AA +');
 assertEquals($reports[0]->compo, 'HS');
+
+printTestCase('Statistics as admin should be ok');
+$adminBrowser = new Browser();
+login($adminBrowser, 'Laure.Maitre@example.com', 'Laure.Maitre@example.com');
+$result = $adminBrowser->get(END_POINT.'/api/generateStats.php?from='.$twentiethDayOfLastMonth.'&to='.$twentiethDayOfLastMonth);
+$rows = explode("\n", $result);
+$stats = array_combine(explode(";", $rows[0]), explode(";", $rows[1]));
+assertEquals($stats['Jour'], $twentiethDayOfLastMonth);
+assertEquals($stats['Benevoles'], 3);
+assertEquals($stats['Interventions'], 3);
+assertEquals($stats['Adultes'], 5);
+assertEquals($stats['Enfants'], 1);
+assertEquals($stats['Total personnes'], 6);
+assertEquals($stats['Personnes seules'], 2);
+assertEquals($stats['Couples'], 1);
+assertEquals($stats['Familles'], 1);
+assertEquals($stats['Parts alimentaires'], 8);
+assertEquals($stats['Couvertures'], 7);
+assertEquals($stats['Tentes'], 2);
+assertEquals($stats['Hygiène'], 1);
+assertEquals($stats['Signalement 115'], 1);
+assertEquals($stats['Rencontre Maraude'], 1);
 
 printTestCase('Bruteforce system should forbid to much connexion attempts');
 for ($i=0 ; $i<10; $i++) {
