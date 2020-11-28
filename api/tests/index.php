@@ -12,6 +12,7 @@
 define('END_POINT', 'http://localhost/');
 define('TABLET_1_AUTOLOGIN_KEY', '8U8MPr6/ZNo4rIQHU7gvezB7lkU6aYI8LXkHH9Le7ZF2Xf8otJgmHgTiVnJnHr12');
 
+require_once('../lib/Container.php');
 require_once('lib/Sql.php');
 require_once('lib/Browser.php');
 require_once('lib/auth.php');
@@ -57,25 +58,25 @@ for ($i=0 ; $i<5; $i++) {
 printTestCase('Login as former should succeed');
 $browser = new Browser();
 login($browser, 'former.user@example.com', 'Former7899');
-assertEquals($browser->cookies['vinciPersistentLogin'], '');
+assertEquals(@$browser->cookies['vinciPersistentLogin'], '');
 assertIsFormer(getSessionUser($browser));
 
 printTestCase('Login as member should succeed');
 $browser = new Browser();
 login($browser, 'soso21@yahoo.fr', 'Soso@215');
-assertEquals($browser->cookies['vinciPersistentLogin'], '');
+assertEquals(@$browser->cookies['vinciPersistentLogin'], '');
 assertIsMember(getSessionUser($browser));
 
 printTestCase('Login as tutor should succeed');
 $browser = new Browser();
 login($browser, 'cerise.48@gmail.com', 'cerise.48@gmail.com');
-assertEquals($browser->cookies['vinciPersistentLogin'], '');
+assertEquals(@$browser->cookies['vinciPersistentLogin'], '');
 assertIsTutor(getSessionUser($browser));
 
 printTestCase('Login as night watcher should succeed');
 $browser = new Browser();
 login($browser, 'berni@gmail.com', 'Berni-Password');
-assertEquals($browser->cookies['vinciPersistentLogin'], '');
+assertEquals(@$browser->cookies['vinciPersistentLogin'], '');
 assertIsBernard(getSessionUser($browser));
 
 printTestCase('Change password as night watcher should succeed');
@@ -114,8 +115,8 @@ $autologinId1 = $browser1->cookies['vinciPersistentLoginId'];
 $autologinToken1 = $browser1->cookies['vinciPersistentLoginToken'];
 $browser2 = new Browser();
 login($browser2, 'berni@gmail.com', 'berni-password-2', false);
-$autologinId2 = $browser2->cookies['vinciPersistentLoginId'];
-$autologinToken2 = $browser2->cookies['vinciPersistentLoginToken'];
+$autologinId2 = @$browser2->cookies['vinciPersistentLoginId'];
+$autologinToken2 = @$browser2->cookies['vinciPersistentLoginToken'];
 $browser3 = new Browser();
 login($browser3, 'berni@gmail.com', 'berni-password-2', true);
 $autologinId3 = $browser3->cookies['vinciPersistentLoginId'];
@@ -142,8 +143,8 @@ try {
 } catch (Exception $e) {
     assertException($e, 'Request rejected', 403);
 }
-assertEquals($appliBrowser->cookies['vinciApplicationId'], '');
-assertEquals($appliBrowser->cookies['vinciApplicationToken'], '');
+assertEquals(@$appliBrowser->cookies['vinciApplicationId'], '');
+assertEquals(@$appliBrowser->cookies['vinciApplicationToken'], '');
 assertIsVisitor(getSessionUser($appliBrowser));
 
 printTestCase('Login with appli credentials should failed');
@@ -193,13 +194,13 @@ assertIsTablet1(getSessionUser($appliBrowser));
 printTestCase('Logout as night watcher should unset autologin');
 assertIsBernard(getSessionUser($browser1));
 logout($browser1);
-assertEquals($browser1->cookies['vinciPersistentLoginId'], '');
+assertEquals(@$browser1->cookies['vinciPersistentLoginId'], '');
 assertIsVisitor(getSessionUser($browser1));
 
 printTestCase('Autologin should not succeed after logout on same browser');
 $browser1 = createAutologinBrowser($autologinId1, $autologinToken1);
 assertIsVisitor(getSessionUser($browser1));
-assertEquals($browser1->cookies['vinciPersistentLoginId'], '');
+assertEquals(@$browser1->cookies['vinciPersistentLoginId'], '');
 
 printTestCase('Autologin should succeed after logout on another browser');
 $browser3 = createAutologinBrowser($autologinId3, $autologinToken3);
@@ -219,12 +220,12 @@ try {
 } catch (Exception $e) {
     assertException($e, 'Request rejected', 403);
 }
-assertEquals($browser3->cookies['vinciPersistentLoginId'], '');
+assertEquals(@$browser3->cookies['vinciPersistentLoginId'], '');
 
 printTestCase('Autologin with new autologin should failed after bad autlogin attempt');
 $browser3 = createAutologinBrowser($autologinId3, $autologinToken3);
 assertIsVisitor(getSessionUser($browser3));
-assertEquals($browser3->cookies['vinciPersistentLoginId'], '');
+assertEquals(@$browser3->cookies['vinciPersistentLoginId'], '');
 
 printTestCase('Reset password as member should succeed');
 $browser = new Browser();
@@ -333,6 +334,23 @@ assertEquals($result->status, 'success');
 assertEquals($result->docId, $docId);
 assertEquals($result->editUrl, $editUrl);
 
+printTestCase('Reports email should be parsed successfully');
+$container = new Container();
+$container->getReporting115()->extractFromMailFile('/var/www/html/api/tests/mock/reportsEmail.eml');
+$container->getReportsStorage()->getTodaysLast(); // raised a 404 if no reports is found
+
+printTestCase('Todays report should anwswer successfully');
+$result = $appliBrowser->get(END_POINT.'/api/getTodaysReports.php');
+assertEquals($result->status, 'success');
+$reports = $result->reports;
+assertEquals(count($reports), 8);
+assertEquals($reports[0]->nom, 'DUPONT');
+assertEquals($reports[0]->prenom, 'Bernard');
+assertEquals($reports[0]->lieu, 'St Egreve - devant hôtel de ville');
+assertEquals($reports[0]->telephone, '01 02 03 04 05');
+assertEquals($reports[0]->besoins, 'AA +');
+assertEquals($reports[0]->compo, 'HS');
+
 printTestCase('Bruteforce system should forbid to much connexion attempts');
 for ($i=0 ; $i<10; $i++) {
     try {
@@ -404,9 +422,9 @@ function cleanTmpDir() {
 
 function assertIsVisitor($user) {
     assertEquals($user->role, 'visitor');
-    assertEquals($user->email, '');
-    assertEquals($user->firstname, '');
-    assertEquals($user->lastname, '');
+    assertEquals(@$user->email, '');
+    assertEquals(@$user->firstname, '');
+    assertEquals(@$user->lastname, '');
     assertEquals($user->permissions, array(
                                         'P_REGISTER',
                                         'P_LOG_IN',

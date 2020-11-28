@@ -1,7 +1,7 @@
 <?php
 
 # Google docs URL
-define('GOOGLE_DOC_URL', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/mock.php?docId=');
+define('GOOGLE_DOC_URL', 'http://localhost'.APPLICATION_PATH.'/api/tests/mock/mock.php?docId=');
 define('GOOGLE_DOC_CMD_CSV', '&type=csv');
 define('GOOGLE_DOC_CMD_CSV_GID', '&type=csv&sheetId=');
 define('GOOGLE_DOC_CMD_EDIT', '&type=edit');
@@ -10,10 +10,10 @@ define('GOOGLE_DOC_CMD_PDF', '&type=pdf&sheetId=');
 define('GOOGLE_DOC_CMD_HTML', '&type=html');
 
 # Google SpreadSheets Generator Script
-define('GOOGLE_SPREADSHEETS_GENERATOR', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/sprdshtsgen.php');
+define('GOOGLE_SPREADSHEETS_GENERATOR', 'http://localhost'.APPLICATION_PATH.'/api/tests/mock/sprdshtsgen.php');
 
 # Google Planning Enrol/Cancel Script
-define('GOOGLE_ENROL_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/enrol.php');
+define('GOOGLE_ENROL_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/mock/enrol.php');
 
 # Google docs contacts liste
 define('CONTACT_DOC_ID', 'contactDocId');
@@ -21,7 +21,7 @@ define('CONTACT_ROAMING_SHEET_ID', 'contactRoamingSheetId');
 define('CONTACT_OTHER_SHEET_ID', 'contactOtherSheetId');
 
 # Google script to add new member
-define('GOOGLE_ADD_MEMBER_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/googleMock/addMember.php');
+define('GOOGLE_ADD_MEMBER_SCRIPT', 'http://localhost'.APPLICATION_PATH.'/api/tests/mock/addMember.php');
 
 # Google docs roamings subscription
 define('DOC_ID', 'DOC_ID');

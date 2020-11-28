@@ -44,7 +44,7 @@ class Browser {
         if (@$urlp['path'] == '') $urlp['path'] = '/';
         $sock = @fsockopen($urlp['host'], $urlp['port']);
         $protocol = $postData ? 'POST' : 'GET';
-        $this->puts($sock, $protocol.' '.$urlp['path'].($urlp['query']?'?'.$urlp['query']:'').' HTTP/1.1');
+        $this->puts($sock, $protocol.' '.$urlp['path'].(@$urlp['query']?'?'.$urlp['query']:'').' HTTP/1.1');
         $this->puts($sock, 'Host: '.$urlp['host'].':'.$urlp['port']);
         $this->putsCookies($sock);
         $this->putsOptionalHeaders($sock);
@@ -65,6 +65,8 @@ class Browser {
         $httpStatus = -1;
         $httpMsg = 'NO MSG';
         $isJson = false;
+        $header = '';
+        $content = '';
         while (!feof($sock)) {
             $currentLine = fgets($sock, 1024);
             if (self::TRACE) {
