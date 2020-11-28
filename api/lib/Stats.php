@@ -95,6 +95,7 @@ class Stats {
     private function getNbVolunteers($volunteers) {
         $str = preg_replace('/;|([\s,;]et[\s,;])/', ',', $volunteers);
         $str = preg_replace('/,[\s,]*/', ',', $str);
+        $str = preg_replace('/,[^,]*maraude[^,]*,/i', ',', $str);
         return substr_count($str, ',') + 1;
     }
 
