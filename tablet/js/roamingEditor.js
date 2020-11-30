@@ -8,7 +8,7 @@ var roamingEditor = angular.module('roamingEditor', ['ngRoute', 'ngCookies']);
 
 var roamingDtoVersion = 3;
 
-var version = '201122';
+var version = '201130';
 
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {

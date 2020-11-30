@@ -4,7 +4,7 @@ var roamingApiEndPoint = '../api';
 
 var roamingPortal = angular.module('roamingPortal', ['ngRoute', 'angular-loading-bar']);
 
-var version = '201122';
+var version = '201130';
 
 roamingPortal.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList/', {
