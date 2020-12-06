@@ -10,6 +10,7 @@ rsync $RSYNC_OPTIONS . $DEST \
     --exclude .gitignore \
     --exclude cr \
     --exclude api/tests \
+    --exclude api/tmp \
     --exclude api/conf \
     --exclude api/conf_dev \
     --exclude api/conf_it \

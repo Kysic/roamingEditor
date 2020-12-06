@@ -42,7 +42,7 @@ class Reporting115 {
     $csvFile = ROAMING_TMP_DIR.'/signalements-'.uniqid().'.csv';
     exec("xlsx2csv \"$xslxFile\" > $csvFile", $output, $result);
     if ($result !== 0) {
-      throw new Exception('Error while executing ripmime '.$result);
+      throw new Exception('Error while executing xlsx2csv '.$result);
     }
     $this->extractFromCsvFile($csvFile);
     unlink($csvFile);
@@ -55,10 +55,7 @@ class Reporting115 {
   }
 
   public function formatCsvArray($csvArray) {
-    array_shift($csvArray); // ignore first row
-    array_shift($csvArray); // ignore second row
-    $headers = array_map('trim', array_map('strtolower', array_shift($csvArray))); // headers are the third one
-    $this->checkHeaders($headers);
+    $headers = $this->extractHeaders($csvArray);
     array_walk($csvArray, [$this, 'combineArrayRow'], $headers);
     $reports = json_encode($csvArray);
     return $reports;
@@ -68,13 +65,21 @@ class Reporting115 {
     $row = array_combine($header, $row);
   }
 
-  private function checkHeaders($headers) {
-    if (
-      !in_array('nom', $headers) || !in_array('prenom', $headers) || !in_array('telephone', $headers)
-        || !in_array('lieu', $headers) || !in_array('besoins', $headers)
-    ) {
-      throw new Exception('Error, missing header '.implode(', ', $headers));
+  private function extractHeaders(&$csvArray) {
+    while (count($csvArray) > 0) {
+      $headers = array_map(array($this, 'cleanUpHeader'), array_shift($csvArray));
+      if (
+        in_array('nom', $headers) && in_array('prenom', $headers) && in_array('telephone', $headers)
+        && in_array('lieu', $headers) && in_array('besoins', $headers)
+      ) {
+        return $headers;
+      }
     }
+    throw new Exception('Error, array headers not found in report');
+  }
+
+  private function cleanUpHeader($header) {
+    return str_replace(['é'], ['e'], strtolower(trim($header)));
   }
 
 }
