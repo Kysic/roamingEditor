@@ -48,7 +48,6 @@ roamingEditor.config(['$cookiesProvider', function($cookiesProvider) {
 roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $cookies, $interval) {
 
     var roamings = { };
-    var resynchroTimer;
 
     loadLocalStorage();
     resynchro(true);

@@ -1,0 +1,20 @@
+<div class="reportsContainer">
+  <div ng-if="!reports">
+    Les signalements 115 n'ont pas encore été reçus.<br>
+    <button ng-click="retrieveReports()" class="action">Rafraîchir</button>
+  </div>
+  <table ng-if="reports">
+    <tr>
+      <th>Prénom</th>
+      <th>Nom</th>
+      <th>Téléphone</th>
+      <th>Emplacement</th>
+    </tr>
+    <tr ng-repeat="report in reports">
+      <td>{{report.prenom}}</td>
+      <td>{{report.nom}}</td>
+      <td><a href="tel:{{report.telephone | removeSpaces}}">{{report.telephone}}</a></td>
+      <td>{{report.lieu}}</td>
+    </tr>
+  </table>
+</div>

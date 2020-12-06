@@ -54,6 +54,12 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
         templateUrl: 'templates/roamingView.html?v='+version,
         controller: 'RoamingViewController'
     })
+    .when('/reports', {
+        shortTitle: 'Signalements 115',
+        longTitle: 'Signalements 115',
+        templateUrl: 'templates/reports.html?v='+version,
+        controller: 'ReportsController'
+    })
     .otherwise({
         redirectTo: '/roamingsList'
     });
@@ -224,6 +230,11 @@ roamingPortal.filter('humanMonth', function(dateUtils) {
 roamingPortal.filter('capitalize', function() {
     return function(input) {
         return (!!input) ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase() : '';
+    }
+});
+roamingPortal.filter('removeSpaces', function() {
+    return function(input) {
+        return (!!input) ? input.replace(/[\s]/g, '') : '';
     }
 });
 
@@ -1013,3 +1024,46 @@ roamingPortal.controller('RoamingViewController', function RoamingListController
 });
 
 
+roamingPortal.controller('ReportsController', function ReportsController($scope, $http, $interval, authService) {
+
+    $scope.sessionInfo = authService.getSessionInfo();
+    $scope.reports = null;
+    $scope.retrieveReports = retrieveReports;
+
+    this.reportsDate = 0;
+
+    $scope.$watch('sessionInfo', function () {
+        if ($scope.sessionInfo.loggedIn === false) {
+            $location.path('/login');
+        }
+    }, true);
+
+    var deleteReportsTimer = $interval(function(){
+        deleteExpiredReports();
+    }, 3600*1000); // every hour
+
+    retrieveReports();
+
+    function retrieveReports() {
+        $http.get(
+            roamingApiEndPoint + '/getTodaysReports.php'
+        ).then(function (response) {
+            if (response.status == 200 && response.data.status == 'success') {
+                $scope.reports = response.data.reports;
+                this.reportsDate = Date.now();
+            }
+        });
+    }
+
+    function deleteExpiredReports() {
+        if (Date.now() - this.reportsDate > 12*3600*1000) { // 12 hours
+            $scope.reports = null;
+        }
+    }
+
+    $scope.$on('$destroy', function() {
+        $interval.cancel(deleteReportsTimer);
+        deleteReportsTimer = undefined;
+    });
+
+});

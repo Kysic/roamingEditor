@@ -188,3 +188,6 @@ ul.tabs>li.notselected:hover {
 .cancelForAll:hover {
     background: #fff;
 }
+.reportsContainer {
+    padding: 30px;
+}
