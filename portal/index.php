@@ -16,13 +16,13 @@ try {
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/png" href="img/favicon.png"/>
-  <link rel="stylesheet" href="css/main.css?v=201130"/>
+  <link rel="stylesheet" href="css/main.css?v=201208"/>
   <link rel="stylesheet" href="css/angular-loading-bar.min.css?v=1"/>
   <link rel="stylesheet" href="css/dialog-mobile.css"/>
   <script type="text/javascript" src="js/angular.min.js"></script>
   <script type="text/javascript" src="js/angular-route.min.js"></script>
   <script type="text/javascript" src="js/angular-loading-bar.min.js"></script>
-  <script type="text/javascript" src="js/roamingPortal.js?v=201130"></script>
+  <script type="text/javascript" src="js/roamingPortal.js?v=201208"></script>
   <link rel="stylesheet" href="../material-icon.css">
   <link rel="stylesheet" href="../material.teal-blue.min.css">
   <script defer type="text/javascript" src="../material.min.js"></script>

@@ -57,12 +57,26 @@ class Reporting115 {
   public function formatCsvArray($csvArray) {
     $headers = $this->extractHeaders($csvArray);
     array_walk($csvArray, [$this, 'combineArrayRow'], $headers);
+    $csvArray = array_filter($csvArray, [$this, 'hasNomPrenomTelephoneOrLieu']);
+    $this->normalizePhoneNumber($csvArray);
     $reports = json_encode($csvArray);
     return $reports;
   }
 
+  private function normalizePhoneNumber(&$reports) {
+    foreach ($reports as &$report) {
+      if (strlen(@$report['telephone']) == 9) {
+        $report['telephone'] = '0' . $report['telephone'];
+      }
+    }
+  }
+
   private function combineArrayRow(&$row, $key, $header) {
-    $row = array_combine($header, $row);
+    $row = @array_combine($header, $row);
+  }
+
+  private function hasNomPrenomTelephoneOrLieu($row) {
+    return trim($row['nom']) || trim($row['prenom']) || trim($row['telephone']) || trim($row['lieu']);
   }
 
   private function extractHeaders(&$csvArray) {

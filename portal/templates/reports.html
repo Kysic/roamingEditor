@@ -10,7 +10,7 @@
       <th>Téléphone</th>
       <th>Emplacement</th>
     </tr>
-    <tr ng-repeat="report in reports">
+    <tr ng-repeat="report in reports track by $index">
       <td>{{report.prenom}}</td>
       <td>{{report.nom}}</td>
       <td><a href="tel:{{report.telephone | removeSpaces}}">{{report.telephone}}</a></td>

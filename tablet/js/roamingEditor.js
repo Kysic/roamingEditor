@@ -8,7 +8,7 @@ var roamingEditor = angular.module('roamingEditor', ['ngRoute', 'ngCookies']);
 
 var roamingDtoVersion = 3;
 
-var version = '201130';
+var version = '201208';
 
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
@@ -844,7 +844,8 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
         var roamings = JSON.parse($scope.roamingsJSON);
         roamingService.deleteAllRoamings();
         for (var roamingDate in roamings) {
-            roamingService.updateRoaming(roamings[roamingDate]);
+            var roamingJson = JSON.stringify(roamings[roamingDate]);
+            localStorage.setItem('roaming_'+roamingDate, roamingJson);
         }
         roamingService.loadLocalStorage();
         loadCurrentConf();

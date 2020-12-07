@@ -4,7 +4,7 @@ var roamingApiEndPoint = '../api';
 
 var roamingPortal = angular.module('roamingPortal', ['ngRoute', 'angular-loading-bar']);
 
-var version = '201130';
+var version = '201208';
 
 roamingPortal.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList/', {
@@ -349,12 +349,14 @@ roamingPortal.controller('RoamingListController', function RoamingListController
                 var roamingsObject = response.data.roamings;
                 Object.keys(roamingsObject).forEach(function(roamingId) {
                     var roamingReceived = roamingsObject[roamingId];
-                    var roaming = findRoamingByDate(roamingReceived.date);
-                    roaming.id = roamingId;
-                    roaming.tutor = roamingReceived.tutor;
-                    roaming.teammates = roamingReceived.teammates;
-                    roaming.hasWebReport = true;
-                    checkRoamingByFour(roaming);
+                    if (roamingReceived) {
+                        var roaming = findRoamingByDate(roamingReceived.date);
+                        roaming.id = roamingId;
+                        roaming.tutor = roamingReceived.tutor;
+                        roaming.teammates = roamingReceived.teammates;
+                        roaming.hasWebReport = true;
+                        checkRoamingByFour(roaming);
+                    }
                 });
             }
         }, function (response) {
@@ -1024,7 +1026,7 @@ roamingPortal.controller('RoamingViewController', function RoamingListController
 });
 
 
-roamingPortal.controller('ReportsController', function ReportsController($scope, $http, $interval, authService) {
+roamingPortal.controller('ReportsController', function ReportsController($scope, $http, $interval, authService, $location) {
 
     $scope.sessionInfo = authService.getSessionInfo();
     $scope.reports = null;
@@ -1034,7 +1036,7 @@ roamingPortal.controller('ReportsController', function ReportsController($scope,
 
     $scope.$watch('sessionInfo', function () {
         if ($scope.sessionInfo.loggedIn === false) {
-            $location.path('/login');
+            $location.path('/login//reports');
         }
     }, true);
 
@@ -1051,6 +1053,8 @@ roamingPortal.controller('ReportsController', function ReportsController($scope,
             if (response.status == 200 && response.data.status == 'success') {
                 $scope.reports = response.data.reports;
                 this.reportsDate = Date.now();
+            } else if (response.status == 401) {
+                $location.path('/login//reports');
             }
         });
     }
