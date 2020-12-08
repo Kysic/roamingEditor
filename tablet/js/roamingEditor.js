@@ -439,14 +439,13 @@ roamingEditor.controller('RoamingController',
     }
 
     function reportToIntervention(report) {
-        console.log(report);
         return {
             time: '03:00',
             phone: report.telephone,
             location: report.lieu,
             people: [ report.prenom + ' ' + report.nom ],
             source: '115',
-            household: 'seules',
+            household: compoToHousehold(report.compo),
             nbAdults: 0,
             nbChildren: 0,
             food: 0,
@@ -455,6 +454,15 @@ roamingEditor.controller('RoamingController',
             hygiene: false,
             comments: 'Compo: ' + report.compo + '\nBesoins: ' + report.besoins + '\n'
         }
+    }
+
+    function compoToHousehold(compo) {
+        if (compo === 'C') {
+            return 'couple';
+        } else if (compo && compo.indexOf('(') >= 0) {
+            return 'famille';
+        }
+        return 'seules';
     }
 
     function addIntervention() {
