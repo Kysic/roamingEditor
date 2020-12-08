@@ -350,6 +350,12 @@ assertEquals($reports[0]->lieu, 'St Egreve - devant hôtel de ville');
 assertEquals($reports[0]->telephone, '01 02 03 04 05');
 assertEquals($reports[0]->besoins, 'AA +');
 assertEquals($reports[0]->compo, 'HS');
+assertEquals($container->getReporting115()->normalizePhoneNumber('06 01 02 03 04'), '06 01 02 03 04');
+assertEquals($container->getReporting115()->normalizePhoneNumber('0601020304'), '06 01 02 03 04');
+assertEquals($container->getReporting115()->normalizePhoneNumber('601020304'), '06 01 02 03 04');
+assertEquals($container->getReporting115()->normalizePhoneNumber(601020304), '06 01 02 03 04');
+assertEquals($container->getReporting115()->normalizePhoneNumber('6.01020304E8'), '06 01 02 03 04');
+assertEquals($container->getReporting115()->normalizePhoneNumber('+33 6 01 02 03 04'), '+33 6 01 02 03 04');
 
 printTestCase('Statistics as admin should be ok');
 $adminBrowser = new Browser();

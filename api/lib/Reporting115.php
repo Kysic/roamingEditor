@@ -58,17 +58,33 @@ class Reporting115 {
     $headers = $this->extractHeaders($csvArray);
     array_walk($csvArray, [$this, 'combineArrayRow'], $headers);
     $csvArray = array_filter($csvArray, [$this, 'hasNomPrenomTelephoneOrLieu']);
-    $this->normalizePhoneNumber($csvArray);
+    $this->normalizeReportPhoneNumber($csvArray);
     $reports = json_encode($csvArray);
     return $reports;
   }
 
-  private function normalizePhoneNumber(&$reports) {
+  private function normalizeReportPhoneNumber(&$reports) {
     foreach ($reports as &$report) {
-      if (strlen(@$report['telephone']) == 9) {
-        $report['telephone'] = '0' . $report['telephone'];
+      if (@$report['telephone']) {
+        $report['telephone'] = $this->normalizePhoneNumber($report['telephone']);
       }
     }
+  }
+
+  public function normalizePhoneNumber($phone) {
+    if (strlen($phone) == 9) {
+      // handle 601020304 => 0601020304
+      $phone = '0' . $phone;
+    } else if (strlen($phone) == 12 && substr($phone, -2) === 'E8' && substr($phone, 1, 1) === '.') {
+      // handle 6.01020304E8 => 0601020304
+      $phone = '0' . substr($phone, 0, 1) . substr($phone, 2, 8);
+    }
+    // format with space every 2 digits if french number
+    $phoneNoSpaces = str_replace(' ', '', $phone);
+    if (strlen($phoneNoSpaces) == 10 && substr($phone, 0, 1) === '0') {
+      $phone = wordwrap($phoneNoSpaces, 2, ' ', true);
+    }
+    return $phone;
   }
 
   private function combineArrayRow(&$row, $key, $header) {
