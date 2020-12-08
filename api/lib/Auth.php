@@ -109,10 +109,6 @@ class Auth {
             $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
             throw $e;
         }
-        if ($user->role === APPLI) {
-            throw new SecurityException('Request rejected',
-                'Login attempt with application '.$user->userId.' credentials on standard login form.');
-        }
         $this->session->setUser($user);
         $usersStorage->resetUserMailToken($user->userId);
         if ($pStayLogged) {
