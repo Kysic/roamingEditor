@@ -8,31 +8,29 @@ var roamingEditor = angular.module('roamingEditor', ['ngRoute', 'ngCookies']);
 
 var roamingDtoVersion = 3;
 
-var version = '201208';
-
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
-        templateUrl: 'templates/roamingsList.html?v='+version,
+        templateUrl: 'templates/roamingsList.html?v=201208',
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v='+version,
+        templateUrl: 'templates/roamingEditor.html?v=201208',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
-        templateUrl: 'templates/interventionEditor.html?v='+version,
+        templateUrl: 'templates/interventionEditor.html?v=201208',
         controller: 'InterventionController'
     })
     .when('/donations/:roamingId?', {
-        templateUrl: 'templates/donations.html?v='+version,
+        templateUrl: 'templates/donations.html?v=201208',
         controller: 'DonationsController'
     })
     .when('/logistic/:roamingId?', {
-        templateUrl: 'templates/logistic.html?v='+version,
+        templateUrl: 'templates/logistic.html?v=201208',
         controller: 'LogisticController'
     })
     .when('/debug', {
-        templateUrl: 'templates/debug.html?v='+version,
+        templateUrl: 'templates/debug.html?v=201208',
         controller: 'DebugController'
     })
     .otherwise({

@@ -1,7 +1,6 @@
 <div class="reportsContainer">
   <div ng-if="!reports">
-    Les signalements 115 n'ont pas encore été reçus.<br>
-    <button ng-click="retrieveReports()" class="action">Rafraîchir</button>
+    Les signalements 115 n'ont pas encore été reçus.
   </div>
   <table ng-if="reports">
     <tr>
@@ -17,4 +16,6 @@
       <td>{{report.lieu}}</td>
     </tr>
   </table>
+  <br>
+  <button ng-click="retrieveReports()" class="action">Rafraîchir</button>
 </div>

@@ -147,16 +147,6 @@ assertEquals(@$appliBrowser->cookies['vinciApplicationId'], '');
 assertEquals(@$appliBrowser->cookies['vinciApplicationToken'], '');
 assertIsVisitor(getSessionUser($appliBrowser));
 
-printTestCase('Login with appli credentials should failed');
-$appliBrowser = new Browser();
-try {
-    login($appliBrowser, 'tablet@example.com', 'tablet1@example.com', false);
-    throw new AssertException('login should have raised an HttpStatusException');
-} catch (Exception $e) {
-    assertException($e, 'Request rejected', 403);
-}
-assertIsVisitor(getSessionUser($appliBrowser));
-
 printTestCase('Autologin as appli should succeed');
 $appliBrowser = new Browser();
 $appliBrowser->cookies['vinciApplicationId'] = 'tablet@example.com';

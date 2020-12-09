@@ -4,60 +4,58 @@ var roamingApiEndPoint = '../api';
 
 var roamingPortal = angular.module('roamingPortal', ['ngRoute', 'angular-loading-bar']);
 
-var version = '201208';
-
 roamingPortal.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList/', {
         shortTitle: 'Compte-rendus',
         longTitle: 'Compte-rendus des maraudes',
-        templateUrl: 'templates/roamingsList.html?v='+version,
+        templateUrl: 'templates/roamingsList.html?v=201208',
         controller: 'RoamingListController',
         reloadOnSearch: false
     })
     .when('/login/:email?/:referer?', {
         shortTitle: 'Connexion',
         longTitle: 'Connexion au site du VINCI',
-        templateUrl: 'templates/login.html?v='+version,
+        templateUrl: 'templates/login.html?v=201208',
         controller: 'LoginController'
     })
     .when('/register/:email?', {
         shortTitle: 'Inscription',
         longTitle: 'Inscription au site du VINCI',
-        templateUrl: 'templates/register.html?v='+version,
+        templateUrl: 'templates/register.html?v=201208',
         controller: 'RegisterController'
     })
     .when('/resetPassword/:email?', {
         shortTitle: 'Mdp perdu',
         longTitle: 'Réinitialisation de votre mot de passe',
-        templateUrl: 'templates/resetPassword.html?v='+version,
+        templateUrl: 'templates/resetPassword.html?v=201208',
         controller: 'ResetPasswordController'
     })
     .when('/setPassword/:userId?/:mailToken?', {
         shortTitle: 'Choix mdp',
         longTitle: 'Modification de votre mot de passe',
-        templateUrl: 'templates/setPassword.html?v='+version,
+        templateUrl: 'templates/setPassword.html?v=201208',
         controller: 'SetPasswordController'
     })
     .when('/mailSent/:email?', {
-        templateUrl: 'templates/mailSent.html?v='+version,
+        templateUrl: 'templates/mailSent.html?v=201208',
         controller: 'MailSentController'
     })
     .when('/users', {
         shortTitle: 'Membres',
         longTitle: 'Liste des membres du VINCI',
-        templateUrl: 'templates/users.html?v='+version,
+        templateUrl: 'templates/users.html?v=201208',
         controller: 'UsersController'
     })
     .when('/roaming/:roamingDate', {
         shortTitle: 'CR Maraude',
         longTitle: 'Compte-rendu de la maraude',
-        templateUrl: 'templates/roamingView.html?v='+version,
+        templateUrl: 'templates/roamingView.html?v=201208',
         controller: 'RoamingViewController'
     })
     .when('/reports', {
         shortTitle: 'Signalements 115',
         longTitle: 'Signalements 115',
-        templateUrl: 'templates/reports.html?v='+version,
+        templateUrl: 'templates/reports.html?v=201208-2',
         controller: 'ReportsController'
     })
     .otherwise({
@@ -1040,9 +1038,13 @@ roamingPortal.controller('ReportsController', function ReportsController($scope,
         }
     }, true);
 
-    var deleteReportsTimer = $interval(function(){
+    var refreshTimer = $interval(function() {
+        var hour = new Date().getHours();
+        if (hour > 19 || hour < 1) { // auto refresh between 19h and 1h
+            retrieveReports();
+        }
         deleteExpiredReports();
-    }, 3600*1000); // every hour
+    }, 15*60*1000); // every 15 minutes
 
     retrieveReports();
 
@@ -1066,8 +1068,8 @@ roamingPortal.controller('ReportsController', function ReportsController($scope,
     }
 
     $scope.$on('$destroy', function() {
-        $interval.cancel(deleteReportsTimer);
-        deleteReportsTimer = undefined;
+        $interval.cancel(refreshTimer);
+        refreshTimer = undefined;
     });
 
 });
