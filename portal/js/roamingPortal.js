@@ -55,7 +55,7 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
     .when('/reports', {
         shortTitle: 'Signalements 115',
         longTitle: 'Signalements 115',
-        templateUrl: 'templates/reports.html?v=201208-2',
+        templateUrl: 'templates/reports.html?v=201208-3',
         controller: 'ReportsController'
     })
     .otherwise({
