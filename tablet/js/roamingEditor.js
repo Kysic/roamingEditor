@@ -249,6 +249,25 @@ roamingEditor.factory('mapService', function () {
         showPlacesOnMap: showPlacesOnMap
     };
 });
+roamingEditor.factory('reportsService', function () {
+    var lastReports = null;
+    var lastCheck = 0;
+    function isNew(reports) {
+        lastCheck = Date.now();
+        if (!angular.equals(lastReports, reports)) {
+            lastReports = reports;
+            return true;
+        }
+        return false;
+    }
+    function millisFromLastCheck() {
+        return Date.now() - lastCheck;
+    }
+    return {
+        isNew: isNew,
+        millisFromLastCheck: millisFromLastCheck
+    };
+});
 
 /* Directives */
 roamingEditor.directive('ngEnter', function() {
@@ -316,7 +335,7 @@ roamingEditor.controller('RoamingListController', function RoamingListController
 
 roamingEditor.controller('RoamingController',
   function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, $window, roamingService,
-                             mapService) {
+                             mapService, reportsService) {
 
     $scope.synchroStatus;
     $scope.roaming;
@@ -352,9 +371,7 @@ roamingEditor.controller('RoamingController',
     if ($scope.roaming.tutor == '' && angular.equals($scope.roaming.teammates, [ '' ])) {
         getTeammates();
     }
-    if ($scope.roaming.interventions.length === 0) {
-        getReports();
-    }
+    refreshReportsIfNeeded();
 
     $scope.$on('roamingUpdate', function (event, roaming) {
         if ($scope.roaming.date == roaming.date) {
@@ -363,8 +380,8 @@ roamingEditor.controller('RoamingController',
     });
 
     refreshTimer = $interval(function(){
-        // Allow to refresh read only status every hour
-    },3600000);
+        refreshReportsIfNeeded();
+    }, 60*1000); // every minute
 
     $scope.$on('$destroy', function() {
         $interval.cancel(refreshTimer);
@@ -400,6 +417,19 @@ roamingEditor.controller('RoamingController',
         });
     }
 
+    function refreshReportsIfNeeded() {
+        var hour = new Date().getHours();
+        var checkEveryMillis = 0;
+        if (hour == 19 && $scope.roaming.interventions.length === 0) { // auto refresh every minute between 19h and 20h if no intervention
+            checkEveryMillis = 60*1000;
+        } else if (hour >= 19 || hour < 1) { // auto refresh every 10 minutes between 19h and 1h
+            checkEveryMillis = 10*60*1000;
+        }
+        if (checkEveryMillis > 0 && reportsService.millisFromLastCheck() >= checkEveryMillis) {
+            getReports();
+        }
+    }
+
     function getReports() {
         if (!isEditable()) {
             return;
@@ -407,7 +437,7 @@ roamingEditor.controller('RoamingController',
         $http.get(
             roamingApiEndPoint + '/getTodaysReports.php'
         ).then(function (response) {
-            if (response.status == 200 && response.data.status == 'success') {
+            if (response.status == 200 && response.data.status == 'success' && reportsService.isNew(response.data.reports)) {
                 var initialInterventions = $scope.roaming.interventions.slice();
                 for (var i = 0; i < response.data.reports.length; i++) {
                     var report = response.data.reports[i];
@@ -720,7 +750,7 @@ roamingEditor.controller('InterventionController',
     }
 
     function cancelInterventionEdit() {
-        if ( formAlmostUntouchedByUser() || confirm('Etes vous sûr de vouloir annuler cette intervention ?') ) {
+        if ( formAlmostUntouchedByUser() || confirm('Etes vous sûr de vouloir annuler vos modifications ?') ) {
             $location.path('/roaming/' + $routeParams.roamingId);
         }
     }

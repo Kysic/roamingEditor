@@ -24,7 +24,7 @@ class ReportsStorage {
 
   public function getTodaysLast() {
     $query = 'SELECT rawJson FROM '.SQL_TABLE_REPORTS.
-             ' WHERE creationDate > (NOW() - INTERVAL 12 HOUR)'.
+             ' WHERE creationDate > (NOW() - INTERVAL 8 HOUR)'.
              ' ORDER BY creationDate DESC LIMIT 1';
     $request = $this->dbAccess->getPdo()->prepare($query);
     $this->dbAccess->executeWithException($request);

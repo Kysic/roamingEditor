@@ -1040,11 +1040,11 @@ roamingPortal.controller('ReportsController', function ReportsController($scope,
 
     var refreshTimer = $interval(function() {
         var hour = new Date().getHours();
-        if (hour > 19 || hour < 1) { // auto refresh between 19h and 1h
+        if (hour >= 19 || hour < 1) { // auto refresh between 19h and 1h
             retrieveReports();
         }
         deleteExpiredReports();
-    }, 15*60*1000); // every 15 minutes
+    }, 10*60*1000); // every 10 minutes
 
     retrieveReports();
 
