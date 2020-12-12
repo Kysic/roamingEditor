@@ -430,14 +430,15 @@ roamingEditor.controller('RoamingController',
         }
     }
 
-    function getReports() {
+    function getReports(forceRefresh) {
         if (!isEditable()) {
             return;
         }
         $http.get(
             roamingApiEndPoint + '/getTodaysReports.php'
         ).then(function (response) {
-            if (response.status == 200 && response.data.status == 'success' && reportsService.isNew(response.data.reports)) {
+            if (response.status == 200 && response.data.status == 'success'
+                    && (forceRefresh || reportsService.isNew(response.data.reports))) {
                 var initialInterventions = $scope.roaming.interventions.slice();
                 for (var i = 0; i < response.data.reports.length; i++) {
                     var report = response.data.reports[i];
