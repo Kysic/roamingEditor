@@ -439,9 +439,24 @@ roamingEditor.controller('RoamingController',
         ).then(function (response) {
             if (response.status == 200 && response.data.status == 'success'
                     && (forceRefresh || reportsService.isNew(response.data.reports))) {
+                var reports = response.data.reports;
                 var initialInterventions = $scope.roaming.interventions.slice();
-                for (var i = 0; i < response.data.reports.length; i++) {
-                    var report = response.data.reports[i];
+                try {
+                    // convert object to array in case it is not already an array
+                    if (!reports.length) {
+                        var props = Object.keys(reports);
+                        var i = props.length;
+                        var resArray = new Array(i);
+                        while (i--) {
+                            resArray[i] = reports[props[i]];
+                        }
+                        reports = resArray;
+                    }
+                } catch (e) {
+                    console.log('error', e);
+                }
+                for (var i = 0; i < reports.length; i++) {
+                    var report = reports[i];
                     var intervention = reportToIntervention(report);
                     if (!containsIntervention(initialInterventions, intervention)) {
                         $scope.roaming.interventions.push(intervention);
