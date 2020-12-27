@@ -477,9 +477,17 @@ roamingEditor.controller('RoamingController',
     }
 
     function isSameIntervention(interventionA, interventionB) {
-        return (interventionA.phone && interventionA.phone === interventionB.phone)
+        return isSamePhone(interventionA.phone, interventionB.phone)
             || (interventionA.people && interventionB.people && interventionA.people.length > 0 && interventionB.people.length > 0
-                && interventionA.people[0] === interventionB.people[0]);
+                && isSameName(interventionA.people[0], interventionB.people[0]));
+    }
+
+    function isSamePhone(phoneA, phoneB) {
+        return phoneA && phoneB && phoneA.replace(/ /g, '') === phoneB.replace(/ /g, '');
+    }
+
+    function isSameName(nameA, nameB) {
+        return nameA && nameB && nameA.toLowerCase() === nameB.toLowerCase();
     }
 
     function reportToIntervention(report) {
