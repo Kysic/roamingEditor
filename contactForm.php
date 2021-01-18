@@ -34,7 +34,9 @@ if (!empty($email) && !empty($message)) {
   <title>VINCI - Demande d'assistance</title>
   <link rel="stylesheet" href="material-icon.css">
   <link rel="stylesheet" href="material.teal-blue.min.css">
-  <link rel="icon" type="image/png" href="img/favicon.png">
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
+  <link rel="alternate icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="alternate icon" type="image/x-icon" href="/favicon.ico">
   <script defer src="material.min.js" type="text/javascript"></script>
 <style>
 .mdl-layout {

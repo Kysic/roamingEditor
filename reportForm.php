@@ -71,7 +71,10 @@ try {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" href="img/favicon.png" />
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
+  <link rel="alternate icon" type="image/png" sizes="512x512" href="/favicon.png">
+  <link rel="alternate icon" type="image/x-icon" href="/favicon.ico">
 <title>Faire un signalement</title>
 <style>
 body {
