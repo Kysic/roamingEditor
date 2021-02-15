@@ -11,29 +11,29 @@ function checkConsistency($users, $members) {
             $member = $members[$email];
             if (@$member['isBoard']) {
                 if ( !in_array( $user->role, array(BOARD, ADMIN, ROOT) ) ) {
-                    return 'role of '.$email;
+                    return 'role '.$user->role.' of '.$email.' is not compatible with "isBoard"';
                 }
             } else if (@$member['isTutor']) {
                 if ( !in_array( $user->role, array(TUTOR, ADMIN, ROOT) ) ) {
-                    return 'role of '.$email;
+                    return 'role '.$user->role.' of '.$email.' is not compatible with "isTutor"';
                 }
             } else if (@$member['doRoaming']) {
                 if ( !in_array( $user->role, array(NIGHT_WATCHER, ADMIN, ROOT) ) ) {
-                    return 'role of '.$email;
+                    return 'role '.$user->role.' of '.$email.' is not compatible with "doRoaming"';
                 }
             } else {
-                if ( !in_array( $user->role, array(MEMBER, ADMIN, ROOT) ) ) {
-                    return 'role of '.$email;
+                if ( !in_array( $user->role, array(MEMBER, BOARD, ADMIN, ROOT) ) ) {
+                    return 'role '.$user->role.' of '.$email.' is not compatible with presence in second tab';
                 }
             }
             if ($user->firstname !== $member['firstname']) {
-                return 'firstname of '.$email;
+                return 'firstname of '.$email.' '.$user->firstname.' != '.$member['firstname'];
             }
             if ($user->lastname !== $member['lastname']) {
-                return 'lastname of '.$email;
+                return 'lastname of '.$email.' '.$user->lastname.' != '.$member['lastname'];
             }
             if ($user->gender !== $member['gender']) {
-                return 'gender of '.$email;
+                return 'gender of '.$email.' '.$user->gender.' != '.$member['gender'];
             }
         } else {
             if ( !in_array( $user->role, array(APPLI, FORMER, GUEST) ) ) {
