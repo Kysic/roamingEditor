@@ -43,7 +43,7 @@ function retrieveHtmlContent($readUrl) {
     );
     $htmlContent = file_get_contents($readUrl, false, stream_context_create($headers));
     $htmlContent = preg_replace(
-        "-<link href='/static/spreadsheets2/client/css/.*.css' type='text/css' rel='stylesheet'>-",
+        "-<link href='/static/spreadsheets2/client/css/[^>]*.css' type='text/css' rel='stylesheet'[^>]*>-",
         "<style type='text/css'>
             #top-bar, .row-header, .column-headers-background, .row-header-wrapper { display: none; visibility: hidden }
         </style>",
