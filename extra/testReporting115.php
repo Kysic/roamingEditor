@@ -1,12 +1,14 @@
 <?php
 
-require_once('../api/lib/Container.php');
+require_once('/var/www/vinci/api/lib/Container.php');
 
 try {
 
     $container = new Container();
 
-    $container->getReporting115()->extractFromMailFile('/var/www/html/extra/signalements.eml');
+    //$container->getReporting115()->extractFromMailFile('signalements.eml');
+    //$container->getReporting115()->extractFromXlsxFile('signalements.xlsx');
+    $container->getReporting115()->extractFromCsvFile('signalements.csv');
 
     echo $container->getReportsStorage()->getTodaysLast();
 

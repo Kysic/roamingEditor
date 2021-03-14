@@ -113,6 +113,10 @@ body {
   flex: 0 1 200px;
   text-align: center;
 }
+.error {
+  color: red;
+  font-weight: bold;
+}
 </style>
 </head>
 <body>

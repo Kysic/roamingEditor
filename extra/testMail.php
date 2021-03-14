@@ -1,6 +1,6 @@
 <?php
 
-require_once('lib/Container.php');
+require_once('/var/www/vinci/api/lib/Container.php');
 
 try {
 
@@ -8,7 +8,7 @@ try {
     $json = $container->getJson();
     $mail = $container->getMail();
 
-    $mail->sendRegisterToken("web-coza2@mail-tester.com", "Jean", "Dupont", 12, "somethingToTest");
+    $mail->sendMail("web-coza2@mail-tester.com", "Subject", "body");
 
     $json->returnResult(array(
         'status' => 'success'
