@@ -1,5 +1,4 @@
 #!/usr/bin/php
-
 <?php
 
 require_once('/var/www/vinci/api/lib/Container.php');
@@ -61,7 +60,6 @@ try {
             'Some user doesn\'t have correct attributes :'."\n".$error
         );
     }
-    echo 'done'."\n";
 
 } catch (Exception $e) {
     $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while checking users',

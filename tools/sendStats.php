@@ -1,5 +1,4 @@
 #!/usr/bin/php
-
 <?php
 
 require_once('/var/www/vinci/api/lib/Container.php');
@@ -47,12 +46,9 @@ try {
         );
     }
 
-    echo 'done'."\n";
-
 } catch (Exception $e) {
     $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while sending stats',
         'An error has occured while generating monthly stats : '."\n".print_r($e, true)
     );
     throw $e;
 }
-

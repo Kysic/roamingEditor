@@ -1,5 +1,4 @@
 #!/usr/bin/php
-
 <?php
 
 require_once('/var/www/vinci/api/lib/Container.php');
