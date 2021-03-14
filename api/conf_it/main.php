@@ -1,8 +1,8 @@
 <?php
 
 # Debug
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-ini_set('display_errors', 1);
+// error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+// ini_set('display_errors', 1);
 
 define('ADMIN_EMAIL', 'it-test-admin@samu-social-grenoble.fr');
 define('SECRETARIAT_EMAIL', 'it-test-secretariat@samu-social-grenoble.fr');
