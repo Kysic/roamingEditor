@@ -191,3 +191,8 @@ ul.tabs>li.notselected:hover {
 .reportsContainer {
     padding: 30px;
 }
+@media (max-width: 1200px) {
+    .hideOnSmallScreen {
+        display: none;
+    }
+}

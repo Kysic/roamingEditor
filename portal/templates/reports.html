@@ -8,12 +8,16 @@
       <th>Nom</th>
       <th>Téléphone</th>
       <th>Emplacement</th>
+      <th class="hideOnSmallScreen">Composition</th>
+      <th class="hideOnSmallScreen">Besoins</th>
     </tr>
     <tr ng-repeat="report in reports track by $index">
       <td>{{report.prenom}}</td>
       <td>{{report.nom}}</td>
       <td><a href="tel:{{report.telephone | removeSpaces}}">{{report.telephone}}</a></td>
       <td><a href="https://maps.google.com/?daddr={{report.lieu}}" target="blank">{{report.lieu}}</a></td>
+      <td class="hideOnSmallScreen">{{report.compo}}</td>
+      <td class="hideOnSmallScreen">{{report.besoins}}</td>
     </tr>
   </table>
   <br>

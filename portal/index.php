@@ -19,7 +19,7 @@ try {
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
   <link rel="alternate icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="alternate icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="stylesheet" href="css/main.css?v=201208"/>
+  <link rel="stylesheet" href="css/main.css?v=210317"/>
   <link rel="stylesheet" href="css/angular-loading-bar.min.css?v=1"/>
   <link rel="stylesheet" href="css/dialog-mobile.css"/>
   <script type="text/javascript" src="js/angular.min.js"></script>
