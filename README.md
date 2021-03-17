@@ -13,6 +13,7 @@
 - Renseigner la clé d'API google dans la page index.html
 - Déposer les fichiers sur le serveur web/php
 - Jouer le script api/sqlscripts/create.sql sur la base de donnée
+- Modifier les permissions pour les dossier cr et api/tmp pour permettre au web serveur d'écrire dedans
 - Interdire l'accès au dossier cr dans la configuration du serveur web (see extra/apache.conf)
 
 ### Outils externes

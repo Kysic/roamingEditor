@@ -11,7 +11,9 @@ function compareConfDir {
             echo "$f1 does not exist at contrary to $f2" >&2
             exit 1
         fi
-        SED_CMD='sed -e "s/.*\(PREVIOUS\|CURRENT\|NEXT\)_YEAR.*//" -e "s/.*DOC_ID.*SHEET_ID.*//" -e "s/\(define(.*, \).*\();\)/\1\2/" -e "s/array(.*)/array()/" -e "s/^#//"'
+        SED_CMD='sed -e "s/.*\(PREVIOUS\|CURRENT\|NEXT\)_YEAR.*//" -e "s/.*DOC_ID.*SHEET_ID.*//" ' \
+            ' -e "s/\(define(.*, \).*\();\)/\1\2/" -e "s/array(.*)/array()/" -e "s/^#//" ' \
+            ' -e "s/^.*# git-hook-ignore//"'
         if ! diff -B -q <(eval $SED_CMD "$f1") <(eval $SED_CMD "$f2")
         then
             echo "$f1 differs from $f2 :" >&2
