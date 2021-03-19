@@ -55,7 +55,7 @@ try {
 
     $error = checkConsistency($users, $members);
     if ($error) {
-        echo 'Inconstency detected : '.$error."\n";
+        // echo 'Inconstency detected : '.$error."\n";
         $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Some VINCI user are not in sync with official list',
             'Some user doesn\'t have correct attributes :'."\n".$error
         );
