@@ -5,6 +5,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE); # git-hook-ignore
 ini_set('display_errors', 1); # git-hook-ignore
 
 define('ADMIN_EMAIL', 'it-test-admin@samu-social-grenoble.fr');
+define('NOREPLY_EMAIL', 'it-test-noreply@samu-social-grenoble.fr');
 define('SECRETARIAT_EMAIL', 'it-test-secretariat@samu-social-grenoble.fr');
 define('PRESIDENT_EMAIL', 'it-test-president@samu-social-grenoble.fr');
 define('PRESIDENT_REPORTING_EMAIL', 'it-test-president-reporting@samu-social-grenoble.fr');

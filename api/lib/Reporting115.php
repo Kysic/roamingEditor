@@ -12,7 +12,10 @@ class Reporting115 {
     $mailFile = ROAMING_TMP_DIR.'/mail-'.uniqid().'.eml';
     copy("php://stdin", $mailFile);
     $this->extractFromMailFile($mailFile);
+    exec("grep '^From: ' $mailFile | sed 's/From: //'", $from);
+    exec("grep '^Subject: ' $mailFile | sed 's/Subject: //'", $subject);
     unlink($mailFile);
+    return array(@$from[0], @$subject[0]);
   }
 
   public function extractFromMailFile($mailFile) {

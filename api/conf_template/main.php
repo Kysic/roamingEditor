@@ -5,6 +5,7 @@
 // ini_set('display_errors', 1);
 
 define('ADMIN_EMAIL', '');
+define('NOREPLY_EMAIL', '');
 define('SECRETARIAT_EMAIL', '');
 define('PRESIDENT_EMAIL', '');
 define('PRESIDENT_REPORTING_EMAIL', '');

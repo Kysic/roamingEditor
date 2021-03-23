@@ -41,4 +41,13 @@
   git config filter.googleapikey.clean "sed 's/${MY_API_KEY}/GOOGLE_API_KEY/'"
   git config filter.googleapikey.smudge "sed 's/GOOGLE_API_KEY/${MY_API_KEY}/'"
   ```
+- Pour éviter d'avoir des adresses email public, définir les filtres git suivants :
+  ```bash
+  export MY_NO_REPLY_EMAIL=""
+  export MY_SECRETARIAT_EMAIL=""
+  export MY_ADMIN_EMAIL=""
+  export MY_SIGNALEMENTS_EMAIL=""
+  git config filter.emails.clean "sed -e 's/${MY_NO_REPLY_EMAIL}/NO_REPLY_EMAIL/' -e 's/${MY_SECRETARIAT_EMAIL}/SECRETARIAT_EMAIL/' -e 's/${MY_ADMIN_EMAIL}/ADMIN_EMAIL/' -e 's/${MY_SIGNALEMENTS_EMAIL}/SIGNALEMENTS_EMAIL/'"
+  git config filter.emails.smudge "sed -e 's/NO_REPLY_EMAIL/${MY_NO_REPLY_EMAIL}/' -e 's/SECRETARIAT_EMAIL/${MY_SECRETARIAT_EMAIL}/' -e 's/ADMIN_EMAIL/${MY_ADMIN_EMAIL}/' -e 's/SIGNALEMENTS_EMAIL/${MY_SIGNALEMENTS_EMAIL}/'"
+  ```
 
