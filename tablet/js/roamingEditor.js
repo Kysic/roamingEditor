@@ -10,27 +10,27 @@ var roamingDtoVersion = 3;
 
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
-        templateUrl: 'templates/roamingsList.html?v=201208',
+        templateUrl: 'templates/roamingsList.html?v=210326',
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v=201208',
+        templateUrl: 'templates/roamingEditor.html?v=210326',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
-        templateUrl: 'templates/interventionEditor.html?v=201208',
+        templateUrl: 'templates/interventionEditor.html?v=210326',
         controller: 'InterventionController'
     })
     .when('/donations/:roamingId?', {
-        templateUrl: 'templates/donations.html?v=201208',
+        templateUrl: 'templates/donations.html?v=210326',
         controller: 'DonationsController'
     })
     .when('/logistic/:roamingId?', {
-        templateUrl: 'templates/logistic.html?v=201208',
+        templateUrl: 'templates/logistic.html?v=210326',
         controller: 'LogisticController'
     })
     .when('/debug', {
-        templateUrl: 'templates/debug.html?v=201208',
+        templateUrl: 'templates/debug.html?v=210326',
         controller: 'DebugController'
     })
     .otherwise({

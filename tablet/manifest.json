@@ -6,8 +6,8 @@
         "sizes": "any",
         "type": "image/svg+xml"
     }],
-    "start_url": "index.html",
-    "display": "standalone",
+    "start_url": "./",
+    "display": "fullscreen",
     "orientation": "landscape"
 }
 
