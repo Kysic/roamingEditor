@@ -26,12 +26,12 @@ try {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VINCI - Calendrier des réunions</title>
-  <link rel="stylesheet" href="material-icon.css">
   <link rel="stylesheet" href="material.teal-blue.min.css">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
   <link rel="alternate icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="alternate icon" type="image/x-icon" href="/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
   <script defer src="material.min.js" type="text/javascript"></script>
 <style>
 .mdl-layout {
@@ -87,11 +87,12 @@ try {
 }
 </style>
 <script type="text/javascript">
-function post(path, params, method='post') {
+function post(path, params) {
+  method = method || 'post';
   const form = document.createElement('form');
   form.method = method;
   form.action = path;
-  for (const key in params) {
+  for (let key in params) {
     if (params.hasOwnProperty(key)) {
       const hiddenField = document.createElement('input');
       hiddenField.type = 'hidden';
