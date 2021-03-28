@@ -1,19 +1,19 @@
 
-const CACHE_NAME = "V210326";
+const CACHE_NAME = "V210328-4";
 
 const STATIC_CACHE_URLS = [
   "./",
-  './js/angular.min.js?v=210326',
-  './js/angular-route.min.js?v=210326',
-  './js/angular-cookies.min.js?v=210326',
-  './js/roamingEditor.js?v=210326',
-  './templates/roamingsList.html?v=210326',
-  './templates/roamingEditor.html?v=210326',
-  './templates/interventionEditor.html?v=210326',
-  './templates/donations.html?v=210326',
-  './templates/logistic.html?v=210326',
-  './templates/debug.html?v=210326',
-  './css/main.css?v=210326',
+  './js/angular.min.js?v=210328-4',
+  './js/angular-route.min.js?v=210328-4',
+  './js/angular-cookies.min.js?v=210328-4',
+  './js/roamingEditor.js?v=210328-4',
+  './templates/roamingsList.html?v=210328-4',
+  './templates/roamingEditor.html?v=210328-4',
+  './templates/interventionEditor.html?v=210328-4',
+  './templates/donations.html?v=210328-4',
+  './templates/logistic.html?v=210328-4',
+  './templates/debug.html?v=210328-4',
+  './css/main.css?v=210328-4',
 ];
 
 self.addEventListener("install", event => {

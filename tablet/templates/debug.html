@@ -5,7 +5,8 @@
   <input type="text" ng-model="apiToken" style="width: 350px" />
   <button ng-click="updateApiCreds()">Modifier les identifiants de l'API</button>
   <hr/>
-  <button ng-click="roamingsJSON='{}'">Réinitialiser</button>
+  <button ng-click="reinit()">Réinitialiser</button>
+  <button ng-click="loadRemote()">Réinitialiser à partir des CR distants</button>
   <button ng-click="updateRoamings()">Sauvegarder</button><br/>
   <textarea ng-model="roamingsJSON" style="width: 700px; height: 650px"></textarea>
 </div>

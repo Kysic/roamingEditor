@@ -10,27 +10,27 @@ var roamingDtoVersion = 3;
 
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
-        templateUrl: 'templates/roamingsList.html?v=210326',
+        templateUrl: 'templates/roamingsList.html?v=210328-4',
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v=210326',
+        templateUrl: 'templates/roamingEditor.html?v=210328-4',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
-        templateUrl: 'templates/interventionEditor.html?v=210326',
+        templateUrl: 'templates/interventionEditor.html?v=210328-4',
         controller: 'InterventionController'
     })
     .when('/donations/:roamingId?', {
-        templateUrl: 'templates/donations.html?v=210326',
+        templateUrl: 'templates/donations.html?v=210328-4',
         controller: 'DonationsController'
     })
     .when('/logistic/:roamingId?', {
-        templateUrl: 'templates/logistic.html?v=210326',
+        templateUrl: 'templates/logistic.html?v=210328-4',
         controller: 'LogisticController'
     })
     .when('/debug', {
-        templateUrl: 'templates/debug.html?v=210326',
+        templateUrl: 'templates/debug.html?v=210328-4',
         controller: 'DebugController'
     })
     .otherwise({
@@ -166,6 +166,7 @@ roamingEditor.factory('roamingService', function ($rootScope, $filter, $http, $c
                 updateSynchroStatus(response.config.roamingDate, response.config.roamingVersion, 'FAILED');
             }
         }, function (response) {
+            console.log('Http error', response);
             updateSynchroStatus(response.config.roamingDate, response.config.roamingVersion, 'FAILED');
         });
     }
@@ -431,6 +432,7 @@ roamingEditor.controller('RoamingController',
     }
 
     function getReports(forceRefresh) {
+        $scope.errorRetrievingReports = false;
         if (!isEditable()) {
             return;
         }
@@ -463,6 +465,16 @@ roamingEditor.controller('RoamingController',
                     }
                 }
                 $scope.updateRoaming();
+            } else {
+                $scope.errorRetrievingReports = true;
+                console.log('server error retrieving reports', response.data.errorMsg);
+            }
+        }, function (httpError) {
+            if (httpError.status == 404) {
+                console.log('No report found');
+            } else {
+                $scope.errorRetrievingReports = true;
+                console.log('http error retrieving reports', httpError);
             }
         });
     }
@@ -880,7 +892,7 @@ roamingEditor.controller('LogisticController', function LogisticController($scop
 
 });
 
-roamingEditor.controller('DebugController', function DebugController($scope, $cookies, $filter, $location, roamingService) {
+roamingEditor.controller('DebugController', function DebugController($scope, $cookies, $http, $filter, $location, roamingService) {
 
     loadCurrentConf();
 
@@ -900,15 +912,39 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
         loadCurrentConf();
     }
 
+    $scope.reinit = function() {
+        $scope.roamingsJSON = '{}';
+    }
+
     $scope.updateRoamings = function () {
         var roamings = JSON.parse($scope.roamingsJSON);
         roamingService.deleteAllRoamings();
-        for (var roamingDate in roamings) {
-            var roamingJson = JSON.stringify(roamings[roamingDate]);
-            localStorage.setItem('roaming_'+roamingDate, roamingJson);
+        for (var roamingId in roamings) {
+            var roamingDate = roamings[roamingId].date;
+            if (roamingDate) {
+                var roamingJson = JSON.stringify(roamings[roamingId]);
+                localStorage.setItem('roaming_'+roamingDate, roamingJson);
+            }
         }
         roamingService.loadLocalStorage();
         loadCurrentConf();
+    }
+
+    $scope.loadRemote = function () {
+        var from = new Date(new Date().getTime() - roamingHistoryNbDays * 24 * 60 * 60 * 1000);
+        var from = $filter('date')(from, 'yyyy-MM-dd');
+        var to = $filter('date')(new Date(), 'yyyy-MM-dd');
+        $http.get(
+            roamingApiEndPoint + '/getRoamings.php?from=' + from + '&to=' + to
+        ).then(function (response) {
+            if (response.data.status == 'success') {
+                $scope.roamingsJSON = JSON.stringify(response.data.roamings);
+            } else {
+                console.log('server error retrieving roamings', response.data.errorMsg);
+            }
+        }, function (error) {
+            console.log('http error retrieving roamings', error);
+        });
     }
 
     function loadCurrentConf() {

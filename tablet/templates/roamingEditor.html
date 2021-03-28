@@ -70,6 +70,7 @@
   <br/>
   <button ng-click="addIntervention()" ng-show="roaming.interventions.length > 0 &amp;&amp; isEditable()">Ajouter une intervention</button>
   <br/><br/>
+  <div ng-if="errorRetrievingReports" class="statusFailed">Echec de la récupération des signalements du 115</div>
   <button ng-click="getReports(true)" ng-show="isEditable()">Récupérer les signalements 115</button>
   <br/><br/>
   <button ng-click="goMap()">Voir les interventions sur une carte</button>
