@@ -168,12 +168,16 @@ class Stats {
         $total = array_reduce($roamingsStats, function ($a, $b) {
                 $c = array();
                 foreach (array_keys($a + $b) as $key) {
-                    $c[$key] = @$a[$key] + @$b[$key];
+                    $c[$key] = $this->toInt(@$a[$key]) + $this->toInt(@$b[$key]);
                 }
                 return $c;
             }, array());
         $total['date'] = 'total';
         return $total;
+    }
+
+    private function toInt($val, $default = 0) {
+        return is_numeric($val) ? intval($val) : $default;
     }
 }
 
