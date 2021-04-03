@@ -16,6 +16,15 @@ const STATIC_CACHE_URLS = [
   './css/main.css?v=210328-4',
 ];
 
+function cache(request, response) {
+  if (request.url.includes("/api/") || response.type === "error" || response.type === "opaque") {
+    return Promise.resolve(); // do not put in cache network errors or API calls
+  }
+  return caches
+    .open(CACHE_NAME)
+    .then(cache => cache.put(request, response.clone()));
+}
+
 self.addEventListener("install", event => {
   console.log("Service Worker installing...");
   // Activate new service worker even if previous one is still linked to clients
@@ -33,6 +42,11 @@ self.addEventListener("fetch", event => {
     caches
       .match(event.request) // On vérifie si la requête a déjà été mise en cache
       .then(cached => cached || fetch(event.request)) // sinon on requête le réseau
+      .then(
+        response =>
+          cache(event.request, response) // on met à jour le cache
+            .then(() => response) // et on résout la promesse avec l'objet Response
+      )
   );
 });
 
