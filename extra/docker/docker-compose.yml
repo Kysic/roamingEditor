@@ -1,26 +1,43 @@
-phpsite:
-  build: phpsite
-  ports :
-   - "8080:80"
-  volumes:
-   - ../../:/var/www/html/
-  links:
-   - database
-phpmyadmin:
-   image: corbinu/docker-phpmyadmin
-   ports :
-    - "8082:80"
-   environment:
-    - MYSQL_USERNAME=vinciplanning
-    - MYSQL_PASSWORD=03Wtrx7j5Ztn
-   links:
-    - database:mysql
-database:
-  image: mysql:5.5
-  ports:
-   - "3306:3306"
-  environment:
-     - MYSQL_ROOT_PASSWORD=WSpPDr8ft8Ql
-     - MYSQL_DATABASE=pl12350-freeh_vinciplanning
-     - MYSQL_USER=vinciplanning
-     - MYSQL_PASSWORD=03Wtrx7j5Ztn
+version: '3'
+
+services:
+
+  database:
+    container_name: vinci_db
+    image: mariadb:10.5
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=WSpPDr8ft8Ql
+      - MYSQL_DATABASE=vinciplanning
+      - MYSQL_USER=vinciplanning
+      - MYSQL_PASSWORD=03Wtrx7j5Ztn
+    volumes:
+      - db:/var/lib/mysql
+
+  phpsite:
+    depends_on:
+      - database
+    container_name: vinci_php
+    build: phpsite
+    ports :
+     - "8080:80"
+    volumes:
+     - ../../:/var/www/html/
+
+  phpmyadmin:
+    depends_on:
+      - database
+    container_name: vinci_phpmyadmin
+    image: phpmyadmin:5.1
+    ports :
+      - "8082:80"
+    environment:
+      - PMA_HOST=database
+      - MYSQL_USERNAME=vinciplanning
+      - MYSQL_PASSWORD=03Wtrx7j5Ztn
+
+volumes:
+  db:
+    name: vinci_db
+

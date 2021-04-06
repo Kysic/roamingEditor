@@ -2,8 +2,8 @@
 
 # SQL Server Configuration
 define('SQL_TYPE' , 'mysql');
-define('SQL_SERVER', 'docker_database_1');
-define('SQL_DATABASE', 'pl12350-freeh_vinciplanning');
+define('SQL_SERVER', 'database');
+define('SQL_DATABASE', 'vinciplanning');
 define('SQL_USER', 'vinciplanning');
 define('SQL_PASSWORD', '03Wtrx7j5Ztn');
 
