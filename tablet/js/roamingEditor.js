@@ -10,27 +10,27 @@ var roamingDtoVersion = 3;
 
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
-        templateUrl: 'templates/roamingsList.html?v=210328-4',
+        templateUrl: 'templates/roamingsList.html?v=210422-2',
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v=210328-4',
+        templateUrl: 'templates/roamingEditor.html?v=210422-2',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
-        templateUrl: 'templates/interventionEditor.html?v=210328-4',
+        templateUrl: 'templates/interventionEditor.html?v=210422-2',
         controller: 'InterventionController'
     })
     .when('/donations/:roamingId?', {
-        templateUrl: 'templates/donations.html?v=210328-4',
+        templateUrl: 'templates/donations.html?v=210422-2',
         controller: 'DonationsController'
     })
     .when('/logistic/:roamingId?', {
-        templateUrl: 'templates/logistic.html?v=210328-4',
+        templateUrl: 'templates/logistic.html?v=210422-2',
         controller: 'LogisticController'
     })
     .when('/debug', {
-        templateUrl: 'templates/debug.html?v=210328-4',
+        templateUrl: 'templates/debug.html?v=210422-2',
         controller: 'DebugController'
     })
     .otherwise({
@@ -335,8 +335,8 @@ roamingEditor.controller('RoamingListController', function RoamingListController
 });
 
 roamingEditor.controller('RoamingController',
-  function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, $window, roamingService,
-                             mapService, reportsService) {
+  function RoamingController($scope, $routeParams, $location, $timeout, $http, $interval, $window, $filter,
+                             roamingService, mapService, reportsService) {
 
     $scope.synchroStatus;
     $scope.roaming;
@@ -433,6 +433,7 @@ roamingEditor.controller('RoamingController',
 
     function getReports(forceRefresh) {
         $scope.errorRetrievingReports = false;
+        $scope.retrieveReportsMsg = '';
         if (!isEditable()) {
             return;
         }
@@ -465,12 +466,14 @@ roamingEditor.controller('RoamingController',
                     }
                 }
                 $scope.updateRoaming();
+                $scope.retrieveReportsMsg = 'Récupération des signalements OK ('+$filter('date')(new Date(), 'HH:mm')+')';
             } else {
                 $scope.errorRetrievingReports = true;
                 console.log('server error retrieving reports', response.data.errorMsg);
             }
         }, function (httpError) {
             if (httpError.status == 404) {
+                $scope.retrieveReportsMsg = 'Aucun signalement reçu ('+$filter('date')(new Date(), 'HH:mm')+')';
                 console.log('No report found');
             } else {
                 $scope.errorRetrievingReports = true;
