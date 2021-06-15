@@ -1,19 +1,20 @@
 
-const CACHE_NAME = "V210422-2";
+const CACHE_NAME = "V210615-3";
 
 const STATIC_CACHE_URLS = [
   "./",
-  './js/angular.min.js?v=210422-2',
-  './js/angular-route.min.js?v=210422-2',
-  './js/angular-cookies.min.js?v=210422-2',
-  './js/roamingEditor.js?v=210422-2',
-  './templates/roamingsList.html?v=210422-2',
-  './templates/roamingEditor.html?v=210422-2',
-  './templates/interventionEditor.html?v=210422-2',
-  './templates/donations.html?v=210422-2',
-  './templates/logistic.html?v=210422-2',
-  './templates/debug.html?v=210422-2',
-  './css/main.css?v=210422-2',
+  './manifest.json?v=210615-3',
+  './js/angular.min.js?v=210615-3',
+  './js/angular-route.min.js?v=210615-3',
+  './js/angular-cookies.min.js?v=210615-3',
+  './js/roamingEditor.js?v=210615-3',
+  './templates/roamingsList.html?v=210615-3',
+  './templates/roamingEditor.html?v=210615-3',
+  './templates/interventionEditor.html?v=210615-3',
+  './templates/donations.html?v=210615-3',
+  './templates/logistic.html?v=210615-3',
+  './templates/debug.html?v=210615-3',
+  './css/main.css?v=210615-3',
 ];
 
 function cache(request, response) {

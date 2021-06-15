@@ -10,27 +10,27 @@ var roamingDtoVersion = 3;
 
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
-        templateUrl: 'templates/roamingsList.html?v=210422-2',
+        templateUrl: 'templates/roamingsList.html?v=210615-3',
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v=210422-2',
+        templateUrl: 'templates/roamingEditor.html?v=210615-3',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
-        templateUrl: 'templates/interventionEditor.html?v=210422-2',
+        templateUrl: 'templates/interventionEditor.html?v=210615-3',
         controller: 'InterventionController'
     })
     .when('/donations/:roamingId?', {
-        templateUrl: 'templates/donations.html?v=210422-2',
+        templateUrl: 'templates/donations.html?v=210615-3',
         controller: 'DonationsController'
     })
     .when('/logistic/:roamingId?', {
-        templateUrl: 'templates/logistic.html?v=210422-2',
+        templateUrl: 'templates/logistic.html?v=210615-3',
         controller: 'LogisticController'
     })
     .when('/debug', {
-        templateUrl: 'templates/debug.html?v=210422-2',
+        templateUrl: 'templates/debug.html?v=210615-3',
         controller: 'DebugController'
     })
     .otherwise({
@@ -941,6 +941,9 @@ roamingEditor.controller('DebugController', function DebugController($scope, $co
             roamingApiEndPoint + '/getRoamings.php?from=' + from + '&to=' + to
         ).then(function (response) {
             if (response.data.status == 'success') {
+                for (var roamingId in response.data.roamings) {
+                    response.data.roamings[roamingId].synchroStatus = 'SYNCHRONIZED';
+                }
                 $scope.roamingsJSON = JSON.stringify(response.data.roamings);
             } else {
                 console.log('server error retrieving roamings', response.data.errorMsg);
