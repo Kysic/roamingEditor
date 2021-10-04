@@ -7,4 +7,5 @@ INSERT INTO `it_users` (`userId`, `email`, `username`, `lastname`, `firstname`, 
 (13, 'aminaTrump@live.fr', 'Amina T', 'TRUMP', 'Amina', 'F', 'admin', 0x6f646d777cd077ab5f1aae24ad10216a, 0x720efdd631e252498f1adf49f7c5fcee48b6b707f673760980ee5df1ffab9207, NULL, '2016-11-01 10:55:46'),
 (14, 'anaele781@orange.fr', 'Anaële C', 'CHIRAC', 'Anaële', 'F', 'night_watcher', 0x92145f8aa0f33461df2789ab70c2d7d6, 0xd4f45f24165464187a83b10a860296d9a29d456e36a092d12ba1868233db4574, NULL, '2016-11-01 22:21:30'),
 (15, 'former.user@example.com', 'User F', 'FORMER', 'User', 'F', 'former', 0xf2be03a762bb709fe4b0a014221acbc3, 0xdd1e0c7ba1c87f9807cd6884b9b8c4a99cefa89c7e345632cd4410219d610f3b, NULL, '2016-11-01 22:21:30'),
-(16, 'jeanot@gmail.com', 'Jean D', 'DUPONT', 'Jean', 'M', 'member', 0x92145f8aa0f33461df2789ab70c2d7d6, 0xd4f45f24165464187a83b10a860296d9a29d456e36a092d12ba1868233db4574, NULL, '2019-11-01 22:21:30');
+(16, 'jeanot@gmail.com', 'Jean D', 'DUPONT', 'Jean', 'M', 'member', 0x92145f8aa0f33461df2789ab70c2d7d6, 0xd4f45f24165464187a83b10a860296d9a29d456e36a092d12ba1868233db4574, NULL, '2019-11-01 22:21:30'),
+(17, 'claudine.FORT-1978@fort.com', 'Claudine F', 'FORT', 'Claudine', 'F', 'external', 0x4c9dd5b6bd5cbc7b16a8f256b6671ec6, 0x2f68bee3983239740548b760db3b4de9a30342112726effdc0149f91f4a84c06, NULL, '2019-11-01 22:21:30');

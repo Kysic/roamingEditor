@@ -793,6 +793,7 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
         'former': 'ancien',
         'guest': 'invité',
         'member': 'membre',
+        'external': 'externe',
         'night_watcher': 'maraudeur',
         'tutor': 'tuteur',
         'board': 'bureau',
@@ -855,19 +856,19 @@ roamingPortal.controller('UsersController', function UsersController($scope, $ht
             var user = $scope.users[i];
             var member = $scope.members[user.email.toLowerCase()];
             if (member === undefined) {
-                user.rightRole = user.role == 'appli' || user.role == 'former' || user.role == 'guest';
+                user.rightRole = ['appli', 'external', 'former', 'guest'].includes(user.role);
             } else {
                 user.phoneNumber = member.phoneNumber;
                 user.address = member.address;
                 user.birthday = member.birthDate;
                 if (member.isBoard) {
-                    user.rightRole = user.role == 'board' || user.role == 'admin' || user.role == 'root';
-                }else if (member.isTutor) {
-                    user.rightRole = user.role == 'tutor' || user.role == 'admin' || user.role == 'root';
+                    user.rightRole = ['board', 'admin', 'root'].includes(user.role);
+                } else if (member.isTutor) {
+                    user.rightRole = ['tutor', 'admin', 'root'].includes(user.role);
                 } else if (member.doRoaming) {
-                    user.rightRole = user.role == 'night_watcher' || user.role == 'admin' || user.role == 'root';
+                    user.rightRole = ['night_watcher', 'admin', 'root'].includes(user.role);
                 } else {
-                    user.rightRole = user.role == 'member' || user.role == 'admin' || user.role == 'root';
+                    user.rightRole = ['member', 'external', 'admin', 'root'].includes(user.role);
                 }
                 user.wrongFirstname = user.firstname !== member.firstname;
                 user.wrongLastname = user.lastname !== member.lastname;

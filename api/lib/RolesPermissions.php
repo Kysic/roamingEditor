@@ -31,6 +31,7 @@ define('APPLI', 'appli');
 define('FORMER', 'former');
 define('GUEST', 'guest');
 define('MEMBER', 'member');
+define('EXTERNAL', 'external');
 define('NIGHT_WATCHER', 'night_watcher');
 define('TUTOR', 'tutor');
 define('BOARD', 'board');
@@ -56,7 +57,8 @@ class RolesPermissions {
         $this->former = array( P_LOG_OUT, P_CHANGE_PASSWORD );
         $this->guest = array_merge(array( P_SEE_PLANNING, P_SEE_NAMES ), $this->former);
         $this->member = array_merge(array( P_SEE_USERS_LIST, P_SEE_MEETING, P_EDIT_PLANNING ), $this->guest);
-        $this->nightWatcher = array_merge(array( P_ENROL, P_SEE_LAST_REPORT ), $this->member);
+        $this->external = array_merge(array( P_SEE_LAST_REPORT ), $this->member);
+        $this->nightWatcher = array_merge(array( P_ENROL ), $this->external);
         $this->tutor = array_merge(array( P_EDIT_REPORT, P_ENROL_AS_TUTOR, P_GEN_STATS ), $this->nightWatcher);
         $this->board = array_merge(array( P_EDIT_MEETING ), $this->tutor);
         $this->admin = array_merge(array( P_UPLOAD_REPORT, P_DELETE_REPORT, P_SEE_REPORT_PHONE, P_CANCEL_ROAMING ), $this->board);
@@ -70,6 +72,7 @@ class RolesPermissions {
             case BOARD: return $this->board;
             case TUTOR: return $this->tutor;
             case NIGHT_WATCHER: return $this->nightWatcher;
+            case EXTERNAL: return $this->external;
             case MEMBER: return $this->member;
             case APPLI: return $this->appli;
             case GUEST: return $this->guest;

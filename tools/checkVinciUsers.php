@@ -21,7 +21,7 @@ function checkConsistency($users, $members) {
                     return 'role '.$user->role.' of '.$email.' is not compatible with "doRoaming"';
                 }
             } else {
-                if ( !in_array( $user->role, array(MEMBER, BOARD, ADMIN, ROOT) ) ) {
+                if ( !in_array( $user->role, array(MEMBER, EXTERNAL, BOARD, ADMIN, ROOT) ) ) {
                     return 'role '.$user->role.' of '.$email.' is not compatible with presence in second tab';
                 }
             }
@@ -35,7 +35,7 @@ function checkConsistency($users, $members) {
                 return 'gender of '.$email.' '.$user->gender.' != '.$member['gender'];
             }
         } else {
-            if ( !in_array( $user->role, array(APPLI, FORMER, GUEST) ) ) {
+            if ( !in_array( $user->role, array(APPLI, EXTERNAL, FORMER, GUEST) ) ) {
                 return 'presence of '.$email;
             }
         }

@@ -67,6 +67,12 @@ login($browser, 'soso21@yahoo.fr', 'Soso@215');
 assertEquals(@$browser->cookies['vinciPersistentLogin'], '');
 assertIsMember(getSessionUser($browser));
 
+printTestCase('Login as external should succeed');
+$browser = new Browser();
+login($browser, 'claudine.FORT-1978@fort.com', 'claudine.FORT-1978@fort.com');
+assertEquals(@$browser->cookies['vinciPersistentLogin'], '');
+assertIsClaudine(getSessionUser($browser));
+
 printTestCase('Login as tutor should succeed');
 $browser = new Browser();
 login($browser, 'cerise.48@gmail.com', 'cerise.48@gmail.com');
@@ -291,6 +297,7 @@ assertEquals($usernames, array(
     'Anaële C',
     'Bernard D',
     'Cerise M',
+    'Claudine F',
     'Jean D',
     'Laure M',
     'Paul P',
@@ -304,7 +311,7 @@ assertEquals($usernames, array(
 ));
 
 printTestCase('Set user role as root should succeed');
-setUserRole($browserRoot, 17, 'tutor', $sessionToken = NULL);
+setUserRole($browserRoot, 18, 'tutor', $sessionToken = NULL);
 $browser = new Browser();
 login($browser, 'berni@gmail.com', 'Berni-Password');
 assertEquals(getSessionUser($browser)->role, 'tutor');
@@ -464,6 +471,13 @@ function assertIsSophie($user) {
     assertEquals($user->username, 'Sophie D');
     assertIsMember($user);
 }
+function assertIsClaudine($user) {
+    assertEquals($user->email, 'claudine.FORT-1978@fort.com');
+    assertEquals($user->firstname, 'Claudine');
+    assertEquals($user->lastname, 'FORT');
+    assertEquals($user->username, 'Claudine F');
+    assertIsExternal($user);
+}
 
 function assertIsFormer($user) {
     assertEquals($user->role, 'former');
@@ -475,6 +489,19 @@ function assertIsFormer($user) {
 function assertIsMember($user) {
     assertEquals($user->role, 'member');
     assertEquals($user->permissions, array(
+                                        'P_SEE_USERS_LIST',
+                                        'P_SEE_MEETING',
+                                        'P_EDIT_PLANNING',
+                                        'P_SEE_PLANNING',
+                                        'P_SEE_NAMES',
+                                        'P_LOG_OUT',
+                                        'P_CHANGE_PASSWORD'
+                                     ));
+}
+function assertIsExternal($user) {
+    assertEquals($user->role, 'external');
+    assertEquals($user->permissions, array(
+                                        'P_SEE_LAST_REPORT',
                                         'P_SEE_USERS_LIST',
                                         'P_SEE_MEETING',
                                         'P_EDIT_PLANNING',
