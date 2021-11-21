@@ -3,7 +3,7 @@
 require_once('/var/www/vinci/api/lib/Container.php');
 
 /**
- * VINCI auth plugin
+ * AMICI auth plugin
  * Should be in <dokuwiki>/lib/plugins/vinciSSO/auth.php
  * <dokuwiki>/conf/local.php should contains:
  *  $conf['authtype'] = 'vinciSSO';

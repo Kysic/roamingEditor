@@ -25,7 +25,7 @@ try {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VINCI - Calendrier des réunions</title>
+  <title>AMICI - Calendrier des réunions</title>
   <link rel="stylesheet" href="material.teal-blue.min.css">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
@@ -115,7 +115,7 @@ function logout() {
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <span class="mdl-layout-title mdl-layout--small-screen-only">Réunions</span>
-      <span class="mdl-layout-title mdl-layout--large-screen-only">Calendrier des réunions et évènements du VINCI</span>
+      <span class="mdl-layout-title mdl-layout--large-screen-only">Calendrier des réunions et évènements d'AMICI</span>
       <div class="mdl-layout-spacer"></div>
       <div id="user-menu-button">
         <span><?php echo $session->getUser()->username;?></span>
@@ -139,7 +139,7 @@ function logout() {
       <a class="mdl-navigation__link" href="/dokuwiki/"><i class="material-icons">school</i> Base connaissances</a>
       <a class="mdl-navigation__link" href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a>
       <a class="mdl-navigation__link" href="https://samu-social-grenoble.fr"><i class="material-icons">web</i> Site Web</a>
-      <a class="mdl-navigation__link" href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">face</i> Page Facebook</a>
+      <a class="mdl-navigation__link" href="https://www.facebook.com/AMICISamuSocialGrenoble"><i class="material-icons">face</i> Page Facebook</a>
       <a class="mdl-navigation__link" href="/contactForm.php"><i class="material-icons">live_help</i> Aide</a>
     </nav>
   </div>

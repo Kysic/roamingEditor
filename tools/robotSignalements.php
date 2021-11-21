@@ -23,7 +23,7 @@ try {
   );
 
 } catch (Exception $e) {
-  $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected on signalements reception',
+  $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Error detected on signalements reception',
     'An error has occured while parsing the signalement file:'."\n".print_r($e, true)
   );
   throw $e;
@@ -36,7 +36,7 @@ function getAcknowledgeBody($reports) {
   return <<<EOD
 Bonsoir,
 
-Ce message est envoyé automatiquement pour confirmer que les signalements ont été traités par notre automate et sont maintenant disponibles pour être récupérés depuis l'application utilisée par l'association VINCI pour gérer ses comptes rendus de maraude.
+Ce message est envoyé automatiquement pour confirmer que les signalements ont été traités par notre automate et sont maintenant disponibles pour être récupérés depuis l'application utilisée par AMICI pour gérer ses comptes rendus de maraude.
 
 Si l'équipe de ce soir ne vous contacte pas en début de maraude ou que vous transmettez de nouveaux signalements au cours de la soirée, n'hésitez pas à joindre l'équipe de maraude par téléphone pour s'assurer qu'elle a bien vu qu'il y avait de nouveaux signalements et pu les récupérer.
 

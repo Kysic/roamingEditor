@@ -25,7 +25,7 @@ try {
     $container->getReportFiles()->deleteOldReports();
 
 } catch (Exception $e) {
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while creating the roamingReport',
+    $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Error detected while creating the roamingReport',
         'An error has occured while generating today\'s report: '."\n".print_r($e, true)
     );
     throw $e;

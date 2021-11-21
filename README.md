@@ -1,5 +1,5 @@
 # Roaming Editor
-## Editeur de maraude pour tablette pour le Samu Social de Grenoble (VINCI).
+## Editeur de maraude pour tablette pour le Samu Social de Grenoble (AMICI).
 
 ### Presentation
 - Le projet est composé en trois parties :

@@ -17,14 +17,14 @@ try {
         foreach ($emails as $email) {
             $container->getMail()->sendMail(
                 $email,
-                '[VINCI] Alerte, maraude du '.$today->format('d/m/Y').' incomplète',
+                '[AMICI] Alerte, maraude du '.$today->format('d/m/Y').' incomplète',
                 'Il manque '.$missing.' pour la maraude du '.$today->format('d/m/Y')
             );
         }
     }
 
 } catch (Exception $e) {
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while checking roaming status',
+    $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Error detected while checking roaming status',
         'An error has occured: '."\n".print_r($e, true)
     );
     throw $e;

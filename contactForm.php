@@ -7,7 +7,7 @@ if (!empty($email) && !empty($message)) {
   try {
     require_once('api/lib/Container.php');
     $container = new Container();
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Demande d\'assistance',
+    $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Demande d\'assistance',
       'Emetteur: '.$email."\r\n".
       'IP: '.$_SERVER['REMOTE_ADDR']."\r\n".
       'Navigateur: '.$_SERVER['HTTP_USER_AGENT']."\r\n".
@@ -31,7 +31,7 @@ if (!empty($email) && !empty($message)) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VINCI - Demande d'assistance</title>
+  <title>AMICI - Demande d'assistance</title>
   <link rel="stylesheet" href="material.teal-blue.min.css">
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
   <link rel="alternate icon" type="image/png" sizes="512x512" href="/favicon.png">
@@ -111,7 +111,7 @@ if (!empty($email) && !empty($message)) {
       <a class="mdl-navigation__link" href="/dokuwiki/"><i class="material-icons">school</i> Base connaissances</a>
       <a class="mdl-navigation__link" href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a>
       <a class="mdl-navigation__link" href="https://samu-social-grenoble.fr"><i class="material-icons">web</i> Site Web</a>
-      <a class="mdl-navigation__link" href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">face</i> Page Facebook</a>
+      <a class="mdl-navigation__link" href="https://www.facebook.com/AMICISamuSocialGrenoble"><i class="material-icons">face</i> Page Facebook</a>
       <a class="mdl-navigation__link" href="/contactForm.php"><i class="material-icons">live_help</i> Aide</a>
     </nav>
   </div>

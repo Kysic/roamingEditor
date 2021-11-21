@@ -56,14 +56,14 @@ try {
     $error = checkConsistency($users, $members);
     if ($error) {
         // echo 'Inconstency detected : '.$error."\n";
-        $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Some VINCI user are not in sync with official list',
+        $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Some AMICI user are not in sync with official list',
             'Some user doesn\'t have correct attributes :'."\n".$error
         );
     }
 
 } catch (Exception $e) {
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while checking users',
-        'An error has occured while checking the VINCI users: '."\n".print_r($e, true)
+    $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Error detected while checking users',
+        'An error has occured while checking the AMICI users: '."\n".print_r($e, true)
     );
     throw $e;
 }

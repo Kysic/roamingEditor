@@ -179,14 +179,14 @@ function tryToSetInCell(sheet, range, value) {
 function sendLog() {
   if (Logger.getLog()) {
     var email = Session.getActiveUser().getEmail();
-    var subject = '[VINCI] Error while generating the CR';
+    var subject = '[AMICI] Error while generating the CR';
     var body = Logger.getLog();
     MailApp.sendEmail(email, subject, body);
   }
 }
 
 function dev_findFolderId() {
-  Logger.log(DriveApp.getFoldersByName("CR VINCI").next().getId());
+  Logger.log(DriveApp.getFoldersByName("CR AMICI").next().getId());
 }
 
 function testGenerationCR_V2() {

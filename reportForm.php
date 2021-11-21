@@ -37,7 +37,7 @@ try {
             $container = new Container();
             $emails = array(SECRETARIAT_EMAIL, PRESIDENT_REPORTING_EMAIL, $session->getUser()->email);
             foreach ($emails as $email) {
-                $container->getMail()->sendMail($email, '[VINCI] Fiche de signalement '.$names,
+                $container->getMail()->sendMail($email, '[AMICI] Fiche de signalement '.$names,
                   'Signalé par '.$author.' identifié en tant que '.$session->getUser()->firstname.' '.$session->getUser()->lastname."\r\n\r\n".
                   '         Nom des personnes : '.$names."\r\n".
                   '      Date de la rencontre : '.$date."\r\n".

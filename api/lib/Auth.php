@@ -35,7 +35,7 @@ class Auth {
             $role = $contacts[$email]['doRoaming'] ? NIGHT_WATCHER : MEMBER;
         } else {
             $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
-            throw new ForbiddenException('Cette adresse mail n\'est pas repertoriée dans la liste des contacts du VINCI.');
+            throw new ForbiddenException('Cette adresse mail n\'est pas repertoriée dans la liste des contacts d\'AMICI.');
         }
         $usersStorage = $this->lazyUSersStorage->get();
         $user = $usersStorage->getUserWithEmail($email);

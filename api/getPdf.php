@@ -33,7 +33,7 @@ try {
     }
 
     header('Content-Type: application/pdf');
-    header('Content-Disposition: inline; filename="VINCI_CR_'.$roamingDate.'.pdf"');
+    header('Content-Disposition: inline; filename="AMICI_CR_'.$roamingDate.'.pdf"');
     echo file_get_contents($printUrl);
 
 } catch (Exception $e) {

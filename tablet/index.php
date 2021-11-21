@@ -26,7 +26,7 @@ $session = $container->getSession();
   <script src="js/angular-cookies.min.js?v=210615-3"></script>
   <script src="js/roamingEditor.js?v=210615-3"></script>
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=GOOGLE_API_KEY&ver=3.exp"></script>
-  <title>VINCI - Edition compte rendu</title>
+  <title>AMICI - Edition compte rendu</title>
 </head>
 <body>
   <script>

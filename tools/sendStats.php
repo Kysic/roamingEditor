@@ -39,7 +39,7 @@ try {
     foreach ($emails as $email) {
         $container->getMail()->sendMail(
             $email,
-            '[VINCI] Statistiques du '.$fromDate->format('d-m-Y').' au '.$toDate->format('d-m-Y'),
+            '[AMICI] Statistiques du '.$fromDate->format('d-m-Y').' au '.$toDate->format('d-m-Y'),
             $body,
             false,
             true
@@ -47,7 +47,7 @@ try {
     }
 
 } catch (Exception $e) {
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[VINCI] Error detected while sending stats',
+    $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Error detected while sending stats',
         'An error has occured while generating monthly stats : '."\n".print_r($e, true)
     );
     throw $e;

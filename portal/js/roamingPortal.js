@@ -14,13 +14,13 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
     })
     .when('/login/:email?/:referer?', {
         shortTitle: 'Connexion',
-        longTitle: 'Connexion au site du VINCI',
+        longTitle: 'Connexion au site d\'AMICI',
         templateUrl: 'templates/login.html?v=201208',
         controller: 'LoginController'
     })
     .when('/register/:email?', {
         shortTitle: 'Inscription',
-        longTitle: 'Inscription au site du VINCI',
+        longTitle: 'Inscription au site d\'AMICI',
         templateUrl: 'templates/register.html?v=201208',
         controller: 'RegisterController'
     })
@@ -42,7 +42,7 @@ roamingPortal.config(['$routeProvider', function($routeProvider) {
     })
     .when('/users', {
         shortTitle: 'Membres',
-        longTitle: 'Liste des membres du VINCI',
+        longTitle: 'Liste des membres d\'AMICI',
         templateUrl: 'templates/users.html?v=201208',
         controller: 'UsersController'
     })

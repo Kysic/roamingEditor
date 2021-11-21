@@ -24,7 +24,7 @@ try {
     $container = new Container();
     $emails = array(PRESIDENT_REPORTING_EMAIL, SECRETARIAT_EMAIL, $session->getUser()->email);
     foreach ($emails as $email) {
-        $container->getMail()->sendMail($email, '[VINCI] Probleme logistic au local', $msg);
+        $container->getMail()->sendMail($email, '[AMICI] Probleme logistic au local', $msg);
     }
 
     $json->returnResult(array('status' => 'success'));

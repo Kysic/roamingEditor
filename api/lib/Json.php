@@ -95,7 +95,7 @@ class Json {
     private function handleSecurityException($exception) {
         $this->lazyMail->get()->sendMail(
             ADMIN_EMAIL,
-            '[VINCI] Security alert',
+            '[AMICI] Security alert',
             'IP: '.$_SERVER['REMOTE_ADDR']."\r\n".
             'Navigateur: '.$_SERVER['HTTP_USER_AGENT']."\r\n".
             'Message: '.$exception->getMessage()."\r\n".

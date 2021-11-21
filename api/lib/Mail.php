@@ -7,10 +7,10 @@ require_once(ROAMING_API_DIR.'/lib/ext/class.smtp.php');
 class Mail {
 
     public function sendRegisterToken($to, $firstname, $lastname, $userId, $mailToken) {
-        $this->sendMail($to, '[VINCI] Inscription site Samu Social de Grenoble',
+        $this->sendMail($to, '[AMICI] Inscription site Samu Social de Grenoble',
                 'Bonjour '.$firstname.' '.$lastname.','."\n".
                 "\n".
-                'Vous recevez cet email en tant que membre de l\'association de Samu Social de Grenoble VINCI,'."\n".
+                'Vous recevez cet email en tant que membre de l\'association de Samu Social de Grenoble AMICI,'."\n".
                 'afin de vous donner l\'accès au site de consultation des comptes rendus de maraudes.'."\n".
                 "\n".
                 'Pour finaliser votre inscription, veuillez vous rendre à l\'adresse suivante afin de choisir votre mot de passe :'."\n".
@@ -22,10 +22,10 @@ class Mail {
     }
 
     public function sendResetPasswordToken($to, $firstname, $lastname, $userId, $mailToken) {
-        $this->sendMail($to, '[VINCI] Réinitialisation de votre mot de passe',
+        $this->sendMail($to, '[AMICI] Réinitialisation de votre mot de passe',
                 'Bonjour '.$firstname.' '.$lastname.','."\n".
                 "\n".
-                'Vous venez de demander la réinitialisation de votre mot de passe sur le site de comptes rendus de maraudes du VINCI'."\n".
+                'Vous venez de demander la réinitialisation de votre mot de passe sur le site de comptes rendus de maraudes d\'AMICI'."\n".
                 'Pour choisir votre nouveau mot de passe, veuillez vous rendre à l\'adresse suivante :'."\n".
                 $this->getPasswordURL($userId, $mailToken)."\n".
                 "\n".
@@ -95,7 +95,7 @@ class Mail {
         $mail->Username = SMTP_USER;
         $mail->Password = SMTP_PASSWORD;
 
-        $mail->setFrom($from, 'Vinci CR');
+        $mail->setFrom($from, 'AMICI CR');
         $mail->addAddress($to);
 
         $mail->Subject = $subject;

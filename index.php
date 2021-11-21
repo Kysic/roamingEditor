@@ -22,7 +22,7 @@ try {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VINCI - Accueil</title>
+  <title>AMICI - Accueil</title>
   <link rel="stylesheet" href="material.teal-blue.min.css">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
@@ -158,7 +158,7 @@ function logout() {
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
       <span class="mdl-layout-title mdl-layout--small-screen-only">Accueil</span>
-      <span class="mdl-layout-title mdl-layout--large-screen-only">Outils informatique du VINCI</span>
+      <span class="mdl-layout-title mdl-layout--large-screen-only">Outils informatique d'AMICI</span>
       <div class="mdl-layout-spacer"></div>
 <?php
 if ($username) {
@@ -190,7 +190,7 @@ if ($username) {
       <a class="mdl-navigation__link" href="/dokuwiki/"><i class="material-icons">school</i> Base connaissances</a>
       <a class="mdl-navigation__link" href="/portal/#!/users"><i class="material-icons">contacts </i> Liste des membres</a>
       <a class="mdl-navigation__link" href="https://samu-social-grenoble.fr"><i class="material-icons">web</i> Site Web</a>
-      <a class="mdl-navigation__link" href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">face</i> Page Facebook</a>
+      <a class="mdl-navigation__link" href="https://www.facebook.com/AMICISamuSocialGrenoble"><i class="material-icons">face</i> Page Facebook</a>
       <a class="mdl-navigation__link" href="/contactForm.php"><i class="material-icons">live_help</i> Aide</a>
     </nav>
   </div>
@@ -319,16 +319,16 @@ if ($username) {
 
     <div class="mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text"><a href="https://www.facebook.com/SamuSocialGrenoble"><i class="material-icons">web</i> Réseaux sociaux</a></h2>
+        <h2 class="mdl-card__title-text"><a href="https://www.facebook.com/AMICISamuSocialGrenoble"><i class="material-icons">web</i> Réseaux sociaux</a></h2>
       </div>
       <div class="mdl-card__supporting-text">
-        Pour suivre l'actualité de l'association, la source la plus à jour est généralement notre <a href="https://www.facebook.com/SamuSocialGrenoble">page Facebook</a>.<br>
+        Pour suivre l'actualité de l'association, la source la plus à jour est généralement notre <a href="https://www.facebook.com/AMICISamuSocialGrenoble">page Facebook</a>.<br>
         Pour discuter ou organiser des évènements entre membres, nous avons un <a href="https://www.facebook.com/groups/benevolesvinci">groupe privé Facebook</a>.<br>
         Pour retrouver des vidéos de reportages ou des articles sur l'association, il y a le <a href="https://www.samu-social-grenoble.fr/presse-actus/">site web</a>
         et notre <a href="https://www.youtube.com/channel/UCoLUJ4HGLVEzC7d3mS49MiQ"> chaîne youtube</a>.
       </div>
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://www.facebook.com/SamuSocialGrenoble">Facebook</a>
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://www.facebook.com/AMICISamuSocialGrenoble">Facebook</a>
         <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://samu-social-grenoble.fr">Site Web</a>
         <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://www.youtube.com/channel/UCoLUJ4HGLVEzC7d3mS49MiQ">Youtube</a>
         <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="https://twitter.com/SamuSocialVINCI">Twitter</a>

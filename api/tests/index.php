@@ -45,7 +45,7 @@ try {
     register($browser, 'someone@gmail.com');
     throw new AssertException('register should have raised an HttpStatusException');
 } catch (Exception $e) {
-    assertException($e, "Cette adresse mail n'est pas repertoriée dans la liste des contacts du VINCI.", 403);
+    assertException($e, "Cette adresse mail n'est pas repertoriée dans la liste des contacts d'AMICI.", 403);
 }
 assertIsVisitor(getSessionUser($browser));
 
