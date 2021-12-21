@@ -10,27 +10,27 @@ var roamingDtoVersion = 3;
 
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
-        templateUrl: 'templates/roamingsList.html?v=210615-3',
+        templateUrl: 'templates/roamingsList.html?v=211221-1',
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v=210615-3',
+        templateUrl: 'templates/roamingEditor.html?v=211221-1',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
-        templateUrl: 'templates/interventionEditor.html?v=210615-3',
+        templateUrl: 'templates/interventionEditor.html?v=211221-1',
         controller: 'InterventionController'
     })
     .when('/donations/:roamingId?', {
-        templateUrl: 'templates/donations.html?v=210615-3',
+        templateUrl: 'templates/donations.html?v=211221-1',
         controller: 'DonationsController'
     })
     .when('/logistic/:roamingId?', {
-        templateUrl: 'templates/logistic.html?v=210615-3',
+        templateUrl: 'templates/logistic.html?v=211221-1',
         controller: 'LogisticController'
     })
     .when('/debug', {
-        templateUrl: 'templates/debug.html?v=210615-3',
+        templateUrl: 'templates/debug.html?v=211221-1',
         controller: 'DebugController'
     })
     .otherwise({
@@ -492,17 +492,20 @@ roamingEditor.controller('RoamingController',
     }
 
     function isSameIntervention(interventionA, interventionB) {
-        return isSamePhone(interventionA.phone, interventionB.phone)
-            || (interventionA.people && interventionB.people && interventionA.people.length > 0 && interventionB.people.length > 0
-                && isSameName(interventionA.people[0], interventionB.people[0]));
+        return isSamePhone(interventionA.phone, interventionB.phone) || (
+                !interventionA.phone && !interventionB.phone
+                && !!interventionA.people && !!interventionB.people
+                && interventionA.people.length > 0 && interventionB.people.length > 0
+                && isSameName(interventionA.people[0], interventionB.people[0])
+            );
     }
 
     function isSamePhone(phoneA, phoneB) {
-        return phoneA && phoneB && phoneA.replace(/ /g, '') === phoneB.replace(/ /g, '');
+        return !!phoneA && !!phoneB && phoneA.replace(/ /g, '') === phoneB.replace(/ /g, '');
     }
 
     function isSameName(nameA, nameB) {
-        return nameA && nameB && nameA.toLowerCase() === nameB.toLowerCase();
+        return !!nameA && !!nameB && nameA.toLowerCase() === nameB.toLowerCase();
     }
 
     function reportToIntervention(report) {
