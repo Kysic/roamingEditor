@@ -75,7 +75,7 @@ class Reporting115 {
   }
 
   public function normalizePhoneNumber($phone) {
-    if (strlen($phone) == 9) {
+    if (preg_match("/^[0-9]{9}$/", $phone)) {
       // handle 601020304 => 0601020304
       $phone = '0' . $phone;
     } else if (strlen($phone) == 12 && substr($phone, -2) === 'E8' && substr($phone, 1, 1) === '.') {

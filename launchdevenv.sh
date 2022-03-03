@@ -7,5 +7,6 @@ chmod a+w api/tests/tmp
 
 docker-compose -p "vinci" -f "${SCRIPTS_DIR}/extra/docker/docker-compose.yml" up
 
-#xdg-open http://localhost:8080/
+echo "http://localhost:8080/"
 
+#xdg-open http://localhost:8080/
