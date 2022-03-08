@@ -54,6 +54,9 @@ class Reporting115 {
   public function extractFromCsvFile($csvFile) {
     $csvArray = array_map('str_getcsv', file($csvFile));
     $reports = $this->formatCsvArray($csvArray);
+    if (!$reports) {
+      throw new Exception('No reports has been extracted from report file');
+    }
     $this->reportsStorage->add($reports);
   }
 
