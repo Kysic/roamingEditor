@@ -8,13 +8,15 @@ var roamingEditor = angular.module('roamingEditor', ['ngRoute', 'ngCookies']);
 
 var roamingDtoVersion = 3;
 
+var defaultTime = '03:00';
+
 roamingEditor.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/roamingsList', {
         templateUrl: 'templates/roamingsList.html?v=211221-1',
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v=211221-1',
+        templateUrl: 'templates/roamingEditor.html?v=220410-1',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
@@ -354,6 +356,7 @@ roamingEditor.controller('RoamingController',
     $scope.logisticReport = logisticReport;
     $scope.isEditable = isEditable;
     $scope.getReports = getReports;
+    $scope.defaultTime = defaultTime;
 
     var refreshTimer;
 
@@ -510,7 +513,7 @@ roamingEditor.controller('RoamingController',
 
     function reportToIntervention(report) {
         return {
-            time: '03:00',
+            time: defaultTime,
             phone: report.telephone,
             location: report.lieu,
             people: [ report.prenom + ' ' + report.nom ],

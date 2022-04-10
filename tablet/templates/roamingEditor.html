@@ -46,7 +46,7 @@
       <th>Commentaire</th>
       <th ng-show="isEditable()">Action</th>
     </tr>
-    <tr ng-repeat="(interventionIndex, intervention) in roaming.interventions">
+    <tr ng-repeat="(interventionIndex, intervention) in roaming.interventions" ng-class="{filled: intervention.time !== defaultTime}">
       <td><ul class="roamingEditorPeopleList"><li ng-repeat="person in intervention.people track by $index">{{person}}</li></ul></td>
       <td ng-show="isEditable()">{{intervention.phone}}</td>
       <td>{{intervention.location}} <img class="mapLink" ng-click="goMapLocation(intervention)" src="img/earth.png"></td>

@@ -34,6 +34,9 @@ th {
 .statusFailed {
     color: #f00;
 }
+.filled {
+    background: #efe;
+}
 ul.roamingEditorPeopleList {
     padding: 0px;
     margin: 0px;

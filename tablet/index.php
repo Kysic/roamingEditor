@@ -14,7 +14,7 @@ $session = $container->getSession();
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
   <link rel="alternate icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="alternate icon" type="image/x-icon" href="/favicon.ico">
-  <link rel="stylesheet" href="css/main.css?v=211221-1">
+  <link rel="stylesheet" href="css/main.css?v=220410-1">
   <meta name="application-name" content="Editeur compte rendu"/>
   <meta name="msapplication-square70x70logo" content="img/appIcon-70x70.jpg"/>
   <meta name="msapplication-square150x150logo" content="img/appIcon-150x150.jpg"/>
@@ -24,7 +24,7 @@ $session = $container->getSession();
   <script src="js/angular.min.js?v=211221-1"></script>
   <script src="js/angular-route.min.js?v=211221-1"></script>
   <script src="js/angular-cookies.min.js?v=211221-1"></script>
-  <script src="js/roamingEditor.js?v=211221-1"></script>
+  <script src="js/roamingEditor.js?v=220410-1"></script>
   <script type="text/javascript" src="//maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=GOOGLE_API_KEY&ver=3.exp"></script>
   <title>AMICI - Edition compte rendu</title>
 </head>

@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "V211221-1";
+const CACHE_NAME = "V220410-1";
 
 const STATIC_CACHE_URLS = [
   "./",
@@ -7,14 +7,14 @@ const STATIC_CACHE_URLS = [
   './js/angular.min.js?v=211221-1',
   './js/angular-route.min.js?v=211221-1',
   './js/angular-cookies.min.js?v=211221-1',
-  './js/roamingEditor.js?v=211221-1',
+  './js/roamingEditor.js?v=220410-1',
   './templates/roamingsList.html?v=211221-1',
-  './templates/roamingEditor.html?v=211221-1',
+  './templates/roamingEditor.html?v=220410-1',
   './templates/interventionEditor.html?v=211221-1',
   './templates/donations.html?v=211221-1',
   './templates/logistic.html?v=211221-1',
   './templates/debug.html?v=211221-1',
-  './css/main.css?v=211221-1',
+  './css/main.css?v=220410-1',
 ];
 
 function cache(request, response) {
