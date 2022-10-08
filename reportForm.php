@@ -37,7 +37,7 @@ try {
             $container = new Container();
             $emails = array(SECRETARIAT_EMAIL, PRESIDENT_REPORTING_EMAIL, $session->getUser()->email);
             foreach ($emails as $email) {
-                $container->getMail()->sendMail($email, '[AMICI] Fiche de signalement '.$names,
+                $container->getMail()->sendMail($email, "[AMICI] Fiche d'alerte ".$names,
                   'Signalé par '.$author.' identifié en tant que '.$session->getUser()->firstname.' '.$session->getUser()->lastname."\r\n\r\n".
                   '         Nom des personnes : '.$names."\r\n".
                   '      Date de la rencontre : '.$date."\r\n".
@@ -75,7 +75,7 @@ try {
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
   <link rel="alternate icon" type="image/png" sizes="512x512" href="/favicon.png">
   <link rel="alternate icon" type="image/x-icon" href="/favicon.ico">
-<title>Faire un signalement</title>
+<title>Alerter</title>
 <style>
 body {
   text-align: center;
@@ -120,17 +120,17 @@ body {
 </style>
 </head>
 <body>
-  <h1>Formulaire de signalement</h1>
+  <h1>Transmettre une alerte</h1>
 <?php
 if ($mailSent) {
 ?>
   <p>
     <div class="success info">
-      Votre signalement a bien été envoyé, merci.
+      Votre alerte a bien été envoyé, merci.
     </div>
   </p>
   <p>
-    <a href="">Faire un autre signalement</a>
+    <a href="">Déposer une autre alerte</a>
   </p>
   <p>
     <a href="javascript:history.go(-2)">Retour</a>
@@ -140,7 +140,7 @@ if ($mailSent) {
 ?>
   <p>
     <div class="info">
-      Formulaire de signalement de personnes en difficultées à destination du secrétariat de l'association.
+      Formulaire pour envoyer une alerte à propros de personnes en difficultées au secrétariat de l'association.
     </div>
     <form class='reportForm' method='post' action='<?php echo basename(__FILE__); ?>'>
       <input id='filled' name='filled' type='hidden' value='true' />

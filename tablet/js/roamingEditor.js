@@ -16,7 +16,7 @@ roamingEditor.config(['$routeProvider', function($routeProvider) {
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v=220410-1',
+        templateUrl: 'templates/roamingEditor.html?v=221008-1',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
@@ -28,7 +28,7 @@ roamingEditor.config(['$routeProvider', function($routeProvider) {
         controller: 'DonationsController'
     })
     .when('/logistic/:roamingId?', {
-        templateUrl: 'templates/logistic.html?v=211221-1',
+        templateUrl: 'templates/logistic.html?v=221008-1',
         controller: 'LogisticController'
     })
     .when('/debug', {
