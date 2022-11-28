@@ -52,12 +52,23 @@ class Reporting115 {
   }
 
   public function extractFromCsvFile($csvFile) {
-    $csvArray = array_map('str_getcsv', file($csvFile));
+    $csvArray = $this->csvFileToArray($csvFile);
     $reports = $this->formatCsvArray($csvArray);
     if (!$reports) {
       throw new Exception('No reports has been extracted from report file');
     }
     $this->reportsStorage->add($reports);
+  }
+
+  public function csvFileToArray($csvFile) {
+    $csvArray = [];
+    if (($handle = fopen($csvFile, "r")) !== FALSE) {
+      while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        $csvArray[] = $data;
+      }
+      fclose($handle);
+    }
+    return $csvArray;
   }
 
   public function formatCsvArray($csvArray) {
