@@ -7,7 +7,7 @@ class GoogleContacts {
     public function extractContacts() {
         $contacts = array();
         $roamingMemberUrl = GOOGLE_DOC_URL . CONTACT_DOC_ID . GOOGLE_DOC_CMD_CSV_GID . CONTACT_ROAMING_SHEET_ID;
-        $contacts = $this->extractFromCsv($roamingMemberUrl, $contacts, function($data, $stack) {
+        return $this->extractFromCsv($roamingMemberUrl, $contacts, function($data, $stack) {
             $email = $this->getContactEmail($data, 5);
             if ($this->checkContactEmail($email)) {
                 $stack[$email] = array(
@@ -20,29 +20,11 @@ class GoogleContacts {
                     'registeringDate' => $this->getRegisteringDate($data, 9),
                     'isTutor' => $this->isTutor($data, 8),
                     'isBoard' => $this->isBoard($data, 7),
-                    'doRoaming' => true,
+                    'doRoaming' => $this->doRoaming($data, 10),
                 );
             }
             return $stack;
         });
-        $otherMemberUrl = GOOGLE_DOC_URL . CONTACT_DOC_ID . GOOGLE_DOC_CMD_CSV_GID . CONTACT_OTHER_SHEET_ID;
-        $contacts = $this->extractFromCsv($otherMemberUrl, $contacts, function($data, $stack) {
-            $email = $this->getContactEmail($data, 5);
-            if ($this->checkContactEmail($email)) {
-                $stack[$email] = array(
-                    'firstname' => $this->getContactFirstname($data, 2),
-                    'lastname' => $this->getContactLastname($data, 1),
-                    'phoneNumber' => $this->getPhoneNumber($data, 3),
-                    'address' => $this->getAddress($data, 6),
-                    'birthDate' => $this->getBirthDate($data, 4),
-                    'gender' => $this->getGender($data, 0),
-                    'registeringDate' => $this->getRegisteringDate($data, 7),
-                    'doRoaming' => false,
-                );
-            }
-            return $stack;
-        });
-        return $contacts;
     }
     private function extractFromCsv($url, $stack, $extractor) {
         if (($handle = fopen($url, 'r')) !== FALSE) {
@@ -103,6 +85,10 @@ class GoogleContacts {
     private function isTutor($data, $col) {
         $trimStr = trim($data[$col]);
         return !empty($trimStr);
+    }
+    private function doRoaming($data, $col) {
+        $trimStr = trim($data[$col]);
+        return empty($trimStr);
     }
     private function getRegisteringDate($data, $col) {
         return trim($data[$col]);
