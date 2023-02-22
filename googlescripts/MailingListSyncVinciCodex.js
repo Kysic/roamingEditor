@@ -1,7 +1,6 @@
 // https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 var docId = PropertiesService.getScriptProperties().getProperty('docId');
 var roamingSheetId = PropertiesService.getScriptProperties().getProperty('roamingSheetId');
-var soupAndEventsSheetId = PropertiesService.getScriptProperties().getProperty('soupAndEventsSheetId');
 var newMembersSheetId = PropertiesService.getScriptProperties().getProperty('newMembersSheetId');
 
 function doGet(request) {
@@ -14,8 +13,6 @@ function doGet(request) {
     return emailListTextOutput(extractEmails(spreadSheet, roamingSheetId, isTutor));
   } else if (action == 'GET_BOARD') {
     return emailListTextOutput(extractEmails(spreadSheet, roamingSheetId, isBoard));
-  } else if (action == 'GET_OTHERS') {
-    return emailListTextOutput(extractEmails(spreadSheet, soupAndEventsSheetId, all));
   }
   return ContentService.createTextOutput('no action specified');
 }
