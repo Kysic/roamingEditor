@@ -61,8 +61,8 @@ class RolesPermissions {
         $this->nightWatcher = array_merge(array( P_ENROL ), $this->external);
         $this->tutor = array_merge(array( P_EDIT_REPORT, P_ENROL_AS_TUTOR, P_GEN_STATS ), $this->nightWatcher);
         $this->board = array_merge(array( P_EDIT_MEETING ), $this->tutor);
-        $this->admin = array_merge(array( P_UPLOAD_REPORT, P_DELETE_REPORT, P_SEE_REPORT_PHONE, P_CANCEL_ROAMING ), $this->board);
-        $this->root = array_merge(array( P_SEE_ALL_REPORT, P_ASSIGN_ROLE, P_REGISTER, P_SEE_LAST_115_REPORTS ), $this->admin);
+        $this->admin = array_merge(array( P_UPLOAD_REPORT, P_DELETE_REPORT, P_SEE_REPORT_PHONE, P_CANCEL_ROAMING, P_SEE_ALL_REPORT ), $this->board);
+        $this->root = array_merge(array( P_ASSIGN_ROLE, P_REGISTER, P_SEE_LAST_115_REPORTS ), $this->admin);
     }
 
     public function getPermissions($role) {
