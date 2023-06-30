@@ -31,7 +31,7 @@ class Reporting115 {
       if ($object != "." && $object != "..") {
         $file = $attachmentDir. DIRECTORY_SEPARATOR .$object;
         if (is_file($file)) {
-          if (stripos($file, '.xlsx')) {
+          if (stripos($file, '.xlsx') || stripos($file, 'winmail.dat')) {
             $this->extractFromXlsxFile($file);
           }
           unlink($file);
