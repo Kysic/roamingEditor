@@ -15,12 +15,17 @@ try {
 
   $reports = $container->getReportsStorage()->getTodaysLast();
 
-  $container->getMail()->sendMail(
-    $from,
-    'Re: '.$subject,
-    getAcknowledgeBody(json_decode($reports)),
-    NOREPLY_EMAIL,
-  );
+  if (
+    stripos($from, 'vinci-signalements-115@googlegroups.com') === false
+    && stripos($from, 'robot-signalements@vinci.ldp.ovh') === false
+  ) {
+    $container->getMail()->sendMail(
+      $from,
+      'Re: '.$subject,
+      getAcknowledgeBody(json_decode($reports)),
+      NOREPLY_EMAIL,
+    );
+  }
 
 } catch (Exception $e) {
   $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Error detected on signalements reception',
