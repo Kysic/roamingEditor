@@ -23,6 +23,7 @@ try {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AMICI - Accueil</title>
+  <link rel="canonical" href="https://benevoles.amici-samu-social.fr/" />
   <link rel="stylesheet" href="material.teal-blue.min.css">
   <link rel="manifest" href="/manifest.json">
   <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg"/>
