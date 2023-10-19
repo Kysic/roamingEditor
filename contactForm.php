@@ -7,15 +7,20 @@ if (!empty($email) && !empty($message)) {
   try {
     require_once('api/lib/Container.php');
     $container = new Container();
-    $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Demande d\'assistance',
-      'Emetteur: '.$email."\r\n".
-      'IP: '.$_SERVER['REMOTE_ADDR']."\r\n".
-      'Navigateur: '.$_SERVER['HTTP_USER_AGENT']."\r\n".
-      'Javascript: '.($_POST['javascript'] === 'true' ? 'true' : 'false')."\r\n".
-      'Cookies: '.($_COOKIE['cookiesEnabled'] === 'true' ? 'true' : 'false')."\r\n".
-      'Message:'."\r\n".$message
-    );
-    $mailSent = true;
+    $bruteforceStorage = $container->getBruteforceStorage();
+    if ($bruteforceStorage->getNbFailedAttemptsInPeriod($_SERVER['REMOTE_ADDR']) < 2) {
+      $container->getMail()->sendMail(ADMIN_EMAIL, '[AMICI] Demande d\'assistance',
+        'Emetteur: '.$email."\r\n".
+        'IP: '.$_SERVER['REMOTE_ADDR']."\r\n".
+        'Navigateur: '.$_SERVER['HTTP_USER_AGENT']."\r\n".
+        'Javascript: '.($_POST['javascript'] === 'true' ? 'true' : 'false')."\r\n".
+        'Cookies: '.($_COOKIE['cookiesEnabled'] === 'true' ? 'true' : 'false')."\r\n".
+        'Message:'."\r\n".$message
+      );
+      $bruteforceStorage->registerFailedAttempt($_SERVER['REMOTE_ADDR']);
+      $mailSent = true;
+    }
+    $formError = 'Trop de demandes depuis cette IP, veuillez réessayer dans un moment.';
   } catch (Exception $e) {
     $formError = 'Une erreur est survenue lors de l\'envoi de votre message.\nMerci d\'envoyer un mail à '.ADMIN_EMAIL;
   }
