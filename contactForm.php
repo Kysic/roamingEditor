@@ -1,7 +1,7 @@
 <?php
 $formError = '';
 $mailSent = false;
-$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+$email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
 $message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
 if (!empty($email) && !empty($message)) {
   try {
