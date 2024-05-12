@@ -47,29 +47,29 @@ class GoogleContacts {
         return implode('-', array_map('ucwords', explode('-', mb_strtolower(trim($txt)))));
     }
     private function getContactFirstname($data, $col) {
-        return $this->toPascalCase(trim($data[$col]));
+        return $this->toPascalCase(trim($data[$col] ?? ''));
     }
     private function getContactLastname($data, $col) {
-        return strtoupper(trim($data[$col]));
+        return strtoupper(trim($data[$col] ?? ''));
     }
     private function getPhoneNumber($data, $col) {
-        $phoneNumber = trim($data[$col]);
+        $phoneNumber = trim($data[$col] ?? '');
         if (preg_match('/^[0-9]{9}$/', $phoneNumber)) {
             $phoneNumber = '0'.$phoneNumber;
         }
         return $phoneNumber;
     }
     private function getBirthDate($data, $col) {
-        return trim($data[$col]);
+        return trim($data[$col] ?? '');
     }
     private function getContactEmail($data, $col) {
-        return strtolower(trim($data[$col]));
+        return strtolower(trim($data[$col] ?? ''));
     }
     private function getAddress($data, $col) {
-        return trim($data[$col]);
+        return trim($data[$col] ?? '');
     }
     private function getGender($data, $col) {
-        $gender = strtoupper(trim($data[$col]));
+        $gender = strtoupper(trim($data[$col] ?? ''));
         if ($gender == 'H') {
             return 'M';
         } else if ($gender == 'F') {
@@ -79,19 +79,19 @@ class GoogleContacts {
         }
     }
     private function isBoard($data, $col) {
-        $trimStr = trim($data[$col]);
+        $trimStr = trim($data[$col] ?? '');
         return !empty($trimStr);
     }
     private function isTutor($data, $col) {
-        $trimStr = trim($data[$col]);
+        $trimStr = trim($data[$col] ?? '');
         return !empty($trimStr);
     }
     private function doRoaming($data, $col) {
-        $trimStr = trim($data[$col]);
+        $trimStr = trim($data[$col] ?? '');
         return empty($trimStr);
     }
     private function getRegisteringDate($data, $col) {
-        return trim($data[$col]);
+        return trim($data[$col] ?? '');
     }
     private function checkContactEmail($email) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);

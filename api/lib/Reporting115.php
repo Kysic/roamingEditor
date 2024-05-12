@@ -105,11 +105,11 @@ class Reporting115 {
   }
 
   private function combineArrayRow(&$row, $key, $header) {
-    $row = @array_combine($header, $row);
+    $row = @array_combine(array_intersect_key($header, $row), array_intersect_key($row, $header));
   }
 
   private function hasNomPrenomTelephoneOrLieu($row) {
-    return trim($row['nom']) || trim($row['prenom']) || trim($row['telephone']) || trim($row['lieu']);
+    return trim($row['nom'] ?? '') || trim($row['prenom'] ?? '') || trim($row['telephone'] ?? '') || trim($row['lieu'] ?? '');
   }
 
   private function extractHeaders(&$csvArray) {

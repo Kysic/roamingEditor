@@ -32,7 +32,7 @@ class GooglePlanning {
     public function getInfos() {
         $infos = array();
         foreach($this->roamingMonthData as $monthData){
-            $infos = array_merge($infos, $monthData['infos']);
+            $infos = array_merge($infos, $monthData['infos'] ?? []);
         }
         return array_unique($infos);
     }
