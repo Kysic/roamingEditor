@@ -344,7 +344,7 @@ if ($username) {
         Si vous rencontrer une erreur, un problème d'accès ou n'arrivez pas à faire quelque chose sur le site,
         rendez-vous sur <a href="/contactForm.php">la page contact</a> pour signaler le problème et obtenir de l'aide.<br>
         Pensez à donner le plus d'informations possibles sur le soucis pour que l'on puisse vous aider.
-        Et pour tout ce qui n'est pas lié au site, contacter le <a href="mailto:associationvinci@gmail.com">secrétariat de l'association</a>.
+        Et pour tout ce qui n'est pas lié au site, contacter le <a href="mailto:amici.secretariat@gmail.com">secrétariat de l'association</a>.
       </div>
       <div class="mdl-card__actions mdl-card--border">
         <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/contactForm.php">

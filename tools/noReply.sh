@@ -8,8 +8,8 @@ Vous avez envoyé un email sur une adresse email n'acceptant pas de message.
 Votre message ne sera donc pas lu par un humain.
 
 - Si vous souhaitez transmettre des signalements à l'équipe de maraude d'AMICI, vous pouvez utiliser l'adresse : SIGNALEMENTS_EMAIL
-- Si vous souhaitez joindre le secrétariat d'AMICI, vous pouvez utiliser l'adresse : SECRETARIAT_EMAIL
-- Si vous souhaitez joindre le responsable de la plateforme logiciel, vous pouvez utiliser l'adresse : ADMIN_EMAIL
+- Si vous souhaitez joindre le secrétariat d'AMICI, vous pouvez utiliser l'adresse : amici.secretariat@gmail.com
+- Si vous souhaitez joindre le responsable de la plateforme logiciel, vous pouvez utiliser l'adresse : amici.compta@gmail.com
 
 Bonne journée à vous
 

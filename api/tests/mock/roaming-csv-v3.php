@@ -10,7 +10,7 @@ Personnes vues,Total,6,,Nombre de couvertures,,,,7,,,,,Nombre couples,1
 ,,,,,,,,,,,,,,
 "Toutes les informations figurant sur ce compte rendu sont confidentielles, réservées à un usage interne permettant le bon fonctionnement de l'association.
 Il est strictement interdit de divulguer ou diffuser ces données en dehors de l'association de Samu Social de Grenoble, conformément à la déclaration CNIL n°2071093.
-Si vous avez eu accès à ce document sans être membre de l'association, merci de nous le signaler par mail : associationvinci@gmail.com",,,,,,,,,,,,,,
+Si vous avez eu accès à ce document sans être membre de l'association, merci de nous le signaler par mail : amici.secretariat@gmail.com",,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,
 Identité,,lieu,heure,source,Personnes,,,Dons,,,,Commentaires,,
 ,,,,,,adulte,enfant,alim.,couv.,tente,hyg.,,,
