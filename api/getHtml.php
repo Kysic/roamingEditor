@@ -26,7 +26,13 @@ try {
     $docId = $spreadsheetsGenerator->getOrCreateDocId($roamingId, $session->getUser()->userId);
     $readUrl = $spreadsheetsGenerator->docIdToReadUrl($docId);
 
-    echo retrieveHtmlContent($readUrl);
+    // Version that
+    // Doesn't work anymore (redirect to a google FAQ google page on cache configuration)
+    // echo retrieveHtmlContent($readUrl);
+
+    // Version that redirect to the google page
+    header('Location: '.$readUrl);
+    echo '<meta http-equiv="refresh" content="1;URL='.$readUrl.'"><script>window.location="'.$readUrl.'";</script>';
 
 } catch (Exception $e) {
     $json->returnError($e);
