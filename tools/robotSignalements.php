@@ -4,9 +4,9 @@
 
 require_once('/var/www/vinci/api/lib/Container.php');
 
-try {
+$container = new Container();
 
-  $container = new Container();
+try {
 
   $sender = getenv('SENDER');
   $recipient = getenv('RECIPIENT');
@@ -19,12 +19,24 @@ try {
     stripos($from, 'vinci-signalements-115@googlegroups.com') === false
     && stripos($from, 'robot-signalements@vinci.ldp.ovh') === false
   ) {
-    $container->getMail()->sendMail(
-      $from,
-      'Re: '.$subject,
-      getAcknowledgeBody(json_decode($reports)),
-      NOREPLY_EMAIL,
-    );
+    // $container->getMail()->sendMail(
+    //   $from,
+    //   'Re: '.$subject,
+    //   getAcknowledgeBody(json_decode($reports)),
+    //   NOREPLY_EMAIL,
+    // );
+
+    // Send interventions to on call tutors
+    $googlePlanning = $container->getGooglePlanning();
+    $roaming = $googlePlanning->getRoamingOfDate(time());
+    if ($roaming['onCall']['email']) {
+      $container->getMail()->sendMail(
+        $roaming['onCall']['email'],
+        '[AMICI] Signalements 115',
+        getOnCallBody(json_decode($reports)),
+        NOREPLY_EMAIL,
+      );
+    }
   }
 
 } catch (Exception $e) {
@@ -36,7 +48,7 @@ try {
 
 function getAcknowledgeBody($reports) {
   $data = array_map('reportToText', $reports);
-  $data = implode($data, "\n");
+  $data = implode("\n", $data);
   $adminEmail = ADMIN_EMAIL;
   return <<<EOD
 Bonsoir,
@@ -57,6 +69,26 @@ Bien cordialement,
 Cet email est un message automatique, veuillez ne pas y répondre directement, votre message ne sera pas transmis à l'équipe de maraude.
 Ce message a été mis en place en espérant qu'il pourrait vous être utile pour vous assurez que votre message a pu être traité correctement.
 S'il vous est inutile et que vous préferez ne pas le recevoir, n'hésitez pas à nous contacter à l'adresse email $adminEmail pour le signaler.
+EOD;
+}
+
+function getOnCallBody($reports) {
+  $data = array_map('reportToText', $reports);
+  $data = implode("\n", $data);
+  return <<<EOD
+Bonsoir,
+
+Voici les données qui ont été extraites de l'email de signalement 115 et sont désormais accessibles à l'équipe de maraude :
+
+$data
+
+Merci pour l'astreinte !
+
+Bon courage pour la soirée,
+
+--------------------------------------
+Les informations contenues dans cet email sont confidentielles et ne doivent pas servir à autre choses qu'à assister l'équipe de maraude.
+Cet email est un message automatique, veuillez ne pas y répondre directement, votre message ne sera pas transmis à l'équipe de maraude.
 EOD;
 }
 

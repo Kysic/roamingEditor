@@ -7,6 +7,9 @@ define('MONTH_INDEX', 2);
 define('YEAR_INDEX', 4);
 define('TUTOR_INDEX', 2);
 define('DIFF_INDEX_TEAMMATE', 2);
+define('ON_CALL_NAME_INDEX', 9);
+define('ON_CALL_PHONE_INDEX', 10);
+define('ON_CALL_EMAIL_INDEX', 11);
 define('COMMENT_INDEX', 8);
 define('BREAD_INDEX', 10);
 
@@ -86,10 +89,16 @@ class GooglePlanning {
                     if (@$data[BREAD_INDEX]) {
                         $roamingData[$roamingDate]['bread'] = $data[BREAD_INDEX];
                     }*/
+                    $onCall = array(
+                        'name' => $data[ON_CALL_NAME_INDEX],
+                        'phone' => $data[ON_CALL_PHONE_INDEX],
+                        'email' => $data[ON_CALL_EMAIL_INDEX],
+                    );
                     $roamingMonthData[$dateId] = array(
                         'tutor' => $tutor,
                         'teammates' => $teammates,
-                        'status' => $this->getStatus($tutor, $teammates)
+                        'status' => $this->getStatus($tutor, $teammates),
+                        'onCall' => $onCall,
                     );
                     $roamingDay++;
                 } else if (stripos($data[0], 'réunion') !== false
