@@ -29,10 +29,17 @@ try {
     // Send interventions to on call tutors
     $googlePlanning = $container->getGooglePlanning();
     $roaming = $googlePlanning->getRoamingOfDate(time());
-    if ($roaming['onCall']['email']) {
+    $to = trim($roaming['onCall']['email'] ?: '');
+    if (!empty($to)) {
       $container->getMail()->sendMail(
-        $roaming['onCall']['email'],
+        $to,
         '[AMICI] Signalements 115',
+        getOnCallBody(json_decode($reports)),
+        NOREPLY_EMAIL,
+      );
+      $container->getMail()->sendMail(
+        'amici@ldpl.fr',
+        '[AMICI] Signalements 115 - '.$to,
         getOnCallBody(json_decode($reports)),
         NOREPLY_EMAIL,
       );
@@ -47,7 +54,7 @@ try {
 }
 
 function getAcknowledgeBody($reports) {
-  $data = array_map('reportToText', $reports);
+  $data = array_map('reportToText', (array) $reports);
   $data = implode("\n", $data);
   $adminEmail = ADMIN_EMAIL;
   return <<<EOD
@@ -73,7 +80,7 @@ EOD;
 }
 
 function getOnCallBody($reports) {
-  $data = array_map('reportToText', $reports);
+  $data = array_map('reportToText', (array) $reports);
   $data = implode("\n", $data);
   return <<<EOD
 Bonsoir,
