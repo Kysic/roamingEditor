@@ -16,7 +16,7 @@ roamingEditor.config(['$routeProvider', function($routeProvider) {
         controller: 'RoamingListController'
     })
     .when('/roaming/:roamingId', {
-        templateUrl: 'templates/roamingEditor.html?v=221008-1',
+        templateUrl: 'templates/roamingEditor.html?v=260516-1',
         controller: 'RoamingController'
     })
     .when('/roaming/:roamingId/intervention/:interventionId', {
@@ -416,6 +416,9 @@ roamingEditor.controller('RoamingController',
             }
             if (response.data.teammates && angular.equals($scope.roaming.teammates, [ '' ])) {
                 $scope.roaming.teammates = response.data.teammates;
+            }
+            if (response.data.onCall) {
+                $scope.roaming.onCall = response.data.onCall;
             }
             $scope.updateRoaming();
         });

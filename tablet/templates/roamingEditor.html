@@ -14,6 +14,9 @@
   <button ng-click="goDonations()">Voir les dons</button>
   <button ng-click="logisticReport()">Logistique</button>
   <br/><br/>
+  <div ng-if="roaming.onCall">
+    <label>Astreinte : </label>{{roaming.onCall.name}} - {{roaming.onCall.phone}}<br/><br/>
+  </div>
   <label for="tutorField">Tuteur</label>
   <input id="tutorField" ng-model="roaming.tutor" type="text" ng-change="updateRoaming()" ng-disabled="!isEditable()" /><br/>
   <div ng-repeat="teammate in roaming.teammates track by $index">
