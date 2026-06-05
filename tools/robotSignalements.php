@@ -37,12 +37,6 @@ try {
         getOnCallBody(json_decode($reports)),
         NOREPLY_EMAIL,
       );
-      $container->getMail()->sendMail(
-        'amici@ldpl.fr',
-        '[AMICI] Signalements 115 - '.$to,
-        getOnCallBody(json_decode($reports)),
-        NOREPLY_EMAIL,
-      );
     }
   }
 
